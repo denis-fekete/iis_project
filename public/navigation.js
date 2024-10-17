@@ -7,7 +7,6 @@ function gotoSearch() {
     window.location = "/search";
 }
 
-
 function gotoProfile() {
     window.location = "/profile";
 }
@@ -25,3 +24,6 @@ function gotoRegister() {
     window.location = "/register";
 }
 
+function gotoLogout() {
+    window.location = "/logout";
+}

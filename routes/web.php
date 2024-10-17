@@ -6,6 +6,10 @@ use App\Http\Controllers\UserController;
 use App\Http\Middleware\Cors;
 use App\Http\Controllers\FormController;
 
+// --------------------------------------------------------
+// Default routes accessible at all times
+// --------------------------------------------------------
+
 Route::get('/', function () {
     return redirect('home');
 });
@@ -18,18 +22,11 @@ Route::get('/search', function () {
     return view('search');
 });
 
-Route::get('/profile', function () {
-    return view('profile', [
-            'user' => auth()->user()
-        ]);
-})->middleware('auth');
+// --------------------------------------------------------
+// Register / login routes
+// --------------------------------------------------------
 
-Route::get('/register', function () {
-    return view('auth.register');
-});
-
-Route::post('/register', [AuthController::class, 'store']);
-
+Route::post('/register', [AuthController::class, 'newRegistration']);
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -37,6 +34,29 @@ Route::get('/login', function () {
 
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/admin', function () {
-    return view('admin.dashboard');
+// --------------------------------------------------------
+// Routes that can only be seen when user is logged in
+// --------------------------------------------------------
+
+// middleware auth makes sure that only logged in user can access this path,
+// otherwise they will be routed to the route with name('login') view
+Route::get('/profile', function () {
+    return view('profile');
+
+})->middleware('auth');
+
+Route::get('/logout', [AuthController::class, 'logout']);
+
+
+Route::get('/register', function () {
+    return view('auth.register');
+});
+
+// --------------------------------------------------------
+// Only visible to admins
+// --------------------------------------------------------
+Route::prefix('admin')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->middleware('auth');
 });

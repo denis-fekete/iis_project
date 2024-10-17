@@ -10,12 +10,34 @@
 <body>
     <div class="body grid-container">
         <div class="page_header grid-container grid-container-fit" id="page_header">
-            <button onclick="gotoHome()"> Home </button>
-            <button onclick="gotoSearch()"> Search </button>
-            <button onclick="gotoProfile()"> My profile </button>
-            <button onclick="gotoAdmin()"> Admin </button>
-            <button onclick="gotoRegister()"> Register </button>
-            <button onclick="gotoLogin()"> Login </button>
+            <button onclick="window.location.href='{{ url('home') }}'" >
+                Home
+            </button>
+
+            <button onclick="window.location.href='{{ url('search') }}'">
+                Search
+            </button>
+
+            @if ($user == NULL)
+                <button onclick="window.location.href='{{ url('register') }}'">
+                    Register
+                </button>
+                <button onclick="window.location.href='{{ url('login') }}'">
+                    Login
+                </button>
+            @else
+                @if ($user->role === 'admin')
+                    <button onclick="window.location.href='{{ url('admin/dashboard') }}'">
+                        Admin
+                    </button>
+                @endif
+                <button onclick="window.location.href='{{ url('profile') }}'">
+                    My profile
+                </button>
+                <button onclick="window.location.href='{{ url('logout') }}'">
+                    Logout
+                </button>
+            @endif
         </div>
 
         <div class="contents" id="contents">
