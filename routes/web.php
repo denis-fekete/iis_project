@@ -52,9 +52,7 @@ Route::get('/register', function () {
     return view('auth.register');
 });
 
-// --------------------------------------------------------
-// Only visible to admins
-// --------------------------------------------------------
+
 Route::prefix('admin')->group(function () {
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
