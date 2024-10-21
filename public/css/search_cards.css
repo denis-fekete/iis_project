@@ -1,0 +1,20 @@
+.card {
+    background-color: wheat;
+}
+
+.card_name{
+    font-size: 20px;
+    color:red;
+}
+
+.card_description {
+    font-size: 15px;
+}
+.card_organizer_name {
+    font-size: 15px;
+    color:lightskyblue
+}
+.card_tags {
+    font-size: 12px;
+    color:gray
+}
