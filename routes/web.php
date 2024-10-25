@@ -1,14 +1,17 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ConferenceController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\Cors;
 use App\Http\Controllers\FormController;
+use App\Http\Controllers\LectureController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\SearchController;
 
 // --------------------------------------------------------
-// Default routes accessible at all times
+//
 // --------------------------------------------------------
 
 Route::get('/', function () {
@@ -21,12 +24,42 @@ Route::get('/home', function () {
     ]);
 });
 
-Route::get('/search', [SearchController::class, 'get']);
+// --------------------------------------------------------
+//
+// --------------------------------------------------------
 
-Route::get('/conferences', [SearchController::class, 'getConference']);
+Route::prefix('conferences')->group(function () {
+    Route::get('/search', [ConferenceController::class, 'getAll']);
+    Route::get('/conference', [ConferenceController::class, 'getConference']);
+    Route::get('/dashboard', [ConferenceController::class, 'dashboard'])
+        ->middleware('auth'); // protect website => user must be logged in
+    Route::get('/create', [ConferenceController::class, 'createGET']);
+    Route::post('/create', [ConferenceController::class, 'createPOST']);
+    Route::get('/edit', [ConferenceController::class, 'edit']);
+    Route::get('/lectures', [ConferenceController::class, 'lectures']);
+
+});
+
+Route::prefix('lectures')->group(function () {
+    Route::get('/dashboard', [LectureController::class, 'dashboard']);
+    Route::get('/create', [LectureController::class, 'createGET']);
+    Route::post('/create', [LectureController::class, 'createPOST']);
+    Route::get('/edit', [LectureController::class, 'editGET']);
+    Route::post('/edit', [LectureController::class, 'editPOST']);
+    Route::post('/cancel', [LectureController::class, 'cancel']);
+});
+
+
+Route::get('/person', [SearchController::class, 'getPerson']);
+
+Route::get('/reserve', [ReservationController::class, 'create']);
+Route::get('/reservations', [ReservationController::class, 'get']);
+Route::get('/reservationCancel', [ReservationController::class, 'cancel']);
+
+
 
 // --------------------------------------------------------
-// Register / login routes
+//
 // --------------------------------------------------------
 
 Route::post('/register', [AuthController::class, 'newRegistration']);
@@ -38,7 +71,7 @@ Route::get('/login', function () {
 Route::post('/login', [AuthController::class, 'login']);
 
 // --------------------------------------------------------
-// Routes that can only be seen when user is logged in
+//
 // --------------------------------------------------------
 
 // middleware auth makes sure that only logged in user can access this path,

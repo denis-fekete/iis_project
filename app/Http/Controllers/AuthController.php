@@ -25,7 +25,7 @@ class AuthController extends Controller
         // if validation fails laravel will automatically send errors and method will end
         $validated = request()->validate([
             'name' => 'required|min:3|max:40', // must be present
-            'email' => 'required|email|unique:users,email', // must be present, must be email, must unique in users in column email
+            'email' => 'required|email|unique:user,email', // must be present, must be email, must unique in user in column email
             'password' => 'required|confirmed|min:8' // confirmed -> must come with second parameter for confirmation
         ]);
 

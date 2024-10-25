@@ -34,7 +34,6 @@
         <button type"submit">Register</button>
         <br>
     </form>
-    {{-- <button type"button" onclick="send('register_form')">Submit</button> --}}
 </div>
 @endsection
 
