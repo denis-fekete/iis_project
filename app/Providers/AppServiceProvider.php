@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
 
             // $role = null;
             // if($user !== null) {
-            //     $role = DB::table('users')->where('id', $user->id)->value('role');
+            //     $role = DB::table('user')->where('id', $user->id)->value('role');
             //     error_log($role);
             // }
 

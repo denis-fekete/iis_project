@@ -23,7 +23,7 @@ return new class extends Migration
             $table->unsignedInteger('capacity');
 
             $table->unsignedBigInteger('owner_id');
-            
+
             $table->foreign('owner_id')
                 ->references('id')
                 ->on('user')
