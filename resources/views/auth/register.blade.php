@@ -25,6 +25,9 @@
         <label class="form_label" for="name">Name:</label>
         <input class="form_input" type="text" name="name" id="name"required>
         <br>
+        <label class="form_label" for="surname">Surname:</label>
+        <input class="form_input" type="text" name="surname" id="surname"required>
+        <br>
         <label class="form_label" for="password">Password:</label>
         <input class="form_input" type="password" name="password" id="password"required>
         <br>

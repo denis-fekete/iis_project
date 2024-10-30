@@ -25,6 +25,7 @@ class AuthController extends Controller
         // if validation fails laravel will automatically send errors and method will end
         $validated = request()->validate([
             'name' => 'required|min:3|max:40', // must be present
+            'surname' => 'required|min:3|max:40', // must be present
             'email' => 'required|email|unique:user,email', // must be present, must be email, must unique in user in column email
             'password' => 'required|confirmed|min:8' // confirmed -> must come with second parameter for confirmation
         ]);
@@ -33,6 +34,7 @@ class AuthController extends Controller
         // create user with validated data, hash the password so its not store in plain text
         $user = User::create([
             'name' => $validated['name'],
+            'surname' => $validated['surname'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
         ]);
