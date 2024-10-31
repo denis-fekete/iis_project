@@ -22,6 +22,7 @@ class ConferenceModalTest extends TestCase
         $conferenceOwner = User::create([
             'name' => 'OwnerName',
             'surname' => 'OwnerSurname',
+            'email' => 'test@mail.com',
             'role' => RoleType::User->value
         ]);
 

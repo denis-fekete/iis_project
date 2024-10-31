@@ -17,6 +17,7 @@ class UserModelTest extends TestCase
         $newUser = User::create([
             'name' => 'TestName',
             'surname' => 'TestSurname',
+            'email' => 'test@mail.com',
             'role' => RoleType::User->value
         ]);
 
@@ -25,6 +26,7 @@ class UserModelTest extends TestCase
 
         $this->assertEquals('TestName', $userInDatabase->name);
         $this->assertEquals('TestSurname', $userInDatabase->surname);
+        $this->assertEquals('test@mail.com', $userInDatabase->email);
         $this->assertEquals(RoleType::User->value, $userInDatabase->role);
     }
 }
