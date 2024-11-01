@@ -5,6 +5,11 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Enums\RoleType;
+use App\Models\Conference;
+use App\Models\Lecture;
+use App\Models\LectureSchedule;
+use App\Models\Reservation;
+use App\Models\Room;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -16,25 +21,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create 10 random users
-        // User::factory(10)->create();
+        User::factory(10)->create();
+        Conference::factory(10)->create();
+        Room::factory(5)->create();
+        Lecture::factory(10)->create();
+        Reservation::factory(30)->create();
+        LectureSchedule::factory(30)->create();
 
-        for($i = 0; $i < 10; $i++) {
-            User::factory()->create([
-                'name' => fake()->name(),
-                'surname' => fake()->lastName(),
-                'email' => fake()->email(),
-                'password' => Hash::make('password'),
-                'role' => RoleType::User->value
-            ]);
-        }
-
-        // Create one admin account
-        User::factory()->create([
-            'name' => 'Administrator',
-            'surname' => 'Administrator',
-            'email' => 'admin@admin.com',
-            'password' => Hash::make('admin'),
+        User::create([
+            'name' => "Administrator",
+            'surname' => "Administrator",
+            'email' => "admin@admin.com",
+            'password' => Hash::make('admin@admin.com'),
             'role' => RoleType::Admin->value
         ]);
     }
