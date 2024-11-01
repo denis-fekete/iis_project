@@ -36,7 +36,7 @@ function searchForPerson(id) {
 }
 
 function makeReservation(id) {
-    window.location = "/reserve?id=" + id;
+    window.location = "/reservations/reserve?id=" + id;
 }
 
 function cancelReservation(id) {

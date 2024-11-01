@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Reservation as ModelsReservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Expr\FuncCall;
 
 class Reservation {
     public int $id;
@@ -22,15 +24,37 @@ class Reservation {
 
 class ReservationController extends Controller
 {
-    public function create() {
-        // TODO: create reservation
+    public function getForm() {
         $id = request()->get('id');
+
+        // TODO: optimize
+        $max = DB::table('conference')->where('id', $id)->get('capacity');
+        $current =  DB::table('reservation')->where('conference_id', $id)->count();
+
+        dump($id);
+
+        return view('/reservations/reserve')
+            ->with('id', $id)
+            // ->with('max', $max - $current);
+            ->with('max', 100);
+    }
+
+    public function create() {
+        $id = request()->get('id');
+
+        // TODO: validate data
+
+        // ModelsReservation::create([
+        //     "user_id" => auth()->user()->id,
+        //     "conference_id" => (string)$id,
+        //     "is_confirmed" => false,
+        // ]);
 
         return redirect('/conferences/conference?id=' . $id)
             ->with('notification', 'Reservation was created successfully');
     }
 
-    public function get() {
+    public function getAll() {
 
         $count = fake()->numberBetween(1, 5);
         $reservations = [];

@@ -31,7 +31,7 @@
                         Admin
                     </button>
                 @endif
-                <button onclick="window.location.href='{{ url('reservations') }}'">
+                <button onclick="window.location.href='{{ url('reservations/dashboard') }}'">
                     Reservations
                 </button>
                 <button onclick="window.location.href='{{ url('lectures/dashboard') }}'">

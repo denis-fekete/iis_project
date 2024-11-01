@@ -96,8 +96,6 @@ class ConferenceController extends Controller
     public function getAll() {
         $this->generateCards(); // DEBUG:
 
-        // $orderBy = request()->get('order');
-
         return view('conferences.search')->with('cards', $this->cards);
     }
 

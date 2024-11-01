@@ -49,12 +49,16 @@ Route::prefix('lectures')->group(function () {
     Route::post('/cancel', [LectureController::class, 'cancel']);
 });
 
+Route::prefix('reservations')->group(function () {
+    Route::get('/reserve', [ReservationController::class, 'getForm']);
+    Route::post('/reserve', [ReservationController::class, 'create']);
+    Route::get('/dashboard', [ReservationController::class, 'getAll']);
+    Route::get('/reservationCancel', [ReservationController::class, 'cancel']);
+});
+
 
 Route::get('/person', [SearchController::class, 'getPerson']);
 
-Route::get('/reserve', [ReservationController::class, 'create']);
-Route::get('/reservations', [ReservationController::class, 'get']);
-Route::get('/reservationCancel', [ReservationController::class, 'cancel']);
 
 
 

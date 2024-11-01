@@ -5,18 +5,6 @@
 <script src="/httpHandler.js"></script>
 
 <div>
-
-    @if ($errors->any())
-        <div style="background-color: red">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{$error}}</li>
-                @endforeach
-            </ul>
-        </div>
-
-    @endif
-
     <form action="{{ url('login') }}" id="register_form" class="register_form" method="post">
         @csrf
         <label class="form_label" for="email">Email:</label>
@@ -27,7 +15,6 @@
         <button type"submit">Login</button>
         <br>
     </form>
-    {{-- <button type"button" onclick="send('register_form')">Submit</button> --}}
 </div>
 @endsection
 

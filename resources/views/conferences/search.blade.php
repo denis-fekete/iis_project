@@ -7,7 +7,7 @@
         <p class="card_title">{{$item->title}}</p>
         <p class="card_description">{{$item->description}}</p>
         <p class="card_theme">{{$item->theme}}</p>
-        <p class="card_price">{{$item->price}}Kč/€/$</p>
+        <p class="card_price">{{$item->price}}Kč</p>
     </div>
 @endforeach
 @endsection
