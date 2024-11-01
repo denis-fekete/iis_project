@@ -1,0 +1,36 @@
+Guest:
+	• As guest, I can list all conferences. 
+	• As guest, I can choose some specific conference and see details
+	• As guest, I can choose some specific lecture and see details
+	• As guest, I can start reservation process without signing in or registering
+	• As guest, I can see all my reservation, see their state (if capacity is not full yet) and cancel them
+	• As guest, I can trigger registration flow and become a user and potential visitor for all conferences I have created reservations for
+	• As guest, I can trigger sign in flow and become a user or administrator 
+User:
+	• As user, I can list all conferences
+	• As user, I can choose some specific conference and see details
+	• As user, I can choose some specific lecture and see details
+	• As user, I can trigger reservation flow and become a potential visitor in relation to specified conference
+	• As user in potential visitor state, I can do nothing and become a confirmed visitor
+	• As user in confirmed visitor state, I can get a ticket
+	• As user, I can list all my reserved conferences, see details and their state (am I a confirmed or a potential visitor)
+	• As user, I can see the schedule of my reserved conferences and mark lectures I am planning to visit 
+	• As user, I can cancel any of my reservation (potential and confirmed) 
+	• As user, I can offer my own lecture to any future conference and become a potential speaker
+	• As user in potential speaker state, I can do nothing and become confirmed speaker
+	• As user, I can list all my lectures, see their state (are they confirmed) and details
+	• As user, I can cancel any of my potential lectures
+	• As user, I can process conference creation flow and become a conference owner
+	• As user in conference owner state, I can add lecture to my conference
+	• As user in conference owner state, I can add new rooms to my conference
+	• As user in conference owner state, I can list all offered lectures
+	• As user in conference owner state, I can approve offered lectures, set their time and place
+	• As user in conference owner state, I can list all potential and confirmed viewers
+	• As user in conference owner state, I can change the state of viewers from potential to confirmed
+	• As user, I can log out and become a guest
+Administrator:
+	• As administrator, I can list users, see and set their roles
+	• As administrator, I can create users and set their roles
+	• As administrator, I can delete users
+	• As administrator, I can log out
+	• As administrator, I can do everything what users and guests can do
