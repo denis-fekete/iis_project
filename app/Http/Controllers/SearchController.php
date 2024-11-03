@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class SearchController extends Controller
 {
-    public function getPerson() {
-        $id = request()->get("id");
+    public function getPerson($id) {
 
         $user = DB::table('user')->where('id', $id)->get();
         $user = json_decode(json_encode($user), true);

@@ -102,10 +102,8 @@ class ConferenceController extends Controller
     /**
      * Returns conference based on provided id
      */
-    public function getConference() {
+    public function get($id) {
         $this->generateCards(); // DEBUG:
-
-        $id = request()->get("id");
 
         // encode structure into json, decode it into a array
         $conference = json_decode(json_encode($this->cards[$id]),  true);
@@ -201,14 +199,13 @@ class ConferenceController extends Controller
 
     }
 
-    public function lectures() {
+    public function lectures($id) {
         $this->generateCards(); // DEBUG:
 
-        $conferenceId = request()->get('id');
         // || 1 for DEBUG:
-        if($this->cards[$conferenceId]->owner_id == auth()->user()->id || 1) {
+        if($this->cards[$id]->owner_id == auth()->user()->id || 1) {
 
-            $lectures = $this->cards[$conferenceId]->lectures;
+            $lectures = $this->cards[$id]->lectures;
             return view('conferences.lectures')
                 ->with('lectures', $lectures)
                 ->with('notification', null);

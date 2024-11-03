@@ -28,19 +28,19 @@ function gotoLogout() {
 }
 
 function searchConferences(id) {
-    window.location = "/conferences/conference?id=" + id;
+    window.location = "/conferences/conference/" + id;
 }
 
 function searchForPerson(id) {
-    window.location = "/person?id=" + id;
+    window.location = "/person/" + id;
 }
 
 function makeReservation(id) {
-    window.location = "/reservations/reserve?id=" + id;
+    window.location = "/reservations/reserve/" + id;
 }
 
 function cancelReservation(id) {
-    window.location = "reservationCancel?id=" + id;
+    window.location = "/reservations/cancel/" + id;
 }
 
 function createConference() {
@@ -48,7 +48,7 @@ function createConference() {
 }
 
 function editConferenceLectures(id) {
-    window.location = "/conferences/lectures?id=" + id;
+    window.location = "/conferences/lectures/" + id;
 }
 
 function createLectures() {
@@ -56,5 +56,10 @@ function createLectures() {
 }
 
 function editLecture(id) {
-    window.location = "/lectures/edit?id=" + id;
+    window.location = "/lectures/edit/" + id;
+}
+
+function showSchedule(id) {
+    window.location = "/reservations/schedule/" + id;
+
 }

@@ -8,6 +8,7 @@
         <p>Reservation:</p>
         <p class="conference_title">Title: {{ $reservation->conference_id }}
         <button onclick="cancelReservation({{ $reservation->id }})">Cancel reservation</button>
+        <button onclick="showSchedule({{ $reservation->id }})">Show schedule</button>
     </div>
     <br>
 @endforeach

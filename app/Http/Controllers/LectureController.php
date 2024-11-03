@@ -72,10 +72,9 @@ class LectureController extends Controller
             ->with("cards", $lectures);
     }
 
-    public function editGET() {
+    public function editGET($id) {
         $this->generateLectures();
 
-        $lectureId = request()->get('id');
 
         // $lecture = $this->globalLectures[$lectureId];
         $lecture = $this->globalLectures[0];
@@ -90,6 +89,10 @@ class LectureController extends Controller
     public function createGET() {
         return view('lectures.edit')
             ->with('info', $this->emptyInfo);
+    }
+
+    public function editPOST() {
+        // TODO:
     }
 
     /**

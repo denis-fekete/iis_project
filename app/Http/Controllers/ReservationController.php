@@ -31,8 +31,6 @@ class ReservationController extends Controller
         $max = DB::table('conference')->where('id', $id)->get('capacity');
         $current =  DB::table('reservation')->where('conference_id', $id)->count();
 
-        dump($id);
-
         return view('/reservations/reserve')
             ->with('id', $id)
             // ->with('max', $max - $current);
@@ -40,7 +38,7 @@ class ReservationController extends Controller
     }
 
     public function create() {
-        $id = request()->get('id');
+        $id = request()->input('id');
 
         // TODO: validate data
 
@@ -63,13 +61,11 @@ class ReservationController extends Controller
             $reservations[] = new Reservation($i);
         }
 
-        return view('reservations.reservations')
+        return view('reservations.dashboard')
             ->with('reservations', $reservations);
     }
 
-    public function cancel() {
-        $id = request()->get('id');
-
+    public function cancel($id) {
         //TODO: cancel reservation
 
         return redirect('/reservations')

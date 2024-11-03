@@ -30,34 +30,37 @@ Route::get('/home', function () {
 
 Route::prefix('conferences')->group(function () {
     Route::get('/search', [ConferenceController::class, 'getAll']);
-    Route::get('/conference', [ConferenceController::class, 'getConference']);
+    Route::get('/conference/{id}', [ConferenceController::class, 'get']);
     Route::get('/dashboard', [ConferenceController::class, 'dashboard'])
         ->middleware('auth'); // protect website => user must be logged in
     Route::get('/create', [ConferenceController::class, 'createGET']);
-    Route::post('/create', [ConferenceController::class, 'createPOST']);
     Route::get('/edit', [ConferenceController::class, 'edit']);
-    Route::get('/lectures', [ConferenceController::class, 'lectures']);
+    Route::get('/lectures/{id}', [ConferenceController::class, 'lectures']);
 
+    Route::post('/create', [ConferenceController::class, 'createPOST']);
 });
 
 Route::prefix('lectures')->group(function () {
     Route::get('/dashboard', [LectureController::class, 'dashboard']);
     Route::get('/create', [LectureController::class, 'createGET']);
+    Route::get('/edit/{id}', [LectureController::class, 'editGET']);
+
     Route::post('/create', [LectureController::class, 'createPOST']);
-    Route::get('/edit', [LectureController::class, 'editGET']);
     Route::post('/edit', [LectureController::class, 'editPOST']);
     Route::post('/cancel', [LectureController::class, 'cancel']);
 });
 
 Route::prefix('reservations')->group(function () {
-    Route::get('/reserve', [ReservationController::class, 'getForm']);
-    Route::post('/reserve', [ReservationController::class, 'create']);
+    Route::get('/reserve/{id}', [ReservationController::class, 'getForm']);
     Route::get('/dashboard', [ReservationController::class, 'getAll']);
-    Route::get('/reservationCancel', [ReservationController::class, 'cancel']);
+    Route::get('/cancel/{id}', [ReservationController::class, 'cancel']);
+    Route::get('/schedule/{id}', [ReservationController::class, 'showSchedule']);
+
+    Route::post('/reserve', [ReservationController::class, 'create']);
 });
 
 
-Route::get('/person', [SearchController::class, 'getPerson']);
+Route::get('/person/{id}', [SearchController::class, 'getPerson']);
 
 
 
