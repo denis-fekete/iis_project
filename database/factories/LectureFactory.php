@@ -20,7 +20,7 @@ class LectureFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->name(),
+            'title' => fake()->words(4, true),
             'poster' => fake()->words(10, true),
             'is_confirmed' => fake()->boolean(),
             'start_time' => fake()->date(),

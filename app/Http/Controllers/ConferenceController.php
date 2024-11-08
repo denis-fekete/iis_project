@@ -130,12 +130,26 @@ class ConferenceController extends Controller
         // check if user is owner or admin
         if($user->id == $conference->owner_id || $user->role == RoleType::Admin->value) {
             return view('conferences.lectures')
+                ->with('id', $conference->id)
                 ->with('lectures', $conference->lectures)
                 ->with('notification', null);
         } else {
             return redirect('conferences/dashboard')
                 ->with('notification', 'You do not have permission to access lectures of this conference');
         }
+    }
 
+    public function editLecturesList(Request $request) {
+        $id = $request->input('id');
+
+        $res = $this->conferenceService->editLecturesList($request);
+
+        if($res) {
+            return redirect('/conferences/lectures/' . $id)
+                ->with('notification', "Your changes were saved");
+        } else {
+            return redirect('/conferences/lectures/' . $id)
+                ->with('notification', "Something went wrong, try it again later"); // TODO: change to ERROR
+        }
     }
 }

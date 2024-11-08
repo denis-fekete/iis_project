@@ -28,12 +28,49 @@ class DatabaseSeeder extends Seeder
         Reservation::factory(30)->create();
         LectureSchedule::factory(30)->create();
 
-        User::create([
+        $this->setupAdmin();
+    }
+
+    private function setupAdmin() {
+        $admin = User::create([
             'name' => "Administrator",
             'surname' => "Administrator",
             'email' => "admin@admin.com",
             'password' => Hash::make('admin@admin.com'),
             'role' => RoleType::Admin->value
         ]);
+
+        $adminConference = Conference::create([
+            'title' => fake()->words(5, true),
+            'description' => fake()->words(300, true),
+            'theme' => fake()->words(10, true),
+            'start_time' => fake()->date(),
+            'end_time' => fake()->date(),
+            'place_address' => fake()->address(),
+            'price' => fake()->randomFloat(2, 0, 10000),
+            'capacity' => fake()->numberBetween(1, 10000),
+            'owner_id' => $admin->id,
+        ]);
+
+        for($i = 0; $i < 3; $i++) {
+            Reservation::create([
+                'is_confirmed' => fake()->boolean(),
+                'user_id' => $admin->id,
+                'conference_id' => $adminConference->id,
+            ]);
+        }
+
+        for($i = 0; $i < 6; $i++) {
+            Lecture::create([
+                'title' => fake()->words(4, true),
+                'poster' => fake()->words(10, true),
+                'is_confirmed' => fake()->boolean(),
+                'start_time' => fake()->date(),
+                'end_time' => fake()->date(),
+                'speaker_id' => $admin->id,
+                'conference_id' => $adminConference->id,
+                'room_id' => Room::all()->random()->id,
+            ]);
+        }
     }
 }

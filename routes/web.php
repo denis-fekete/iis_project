@@ -43,6 +43,9 @@ Route::prefix('conferences')->group(function () {
     Route::get('/lectures/{id}', [ConferenceController::class, 'listConferenceLectures'])
         ->middleware('auth'); // protect website => user must be logged in
 
+    Route::post('/lectures', [ConferenceController::class, 'editLecturesList'])
+        ->middleware('auth'); // protect website => user must be logged in
+
     Route::post('/create', [ConferenceController::class, 'create']);
 });
 

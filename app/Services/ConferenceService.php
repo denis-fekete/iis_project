@@ -161,4 +161,22 @@ class ConferenceService
 
         return $capacityMax - $capacityCurrent;
     }
+
+    public function editLecturesList(Request $request) {
+        $id = $request->input('id');
+        $conference = Conference::find($id);
+
+        foreach($conference->lectures as $lectures) {
+            $val = $request->input((string)($lectures->id));
+
+            if($lectures->is_confirmed != ($val == 'true')) {
+                $lectures->is_confirmed = ($val == 'true');
+                $lectures->save();
+            }
+        }
+
+        $conference->save();
+
+        return true;
+    }
 }

@@ -9,15 +9,22 @@
     </div>
 @endif
 
-<form action="{{ url('conferences/create') }}" id="register_form" class="register_form" method="post">
+<form action="{{ url('conferences/lectures') }}" id="register_form" class="register_form" method="post">
+<input type="number" name="id" value="{{ $id }}" hidden required>
 @csrf
 @foreach ($lectures as $item)
-    @php
-    @endphp
     <p>Lecture: {{$item->title}}:</p>
     <p>confirmed/not confirmed</p>
-    <input class="form_input" type="radio" name="{{$item->id}}" id="capacity" required>
-    <input class="form_input" type="radio" name="{{$item->id}}" id="capacity" required>
+    <input class="form_input" type="radio" name="{{$item->id}}" value="true"
+        @if ($item->is_confirmed)
+            checked
+        @endif
+        required>
+    <input class="form_input" type="radio" name="{{$item->id}}" value="false"
+        @if (!($item->is_confirmed))
+            checked
+        @endif
+        required>
     <hr>
 @endforeach
 <button type"submit">Save</button>
