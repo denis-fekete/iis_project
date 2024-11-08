@@ -61,5 +61,8 @@ function editLecture(id) {
 
 function showSchedule(id) {
     window.location = "/reservations/schedule/" + id;
+}
 
+function editConference(id) {
+    window.location = "/conferences/edit/" + id;
 }

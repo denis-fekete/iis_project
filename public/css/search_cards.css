@@ -1,20 +1,21 @@
 .card {
     background-color: wheat;
+    margin-inline: 4em;
 }
 
-.title{
+.card_title{
     font-size: 20px;
     color:red;
 }
 
-.description {
+.card_description {
     font-size: 15px;
 }
-.organizer_name {
+.card_organizer_name {
     font-size: 15px;
     color:lightskyblue
 }
-.tags {
+.card_theme {
     font-size: 12px;
     color:gray
 }

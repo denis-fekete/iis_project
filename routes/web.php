@@ -33,11 +33,17 @@ Route::prefix('conferences')->group(function () {
     Route::get('/conference/{id}', [ConferenceController::class, 'get']);
     Route::get('/dashboard', [ConferenceController::class, 'dashboard'])
         ->middleware('auth'); // protect website => user must be logged in
-    Route::get('/create', [ConferenceController::class, 'createGET']);
-    Route::get('/edit', [ConferenceController::class, 'edit']);
-    Route::get('/lectures/{id}', [ConferenceController::class, 'lectures']);
 
-    Route::post('/create', [ConferenceController::class, 'createPOST']);
+    Route::get('/create', [ConferenceController::class, 'creationForm'])
+        ->middleware('auth'); // protect website => user must be logged in
+
+    Route::get('/edit/{id}', [ConferenceController::class, 'edit'])
+        ->middleware('auth'); // protect website => user must be logged in
+
+    Route::get('/lectures/{id}', [ConferenceController::class, 'listConferenceLectures'])
+        ->middleware('auth'); // protect website => user must be logged in
+
+    Route::post('/create', [ConferenceController::class, 'create']);
 });
 
 Route::prefix('lectures')->group(function () {

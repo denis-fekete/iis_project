@@ -1,7 +1,8 @@
+Denis: conferences, search
 
 Legend:
 ❌ - not implemented in be/fe
-✅ - implemnted in fe, be methods are created but needs proper implementation
+✅ - implemented in fe, be methods are created but needs proper implementation
 ❓ -
 
 ### Guest
@@ -17,7 +18,7 @@ Legend:
     - ✅ cancel reservation
 - ✅ register (became user)
 - ✅ sign in (became user)
-- ✅❓ see all my reservations (do we check user reservations based on session ID? if it expires should the reservation be deleted from database? should it exist int the first place?)
+- ✅ see all my reservations (store in cookies)
 
 ### User
 - ✅ list all conferences
@@ -25,6 +26,7 @@ Legend:
         - ✅ list lecturers of conference
             - ✅ see details about lecturer (list of lectures, own bio, etc...)
         - ✅ start reservation process
+        - ❌ can offer my own lecture to any future conference and become a potential speaker
 - ✅ list all reservations
     - ✅ become visitor without doing anything
     - ❌ pay for a ticket
@@ -38,10 +40,9 @@ Legend:
     - ❌ see details                        
         - ✅ edit details
         - ❌ add new presentation (plain text)
-    - ❌ see statitics (number of user that are plannig to attend lecture)
+    - ❌ see statistics (number of user that are planning to attend lecture)
     - ✅ see state (accepted/pending)
     - ✅ cancel lecture
-    - ❌❓ can offer my own lecture to any future conference and become a potential speaker (should be in My Conferences (there a lecturer must register as a potential visitor), or should be in Conference detail?)
 - ✅ list my conferences
     - ✅ create conference
     - ❌ enter conference edit mode
@@ -68,4 +69,4 @@ Legend:
         - ❌❓ delete lecture
         - ❌❓ edit lecture
 - ✅ logout
-- ✅ do everyhing that users and guest can do
+- ✅ do everything that users and guest can do
