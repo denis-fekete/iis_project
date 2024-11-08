@@ -55,10 +55,22 @@ class ConferenceService
      * @param  mixed $id ID of the conference
      * @return Conference Conference or null if not found
      */
-    public function getAllDetails($id) {
+    public function getWithLectures($id) {
         // add owner and lectures info now for less database requests
         return Conference::with('owner:id,name,surname')
             ->with('lectures.lecturer:name')
+            ->find($id);
+    }
+
+    /**
+     * Returns a conference by id and puts owner id and name into it
+     *
+     * @param  mixed $id ID of the conference
+     * @return Conference Conference or null if not found
+     */
+    public function getWithReservations($id) {
+        // add owner and lectures info now for less database requests
+        return Conference::with('reservations.user')
             ->find($id);
     }
 
@@ -145,6 +157,12 @@ class ConferenceService
         return $conference;
     }
 
+    /**
+     * Returns number of free seats/capacity for conference with given id
+     *
+     * @param  mixed $id ID of the conference
+     * @return int number of free seats/capacity
+     */
     public static function capacityLeft($id) : int {
         $conference = Conference::find($id);
 
@@ -162,6 +180,13 @@ class ConferenceService
         return $capacityMax - $capacityCurrent;
     }
 
+    /**
+     * Edits lectures to be confirmed or unconfirmed based on information in
+     * $request
+     *
+     * @param  Request $request POST request containing form information
+     * @return bool returns true on success
+     */
     public function editLecturesList(Request $request) {
         $id = $request->input('id');
         $conference = Conference::find($id);
@@ -172,6 +197,31 @@ class ConferenceService
             if($lectures->is_confirmed != ($val == 'true')) {
                 $lectures->is_confirmed = ($val == 'true');
                 $lectures->save();
+            }
+        }
+
+        $conference->save();
+
+        return true;
+    }
+
+    /**
+     * Edits reservations to be confirmed or unconfirmed based on information in
+     * $request
+     *
+     * @param  Request $request POST request containing form information
+     * @return bool returns true on success
+     */
+    public function editReservationsList(Request $request) {
+        $id = $request->input('id');
+        $conference = Conference::find($id);
+
+        foreach($conference->reservations as $reservation) {
+            $val = $request->input((string)($reservation->id));
+
+            if($reservation->is_confirmed != ($val == 'true')) {
+                $reservation->is_confirmed = ($val == 'true');
+                $reservation->save();
             }
         }
 

@@ -40,10 +40,16 @@ Route::prefix('conferences')->group(function () {
     Route::get('/edit/{id}', [ConferenceController::class, 'edit'])
         ->middleware('auth'); // protect website => user must be logged in
 
-    Route::get('/lectures/{id}', [ConferenceController::class, 'listConferenceLectures'])
+    Route::get('/conference/lectures/{id}', [ConferenceController::class, 'listConferenceLectures'])
         ->middleware('auth'); // protect website => user must be logged in
 
-    Route::post('/lectures', [ConferenceController::class, 'editLecturesList'])
+    Route::post('/conference/lectures', [ConferenceController::class, 'editLecturesList'])
+        ->middleware('auth'); // protect website => user must be logged in
+
+    Route::get('/conference/reservations/{id}', [ConferenceController::class, 'listConferenceReservations'])
+        ->middleware('auth'); // protect website => user must be logged in
+
+    Route::post('/conference/reservations', [ConferenceController::class, 'editReservationsList'])
         ->middleware('auth'); // protect website => user must be logged in
 
     Route::post('/create', [ConferenceController::class, 'create']);

@@ -48,7 +48,11 @@ function createConference() {
 }
 
 function editConferenceLectures(id) {
-    window.location = "/conferences/lectures/" + id;
+    window.location = "/conferences/conference/lectures/" + id;
+}
+
+function editConferenceReservations(id) {
+    window.location = "/conferences/conference/reservations/" + id;
 }
 
 function createLectures() {
@@ -66,3 +70,4 @@ function showSchedule(id) {
 function editConference(id) {
     window.location = "/conferences/edit/" + id;
 }
+

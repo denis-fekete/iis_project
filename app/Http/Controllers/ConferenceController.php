@@ -37,7 +37,7 @@ class ConferenceController extends Controller
      * @return void details of the conference view
      */
     public function get($id) {
-        $conference = $this->conferenceService->get($id);
+        $conference = $this->conferenceService->getWithLectures($id);
 
         return view('conferences.conference')
             ->with('conferences', $conference)
@@ -116,7 +116,7 @@ class ConferenceController extends Controller
 
 
     /**
-     * Show user lecture edit for a current conference
+     * Show lecture edit for a current conference
      *
      * @param  mixed $id Id of the conference
      * @return void View to lectures editing or redirects user to dashboard if
@@ -139,17 +139,69 @@ class ConferenceController extends Controller
         }
     }
 
+    /**
+     * Changes values of confirmed lectures
+     *
+     * @param  Request $request POST request containing form information
+     * @return void redirects user to lectures page with notification message
+     */
     public function editLecturesList(Request $request) {
         $id = $request->input('id');
 
         $res = $this->conferenceService->editLecturesList($request);
 
         if($res) {
-            return redirect('/conferences/lectures/' . $id)
+            return redirect('/conferences/conference/lectures/' . $id)
                 ->with('notification', "Your changes were saved");
         } else {
-            return redirect('/conferences/lectures/' . $id)
+            return redirect('/conferences/conference/lectures/' . $id)
                 ->with('notification', "Something went wrong, try it again later"); // TODO: change to ERROR
         }
     }
+
+    /**
+     * Show reservations and allow editing for a current conference
+     *
+     * @param  mixed $id Id of the conference
+     * @return void View to reservation editing or redirects user to dashboard if
+     * user doesn't have permissions
+     */
+    public function listConferenceReservations($id) {
+        // get conference information
+        $conference = $this->conferenceService->getWithReservations($id);
+
+        $user = auth()->user();
+
+        // check if user is owner or admin
+        if($user->id == $conference->owner_id || $user->role == RoleType::Admin->value) {
+            return view('conferences.reservations')
+                ->with('id', $conference->id)
+                ->with('reservations', $conference->reservations)
+                ->with('notification', null);
+        } else {
+            return redirect('conferences/dashboard')
+                ->with('notification', 'You do not have permission to access lectures of this conference');
+        }
+    }
+
+    /**
+     * Changes values of confirmed reservations
+     *
+     * @param  Request $request POST request containing form information
+     * @return void redirects user to reservations page with notification message
+     */
+    public function editReservationsList(Request $request) {
+        $id = $request->input('id');
+
+        $res = $this->conferenceService->editReservationsList($request);
+
+        if($res) {
+            return redirect('/conferences/conference/reservations/' . $id)
+                ->with('notification', "Your changes were saved");
+        } else {
+            return redirect('/conferences/conference/lectures/' . $id)
+                ->with('notification', "Something went wrong, try it again later"); // TODO: change to ERROR
+        }
+    }
+
 }

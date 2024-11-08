@@ -9,6 +9,7 @@
     </div>
 @endif
 
+<h2>Lectures</h2>
 <form action="{{ url('conferences/lectures') }}" id="register_form" class="register_form" method="post">
 <input type="number" name="id" value="{{ $id }}" hidden required>
 @csrf
