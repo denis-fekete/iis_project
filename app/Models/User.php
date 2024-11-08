@@ -30,6 +30,16 @@ class User extends Authenticatable
         return $this->hasMany(Reservation::class, 'user_id');
     }
 
+    public function conferences()
+    {
+        return $this->hasMany(Conference::class, 'conference_id');
+    }
+
+    public function lectures()
+    {
+        return $this->hasMany(Lecture::class, 'speaker_id');
+    }
+
     // Means password will not be included while serialization to JSON
     protected $hidden = [
         'password',

@@ -23,6 +23,17 @@ class Conference extends Model
         'capacity'
     ];
 
+    // tells laravel to cast time into Carbon instead of string (easier to manipulate)
+    protected $casts = [
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
+    ];
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
     public function lectures()
     {
         return $this->hasMany(Lecture::class, 'conference_id');

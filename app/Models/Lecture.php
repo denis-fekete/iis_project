@@ -27,6 +27,11 @@ class Lecture extends Model
         return $this->belongsTo(Conference::class, 'conference_id');
     }
 
+    public function lecturer()
+    {
+        return $this->belongsTo(User::class, 'speaker_id');
+    }
+
     public function room()
     {
         return $this->belongsTo(Room::class, 'room_id');
