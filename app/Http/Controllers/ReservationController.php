@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reservation as ModelsReservation;
+use App\Services\ConferenceService;
+use App\Services\ReservationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Expr\FuncCall;
@@ -24,32 +26,36 @@ class Reservation {
 
 class ReservationController extends Controller
 {
-    public function getForm() {
-        $id = request()->get('id');
+    public function __construct(private ReservationService $reservationService)
+    {
 
-        // TODO: optimize
-        $max = DB::table('conference')->where('id', $id)->get('capacity');
-        $current =  DB::table('reservation')->where('conference_id', $id)->count();
+    }
+
+
+    public function getForm($id) {
+
+        ConferenceService::capacityLeft($id);
 
         return view('/reservations/reserve')
-            ->with('id', $id)
+            ->with('conferenceId', $id)
             // ->with('max', $max - $current);
             ->with('max', 100);
     }
 
-    public function create() {
-        $id = request()->input('id');
+    public function create(Request $request) {
+        $userId = auth()->user()->id;
+        $conferenceId = $request->input('conferenceId');
 
-        // TODO: validate data
+        $err = $this->reservationService->create($request, $userId);
 
-        // ModelsReservation::create([
-        //     "user_id" => auth()->user()->id,
-        //     "conference_id" => (string)$id,
-        //     "is_confirmed" => false,
-        // ]);
+        if($err == '') {
+            return redirect('/conferences/conference/' . $conferenceId)
+                ->with('notification', 'Reservation was created successfully');
+        } else {
+            return redirect()->back()
+                ->withErrors($err);
+        }
 
-        return redirect('/conferences/conference?id=' . $id)
-            ->with('notification', 'Reservation was created successfully');
     }
 
     public function getAll() {

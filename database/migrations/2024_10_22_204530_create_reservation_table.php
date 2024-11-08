@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('reservation', function (Blueprint $table) {
             $table->id();
-            $table->boolean('is_confirmed');
+            $table->boolean('is_confirmed')->default(false);
+            $table->unsignedInteger('number_of_people')->default(1);
 
             $table->unsignedBigInteger('conference_id');
             $table->unsignedBigInteger('user_id');

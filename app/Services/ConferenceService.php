@@ -144,4 +144,21 @@ class ConferenceService
         $conference->end_time = now();
         return $conference;
     }
+
+    public static function capacityLeft($id) : int {
+        $conference = Conference::find($id);
+
+        if($conference == null) {
+            return -1;
+        }
+
+        $capacityMax = $conference->capacity;
+        $capacityCurrent = 0;
+
+        foreach($conference->reservations as $reservation) {
+            $capacityCurrent += $reservation->number_of_people;
+        }
+
+        return $capacityMax - $capacityCurrent;
+    }
 }
