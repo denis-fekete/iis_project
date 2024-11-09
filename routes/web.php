@@ -35,22 +35,22 @@ Route::prefix('conferences')->group(function () {
         ->middleware('auth'); // protect website => user must be logged in
 
     Route::get('/create', [ConferenceController::class, 'creationForm'])
-        ->middleware('auth'); // protect website => user must be logged in
+        ->middleware('auth');
 
     Route::get('/edit/{id}', [ConferenceController::class, 'edit'])
-        ->middleware('auth'); // protect website => user must be logged in
+        ->middleware('auth');
 
     Route::get('/conference/lectures/{id}', [ConferenceController::class, 'listConferenceLectures'])
-        ->middleware('auth'); // protect website => user must be logged in
+        ->middleware('auth');
 
     Route::post('/conference/lectures', [ConferenceController::class, 'editLecturesList'])
-        ->middleware('auth'); // protect website => user must be logged in
+        ->middleware('auth');
 
     Route::get('/conference/reservations/{id}', [ConferenceController::class, 'listConferenceReservations'])
-        ->middleware('auth'); // protect website => user must be logged in
+        ->middleware('auth');
 
     Route::post('/conference/reservations', [ConferenceController::class, 'editReservationsList'])
-        ->middleware('auth'); // protect website => user must be logged in
+        ->middleware('auth');
 
     Route::post('/create', [ConferenceController::class, 'create']);
 });
@@ -71,7 +71,8 @@ Route::prefix('reservations')->group(function () {
     Route::get('/cancel/{id}', [ReservationController::class, 'cancel']);
     Route::get('/schedule/{id}', [ReservationController::class, 'showSchedule']);
 
-    Route::post('/reserve', [ReservationController::class, 'create']);
+    Route::post('/reserve', [ReservationController::class, 'create'])
+        ->middleware('auth');
 });
 
 

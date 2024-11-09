@@ -34,15 +34,18 @@ class ReservationController extends Controller
 
     public function getForm($id) {
 
-        ConferenceService::capacityLeft($id);
-
         return view('/reservations/reserve')
             ->with('conferenceId', $id)
-            // ->with('max', $max - $current);
-            ->with('max', 100);
+            ->with('max', ConferenceService::capacityLeft($id))
+            ->with('user', auth()->user());
     }
 
     public function create(Request $request) {
+        if(auth()->user() == null) {
+            return redirect()->back()
+                ->withErrors(['auth' => 'Error: it seems that you are not logged in']);
+        }
+
         $userId = auth()->user()->id;
         $conferenceId = $request->input('conferenceId');
 

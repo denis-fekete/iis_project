@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Laravel\Pail\ValueObjects\Origin\Console;
 
 class AuthController extends Controller
 {
@@ -50,14 +49,13 @@ class AuthController extends Controller
      * user will be given error messages
      */
     public function login() {
-
         validator(request()->all(), [
             'email' => 'required|email',
             'password' => 'required'
         ])->validate();
 
         if(auth()->attempt(request()->only(['email', 'password']))) {
-            return redirect('/home');
+            return redirect()->back();
         }
 
         return redirect()->back()->withErrors(['email' => 'Invalid credentials']);
@@ -74,6 +72,6 @@ class AuthController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/home');
+        return redirect()->back();
     }
 }

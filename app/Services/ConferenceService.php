@@ -58,7 +58,7 @@ class ConferenceService
     public function getWithLectures($id) {
         // add owner and lectures info now for less database requests
         return Conference::with('owner:id,name,surname')
-            ->with('lectures.lecturer:name')
+            ->with('lectures.lecturer:id,name,surname')
             ->find($id);
     }
 

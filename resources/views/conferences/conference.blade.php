@@ -19,7 +19,7 @@
             <p class="lecture_title">Title: {{$item->title}}</p>
             <p class="lecture_poster">{poster:<{{$item->poster}}>}</p>
 
-            <p class="lecture_speaker" onclick="searchForPerson( {{$item->speaker_id}} )">
+            <p class="lecture_speaker" onclick="searchForPerson( {{$item->lecturer->id}} )">
                 Speaker: {{$item->lecturer->name}} {{$item->lecturer->surname}}
             </p>
 
@@ -27,7 +27,7 @@
                     $item["is_confirmed"] ? 'yes' : 'no'
                 }}
             </p>
-            <p class="lecture_time">Time from {{ $item["start_time"] }} to {{ $item["end_time"] }}</p>
+        <p class="lecture_time">Time from {{ $item["start_time"] }} to {{ $item["end_time"] }}</p>
             <div class="room">
                 <p class="room_id">Room id: {{$item["room_id"]}}</p>
                 <p class="room_name">Room name: TBD</p>
