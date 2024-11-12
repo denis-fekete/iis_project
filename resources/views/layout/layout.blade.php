@@ -50,12 +50,21 @@
         </div>
 
 
+        {{-- do not show notifications if not provided any --}}
         @if (session('notification') != null)
             <div class="notification">
                 <h3>{{session('notification')}}</h3>
             </div>
         @endif
 
+        {{-- if $info not provided set it as a empty array --}}
+        @if (session('info') == null)
+            @php
+                $info = array();
+            @endphp
+        @endif
+
+        {{-- do not show errors if not provided any --}}
         @if ($errors->any())
             <div style="background-color: red">
                 <ul>

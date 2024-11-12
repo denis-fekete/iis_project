@@ -26,12 +26,6 @@ class Reservation {
 
 class ReservationController extends Controller
 {
-    public function __construct(private ReservationService $reservationService)
-    {
-
-    }
-
-
     public function getForm($id) {
 
         return view('/reservations/reserve')
@@ -49,7 +43,7 @@ class ReservationController extends Controller
         $userId = auth()->user()->id;
         $conferenceId = $request->input('conferenceId');
 
-        $err = $this->reservationService->create($request, $userId);
+        $err = ReservationService::create($request, $userId);
 
         if($err == '') {
             return redirect('/conferences/conference/' . $conferenceId)

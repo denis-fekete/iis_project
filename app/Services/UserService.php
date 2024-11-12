@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class UserService
 {
-    public function getPerson($id) {
+    public static function getPerson($id) {
         return User::find($id);
     }
 }

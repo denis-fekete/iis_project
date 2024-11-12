@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('place_address');
             $table->decimal('price', 10, 2);
             $table->unsignedInteger('capacity');
+            $table->unsignedInteger('capacity_left')->default(0);
 
             $table->unsignedBigInteger('owner_id');
 

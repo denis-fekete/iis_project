@@ -13,18 +13,13 @@ use Illuminate\Support\Facades\DB;
 
 class ConferenceController extends Controller
 {
-    public function __construct(private ConferenceService $conferenceService)
-    {
-
-    }
-
     /**
      * Returns all cards that are available, or based on filters
      *
      * @return void search view with all conferences
      */
     public function getAll() {
-        $conferences = $this->conferenceService->getAllShortDescription();
+        $conferences = ConferenceService::getAllShortDescription();
 
         return view('conferences.search')
             ->with('conferences', $conferences);
@@ -37,7 +32,7 @@ class ConferenceController extends Controller
      * @return void details of the conference view
      */
     public function get($id) {
-        $conference = $this->conferenceService->getWithLectures($id);
+        $conference = ConferenceService::getWithLectures($id);
 
         return view('conferences.conference')
             ->with('conferences', $conference)
@@ -51,7 +46,7 @@ class ConferenceController extends Controller
      */
     public function dashboard() {
         $userId = auth()->user()->id;
-        $conferences = $this->conferenceService->getMy($userId);
+        $conferences = ConferenceService::getMy($userId);
 
         return view('conferences.dashboard')
             ->with("conferences", $conferences);
@@ -63,7 +58,7 @@ class ConferenceController extends Controller
      * @return void edit page view
      */
     public function creationForm() {
-        $conference = $this->conferenceService->emptyConferenceWithDate();
+        $conference = ConferenceService::emptyConferenceWithDate();
 
         return view('conferences.edit')
             ->with('conference', $conference);
@@ -80,7 +75,7 @@ class ConferenceController extends Controller
      */
     public function create(Request $request) {
 
-        $res = $this->conferenceService->create($request);
+        $res = ConferenceService::create($request);
         if($res == '') {
             return redirect('conferences/dashboard')
                 ->with("notification", 'Conference was created successfully');
@@ -99,7 +94,7 @@ class ConferenceController extends Controller
      */
     public function edit($id) {
         // get conference information
-        $conference = $this->conferenceService->getWithFormattedDate($id);
+        $conference = ConferenceService::getWithFormattedDate($id);
 
         $user = auth()->user();
         // check if user is owner or admin
@@ -124,7 +119,7 @@ class ConferenceController extends Controller
      */
     public function listConferenceLectures($id) {
         // get conference information
-        $conference = $this->conferenceService->get($id);
+        $conference = ConferenceService::get($id);
 
         $user = auth()->user();
         // check if user is owner or admin
@@ -148,7 +143,7 @@ class ConferenceController extends Controller
     public function editLecturesList(Request $request) {
         $id = $request->input('id');
 
-        $res = $this->conferenceService->editLecturesList($request);
+        $res = ConferenceService::editLecturesList($request);
 
         if($res) {
             return redirect('/conferences/conference/lectures/' . $id)
@@ -168,12 +163,12 @@ class ConferenceController extends Controller
      */
     public function listConferenceReservations($id) {
         // get conference information
-        $conference = $this->conferenceService->getWithReservations($id);
+        $conference = ConferenceService::getWithReservations($id);
 
         $user = auth()->user();
 
         // check if user is owner or admin
-        if($user->id == $conference->owner_id || $user->role == RoleType::Admin->value) {
+        if($user->id == $conference->owner_id) {
             return view('conferences.reservations')
                 ->with('id', $conference->id)
                 ->with('reservations', $conference->reservations)
@@ -193,7 +188,7 @@ class ConferenceController extends Controller
     public function editReservationsList(Request $request) {
         $id = $request->input('id');
 
-        $res = $this->conferenceService->editReservationsList($request);
+        $res = ConferenceService::editReservationsList($request);
 
         if($res) {
             return redirect('/conferences/conference/reservations/' . $id)

@@ -1,5 +1,3 @@
-Denis: conferences, search
-
 Legend:
 ❌ - not implemented in be/fe
 ✅ - implemented in fe, be methods are created but needs proper implementation

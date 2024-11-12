@@ -15,13 +15,12 @@ class ConferenceService
 {
     const MAX_DESCRIPTION_LEN = 160;
 
-
     /**
      * Returns all conferences in database
      *
      * @return Collection of Conferences
      */
-    public function getAll(): Collection {
+    public static function getAll(): Collection {
         return Conference::all();
     }
 
@@ -30,8 +29,8 @@ class ConferenceService
      *
      * @return Collection of Conferences with capped length of description
      */
-    public function getAllShortDescription(): Collection {
-        $conferences = $this->getAll();
+    public static function getAllShortDescription(): Collection {
+        $conferences = self::getAll();
 
         foreach($conferences as $key => $val) {
             $conferences[$key]->description = substr($conferences[$key]->description, 0, self::MAX_DESCRIPTION_LEN);
@@ -45,7 +44,7 @@ class ConferenceService
      * @param  mixed $id ID of the conference
      * @return Conference Conference or null if not found
      */
-    public function get($id) {
+    public static function get($id) {
         return Conference::find($id);
     }
 
@@ -55,7 +54,7 @@ class ConferenceService
      * @param  mixed $id ID of the conference
      * @return Conference Conference or null if not found
      */
-    public function getWithLectures($id) {
+    public static function getWithLectures($id) {
         // add owner and lectures info now for less database requests
         return Conference::with('owner:id,name,surname')
             ->with('lectures.lecturer:id,name,surname')
@@ -68,7 +67,7 @@ class ConferenceService
      * @param  mixed $id ID of the conference
      * @return Conference Conference or null if not found
      */
-    public function getWithReservations($id) {
+    public static function getWithReservations($id) {
         // add owner and lectures info now for less database requests
         return Conference::with('reservations.user')
             ->find($id);
@@ -80,7 +79,7 @@ class ConferenceService
      * @param  mixed $id ID of the conference
      * @return Conference Conference or null if not found
      */
-    public function getWithFormattedDate($id) {
+    public static function getWithFormattedDate($id) {
         $conference = Conference::find($id);
         $conference->start_time= $conference->start_time->format('Y-m-d\TH:i');
         $conference->end_time = $conference->end_time->format('Y-m-d\TH:i');
@@ -94,7 +93,7 @@ class ConferenceService
      * @param  mixed $id ID of user
      * @return void Array of conferences
      */
-    public function getMy($id) {
+    public static function getMy($id) {
         return Conference::where('owner_id', $id)->get();
     }
 
@@ -106,7 +105,7 @@ class ConferenceService
      * @return String Returns empty string if no error occurred, others a error message
      * will be returned
      */
-    public function create(Request $request) {
+    public static function create(Request $request) {
         $validator = Validator::make($request->all(), [
                 'title' => 'required|min:3|max:100',
                 'description' => 'required|min:20|max:10000',
@@ -150,7 +149,7 @@ class ConferenceService
      *
      * @return Conference
      */
-    public function emptyConferenceWithDate() : Conference {
+    public static function emptyConferenceWithDate() : Conference {
         $conference = new Conference();
         $conference->start_time = now();
         $conference->end_time = now();
@@ -187,7 +186,7 @@ class ConferenceService
      * @param  Request $request POST request containing form information
      * @return bool returns true on success
      */
-    public function editLecturesList(Request $request) {
+    public static function editLecturesList(Request $request) {
         $id = $request->input('id');
         $conference = Conference::find($id);
 
@@ -212,7 +211,7 @@ class ConferenceService
      * @param  Request $request POST request containing form information
      * @return bool returns true on success
      */
-    public function editReservationsList(Request $request) {
+    public static function editReservationsList(Request $request) {
         $id = $request->input('id');
         $conference = Conference::find($id);
 

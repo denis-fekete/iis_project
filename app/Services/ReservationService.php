@@ -28,7 +28,7 @@ class ReservationService
      * @param Request  $request
      * @return string
      */
-    public function create(Request $request, $userId) : string {
+    public static function create(Request $request, $userId) : string {
         $conferenceId = $request->input('conferenceId');
         $people = $request->input('number_of_people');
 
