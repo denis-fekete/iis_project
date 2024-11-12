@@ -61,7 +61,31 @@ class ConferenceController extends Controller
         $conference = ConferenceService::emptyConferenceWithDate();
 
         return view('conferences.edit')
-            ->with('conference', $conference);
+            ->with('conference', $conference)
+            ->with('info', ['type' => 'create']);
+    }
+
+    /**
+     * Returns edit page filled current conference data
+     *
+     * @param  mixed $id of the conference
+     * @return void edit view
+     */
+    public function editForm($id) {
+        // get conference information
+        $conference = ConferenceService::getWithFormattedDate($id);
+
+        $user = auth()->user();
+        // check if user is owner or admin
+        if($user->id == $conference->owner_id) {
+
+            return view('conferences.edit')
+                ->with('conference', $conference)
+                ->with('info', ['type' => 'edit', 'id' => $id]);
+        } else {
+            return redirect('conferences/dashboard')
+                ->with('notification', 'You do not have permission to edit this conference');
+        }
     }
 
     /**
@@ -87,27 +111,34 @@ class ConferenceController extends Controller
     }
 
     /**
-     * Returns edit page filled current conference data
+     * Creates new conferences based on provided parameters, parameters are
+     * first validated, then used
      *
-     * @param  mixed $id of the conference
-     * @return void edit view
+     * @param request HTTP Post request that will be validated
+     *
+     * @return Redirect redirects uses to the dashboard on success or back to
+     * creation site if provided data are not correct
      */
-    public function edit($id) {
-        // get conference information
-        $conference = ConferenceService::getWithFormattedDate($id);
+    public function edit(Request $request) {
+        $id = $request->input('id');
 
-        $user = auth()->user();
-        // check if user is owner or admin
-        if($user->id == $conference->owner_id || $user->role == RoleType::Admin->value) {
-
-            return view('conferences.edit')
-                ->with('conference', $conference)
-                ->with('notification', '');
-        } else {
+        if($id == null) {
             return redirect('conferences/dashboard')
-                ->with('notification', 'You do not have permission to edit this conference');
+                ->withErrors(['id' => 'Error: Unknown conference ID']);
+        }
+
+        $res = ConferenceService::edit($request);
+
+        if($res == '') {
+            return redirect('conferences/dashboard')
+                ->with("notification", 'Conference changes were successfully saved');
+        } else {
+            return redirect('conferences/edit/' . ((string)$id))
+                ->withInput() // returns old input so user doesn't have to type it again
+                ->withErrors($res);
         }
     }
+
 
 
     /**

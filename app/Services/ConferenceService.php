@@ -15,6 +15,17 @@ class ConferenceService
 {
     const MAX_DESCRIPTION_LEN = 160;
 
+    private const VALIDATOR_PARAMS = [
+        'title' => 'required|min:3|max:100',
+        'description' => 'required|min:20|max:10000',
+        'theme' => 'required|min:2|max:100',
+        'start_time' => 'required|date',
+        'end_time' => 'required|date',
+        'place_address' => 'required',
+        'price' => 'required',
+        'capacity' => 'required',
+    ];
+
     /**
      * Returns all conferences in database
      *
@@ -98,24 +109,15 @@ class ConferenceService
     }
 
     /**
-     * Validated HTTP POST request and creates new conference if not problem occurred,
-     * if error with validation occurred an error message will be returned
+     * Validated HTTP POST request and creates new conference
      *
      * @param  Request $request HTTP POST request
      * @return String Returns empty string if no error occurred, others a error message
      * will be returned
      */
     public static function create(Request $request) {
-        $validator = Validator::make($request->all(), [
-                'title' => 'required|min:3|max:100',
-                'description' => 'required|min:20|max:10000',
-                'theme' => 'required|min:2|max:100',
-                'start_time' => 'required|date',
-                'end_time' => 'required|date',
-                'place_address' => 'required',
-                'price' => 'required',
-                'capacity' => 'required',
-        ]);
+
+        $validator =  Validator::make($request->all(), self::VALIDATOR_PARAMS);
 
         if($validator->fails()) {
             $errorMessages = collect($validator->errors()->toArray())
@@ -139,6 +141,48 @@ class ConferenceService
             'capacity' => $validated['capacity'],
             'owner_id' => auth()->user()->id,
         ]);
+
+        return ''; // everything was alright, return no error message
+    }
+
+    /**
+     * Validated HTTP POST request and edits existing conference
+     *
+     * @param  Request $request HTTP POST request
+     * @return String Returns empty string if no error occurred, others a error message
+     * will be returned
+     */
+    public static function edit(Request $request) {
+
+        $validator =  Validator::make($request->all(), self::VALIDATOR_PARAMS);
+
+        if($validator->fails()) {
+            $errorMessages = collect($validator->errors()->toArray())
+                ->flatten()
+                ->implode("\n"); // Joins each error with a newline
+
+            return $errorMessages;
+        }
+
+        $validated = $validator->validated();
+
+        $id = $request->input('id');
+        $conference = Conference::find($id);
+
+        if($conference == null) {
+            return "Error: provided conference doesn't exist";
+        }
+
+        $conference->title = $validated['title'];
+        $conference->description = $validated['description'];
+        $conference->theme = $validated['theme'];
+        $conference->start_time = $validated['start_time'];
+        $conference->end_time = $validated['end_time'];
+        $conference->place_address = $validated['place_address'];
+        $conference->price = $validated['price'];
+        $conference->capacity = $validated['capacity'];
+
+        $conference->save();
 
         return ''; // everything was alright, return no error message
     }

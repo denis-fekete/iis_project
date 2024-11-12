@@ -37,7 +37,7 @@ Route::prefix('conferences')->group(function () {
     Route::get('/create', [ConferenceController::class, 'creationForm'])
         ->middleware('auth');
 
-    Route::get('/edit/{id}', [ConferenceController::class, 'edit'])
+    Route::get('/edit/{id}', [ConferenceController::class, 'editForm'])
         ->middleware('auth');
 
     Route::get('/conference/lectures/{id}', [ConferenceController::class, 'listConferenceLectures'])
@@ -53,6 +53,7 @@ Route::prefix('conferences')->group(function () {
         ->middleware('auth');
 
     Route::post('/create', [ConferenceController::class, 'create']);
+    Route::post('/edit', [ConferenceController::class, 'edit']);
 });
 
 Route::prefix('lectures')->group(function () {
