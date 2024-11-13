@@ -19,12 +19,7 @@
             </button>
 
             @if ($user == NULL)
-                <button onclick="window.location.href='{{ url('register') }}'">
-                    Register
-                </button>
-                <button onclick="window.location.href='{{ url('login') }}'">
-                    Login
-                </button>
+                <button type="button" onclick="showLogin()">Log In</button>
             @else
                 @if ($user->role === 'admin')
                     <button onclick="window.location.href='{{ url('admin/dashboard') }}'">
@@ -64,6 +59,7 @@
             @endphp
         @endif
 
+
         {{-- do not show errors if not provided any --}}
         @if ($errors->any())
             <div style="background-color: red">
@@ -75,6 +71,8 @@
             </div>
         @endif
 
+        @include('layouts.auth_popup')
+
         <div class="contents" id="contents">
             @yield('content')
         </div>
@@ -83,5 +81,12 @@
             <p>License</p>
         </div>
     </div>
+
+
+    @isset($info['open_login'])
+        <script>
+            showLogin();
+        </script>
+    @endisset
 </body>
 </html>

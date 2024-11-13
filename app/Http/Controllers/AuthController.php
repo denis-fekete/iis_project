@@ -18,7 +18,7 @@ class AuthController extends Controller
      * not too short, etc...), if not errors are send back for user to correct
      * them
      */
-    public function newRegistration(Request $request)
+    public function registration(Request $request)
     {
         // validate data using built-in validator method
         // if validation fails laravel will automatically send errors and method will end
@@ -38,9 +38,13 @@ class AuthController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
+        $returnUrl = $request->input('return_to');
+
         // log in user and send him to his profile
         if(auth()->attempt(request()->only(['email', 'password']))) {
-            return redirect('/profile');
+            if($returnUrl !== null) {
+                return redirect($returnUrl);
+            }
         }
     }
 
@@ -48,17 +52,27 @@ class AuthController extends Controller
      * Logs in existing user, if credentials are wrong (don't exist in system)
      * user will be given error messages
      */
-    public function login() {
-        validator(request()->all(), [
+    public function login(Request $request) {
+        validator($request->all(), [
             'email' => 'required|email',
             'password' => 'required'
         ])->validate();
 
+        $returnUrl = $request->input('return_to');
+
         if(auth()->attempt(request()->only(['email', 'password']))) {
-            return redirect()->back();
+            if( $returnUrl !== null) {
+                return redirect($returnUrl);
+            } else {
+                return redirect('/home');
+            }
         }
 
-        return redirect()->back()->withErrors(['email' => 'Invalid credentials']);
+        if($returnUrl !== null) {
+            return redirect($returnUrl)->withErrors(['email' => 'Invalid credentials']);
+        } else {
+            return redirect()->back()->withErrors(['email' => 'Invalid credentials']);
+        }
     }
 
     /**

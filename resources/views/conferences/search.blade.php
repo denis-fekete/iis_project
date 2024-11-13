@@ -1,4 +1,4 @@
-@extends('layout.layout')
+@extends('layouts.layout')
 <link href="{{asset('css/search_cards.css')}}" rel="stylesheet">
 
 @section('content')

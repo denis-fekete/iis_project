@@ -76,23 +76,21 @@ Route::prefix('reservations')->group(function () {
         ->middleware('auth');
 });
 
-
 Route::get('/person/{id}', [SearchController::class, 'getPerson']);
-
-
 
 
 // --------------------------------------------------------
 //
 // --------------------------------------------------------
 
-Route::post('/register', [AuthController::class, 'newRegistration']);
+Route::post('/register', [AuthController::class, 'registration']);
 
 Route::get('/login', function () {
-    return view('auth.login');
+    return view('auth.auth');
 })->name('login');
 
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/logout', [AuthController::class, 'logout']);
 
 // --------------------------------------------------------
 //
@@ -105,7 +103,6 @@ Route::get('/profile', function () {
 
 })->middleware('auth');
 
-Route::get('/logout', [AuthController::class, 'logout']);
 
 
 Route::get('/register', function () {
