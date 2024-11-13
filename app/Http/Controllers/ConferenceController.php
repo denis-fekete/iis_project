@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\OrderBy;
+use App\Enums\OrderDirection;
 use App\Enums\RoleType;
+use App\Enums\Themes;
 use App\Models\Conference;
 use App\Services\ConferenceService;
 use Dotenv\Exception\ValidationException;
@@ -18,11 +21,19 @@ class ConferenceController extends Controller
      *
      * @return void search view with all conferences
      */
-    public function getAll() {
-        $conferences = ConferenceService::getAllShortDescription();
+    public function getAll($themes, $orderBy, $orderDir) {
+        $conferences = ConferenceService::getAllShortDescription($themes, $orderBy, $orderDir);
 
         return view('conferences.search')
-            ->with('conferences', $conferences);
+            ->with('conferences', $conferences)
+            ->with('info', [
+                'themes' => Themes::cases(),
+                'directions' => OrderDirection::cases(),
+                'orders' => OrderBy::cases(),
+                'default_theme' => $themes,
+                'default_orders' => $orderBy,
+                'default_directions' => $orderDir,
+                ]);
     }
 
     /**

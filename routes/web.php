@@ -34,7 +34,7 @@ Route::get('/profile', function () {
 // --------------------------------------------------------
 
 Route::prefix('conferences')->group(function () {
-    Route::get('/search', [ConferenceController::class, 'getAll']);
+    Route::get('/search/{themes};{orderBy};{orderDir}', [ConferenceController::class, 'getAll']);
     Route::get('/conference/{id}', [ConferenceController::class, 'get']);
     Route::get('/dashboard', [ConferenceController::class, 'dashboard'])
         ->middleware('auth'); // protect website => user must be logged in

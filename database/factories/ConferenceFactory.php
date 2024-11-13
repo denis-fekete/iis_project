@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\Themes;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -17,10 +18,13 @@ class ConferenceFactory extends Factory
      */
     public function definition(): array
     {
+        $allThemes = Themes::cases();
+        $count = count($allThemes);
+        $theme = $allThemes[fake()->numberBetween(0, $count)];
         return [
             'title' => fake()->words(5, true),
             'description' => fake()->words(300, true),
-            'theme' => fake()->words(10, true),
+            'theme' => $theme,
             'start_time' => fake()->date(),
             'end_time' => fake()->date(),
             'place_address' => fake()->address(),

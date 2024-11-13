@@ -4,7 +4,42 @@
 @section('content')
 
 <div class="filters">
-    <p>filters</p>
+    <fieldset class="radio_box">
+        @foreach ($info['themes'] as $item)
+            <input type="radio" name="themes" value="{{$item->value}}"
+                @if ($item->value == $info['default_theme'])
+                    checked
+                @endif
+            >
+            <label>{{$item->value}}</label>
+        @endforeach
+    </fieldset>
+    <fieldset class="radio_box">
+        @foreach ($info['orders'] as $item)
+            <input type="radio" name="orders" value="{{$item->value}}"
+                @if ($item->value == $info['default_orders'])
+                    checked
+                @endif
+            >
+            <label>{{$item->value}}</label>
+        @endforeach
+    </fieldset>
+    <fieldset class="radio_box">
+        <input type="radio" name="directions" value="asc"
+            @if ("asc" == $info['default_directions'])
+                checked
+            @endif
+            >
+        <label>Ascending</label>
+        <input type="radio" name="directions" value="desc"
+            @if ("desc" == $info['default_directions'])
+                checked
+            @endif
+            >
+        <label>Descending</label>
+    </fieldset>
+
+    <input type="submit" onclick="applyFilters()" value="Apply">
 </div>
 
 <div class="all_cards">
@@ -19,3 +54,16 @@
 @endforeach
 </div>
 @endsection
+
+<script>
+    function applyFilters() {
+        const theme = document.querySelector('input[name="themes"]:checked')?.value;
+        const order = document.querySelector('input[name="orders"]:checked')?.value;
+        const direction = document.querySelector('input[name="directions"]:checked')?.value;
+
+         window.location = "/conferences/search/" +
+            theme + ";" +
+            order + ";" +
+            direction;
+    }
+</script>

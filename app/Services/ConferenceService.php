@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
-
+use App\Enums\OrderBy;
+use App\Enums\Themes;
+use App\Enums\OrderDirection;
 use App\Models\Conference;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -29,10 +31,61 @@ class ConferenceService
     /**
      * Returns all conferences in database
      *
-     * @return Collection of Conferences
+     * @param  Themes|null $themes
+     * @param  OrderBy|null $orderBy
+     * @param  OrderDirection|null $orderDir
+     * @return Collection
      */
-    public static function getAll(): Collection {
-        return Conference::all();
+    public static function getAll($themes, $orderBy, $orderDir): Collection {
+        $query = Conference::query();
+
+        // TODO: rework to allow more simultaneously
+        $allThemes = Themes::cases();
+
+        if($themes != Themes::All->value) {
+            foreach($allThemes as $item) {
+                if($item->value == $themes) {
+                    $query->where('theme', $item->value);
+                    break;
+                }
+            }
+        }
+
+        $orderDirection = "";
+        switch($orderDir) {
+            case OrderDirection::Descending->value:
+            case OrderDirection::Ascending->value:
+                $orderDirection = $orderDir;
+                break;
+            default:
+                error_log("Unknown order direction");
+                $orderDirection = 'asc';
+                break;
+        }
+
+        switch($orderBy) {
+            case OrderBy::Name->value :
+                $query->orderBy('title', $orderDirection);
+                break;
+            case OrderBy::Price->value :
+                $query->orderBy('price', $orderDirection);
+                break;
+            case OrderBy::Newest->value :
+            case OrderBy::Oldest->value :
+                $query->orderBy('start_time', $orderDirection);
+                break;
+            default:
+                error_log("Unknown order by type");
+                break;
+        }
+
+
+        $result = $query->get();
+        if($orderDir == OrderBy::Oldest->value) {
+            $result = $result->reverse();
+        }
+
+        return $result;
     }
 
     /**
@@ -40,8 +93,8 @@ class ConferenceService
      *
      * @return Collection of Conferences with capped length of description
      */
-    public static function getAllShortDescription(): Collection {
-        $conferences = self::getAll();
+    public static function getAllShortDescription($themes, $orderBy, $orderDir): Collection {
+        $conferences = self::getAll($themes, $orderBy, $orderDir);
 
         foreach($conferences as $key => $val) {
             $conferences[$key]->description = substr($conferences[$key]->description, 0, self::MAX_DESCRIPTION_LEN);

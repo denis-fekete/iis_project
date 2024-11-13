@@ -14,7 +14,7 @@
                 Home
             </button>
 
-            <button onclick="window.location.href='{{ url('conferences/search') }}'">
+            <button onclick="window.location.href='{{ url('conferences/search/All;Name;asc') }}'">
                 Search
             </button>
 
