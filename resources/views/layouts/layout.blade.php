@@ -38,7 +38,7 @@
                 <button onclick="window.location.href='{{ url('profile') }}'">
                     My profile
                 </button>
-                <button onclick="window.location.href='{{ url('logout') }}'">
+                <button onclick="window.location.href='{{ url('auth/logout') }}'">
                     Logout
                 </button>
             @endif

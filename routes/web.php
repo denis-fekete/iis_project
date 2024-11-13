@@ -24,6 +24,11 @@ Route::get('/home', function () {
     ]);
 });
 
+Route::get('/profile', function () {
+    return view('profile');
+
+})->middleware('auth');
+
 // --------------------------------------------------------
 //
 // --------------------------------------------------------
@@ -83,32 +88,24 @@ Route::get('/person/{id}', [SearchController::class, 'getPerson']);
 //
 // --------------------------------------------------------
 
-Route::post('/register', [AuthController::class, 'registration']);
+Route::prefix('auth')->group(function () {
+    Route::post('/register', [AuthController::class, 'registration']);
+    Route::get('/register', function () {
+        return view('auth.auth');
+    });
 
-Route::get('/login', function () {
-    return view('auth.auth');
-})->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/login', function () {
+        return view('auth.auth');
+    })->name('login');
 
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/logout', [AuthController::class, 'logout']);
+    Route::get('/logout', [AuthController::class, 'logout']);
+});
+
 
 // --------------------------------------------------------
 //
 // --------------------------------------------------------
-
-// middleware auth makes sure that only logged in user can access this path,
-// otherwise they will be routed to the route with name('login') view
-Route::get('/profile', function () {
-    return view('profile');
-
-})->middleware('auth');
-
-
-
-Route::get('/register', function () {
-    return view('auth.register');
-});
-
 
 Route::prefix('admin')->group(function () {
     Route::get('/dashboard', function () {
