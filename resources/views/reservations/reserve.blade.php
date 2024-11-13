@@ -13,7 +13,7 @@
         <input class="form_input" type="hidden" name="conferenceId" id="id" value="{{ $conferenceId }}" required>
         <br>
         <label class="form_label" for="password">Number of people:</label>
-        <input class="form_input" type="number" name="number_of_people" id="no_people" max="{{$max}}" min="0" required>
+        <input class="form_input" type="number" name="number_of_people" id="no_people" max="{{$max}}" min="1" required>
         <br>
         @if ($user == null)
             <button type"submit" disabled>Make reservation</button>

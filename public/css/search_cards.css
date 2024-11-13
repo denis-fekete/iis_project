@@ -1,6 +1,26 @@
+.all_cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-inline: 5%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
 .card {
     background-color: wheat;
-    margin-inline: 4em;
+    margin-inline: 5%;
+    padding-inline: 5%;
+    padding-bottom: 1%;
+}
+
+.filters {
+    margin-inline: 4%;
+    background-color: wheat;
+}
+
+.card_image {
+    max-width: 100%;
 }
 
 .card_title{

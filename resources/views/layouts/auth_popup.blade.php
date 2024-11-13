@@ -59,7 +59,6 @@
         document.getElementById('loginPopup').style.display = 'none';
     }
 
-    // Close the modal if clicked outside the white box
     document.getElementById('loginPopup').addEventListener('click', function(event) {
         if (event.target === this) {
             hideLogin();
