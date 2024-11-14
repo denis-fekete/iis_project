@@ -63,7 +63,7 @@ Route::prefix('conferences')->group(function () {
 
 Route::prefix('lectures')->group(function () {
     Route::get('/dashboard', [LectureController::class, 'dashboard']);
-    Route::get('/create', [LectureController::class, 'createGET']);
+    Route::get('/create/{id}', [LectureController::class, 'createGET']);
     Route::get('/edit/{id}', [LectureController::class, 'editGET']);
     Route::get('/lecture/{id}', [LectureController::class, 'get']);
 

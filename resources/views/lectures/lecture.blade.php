@@ -5,7 +5,7 @@
 <div class="card">
     <p>{{$data['title']}}</p>
     @if ($data['posterUrl'])
-        <img src="{{$data['posterUrl']}} alt="Poster" />
+        <img src="{{$data['posterUrl']}}" alt='Poster' />
     @endif
     <p>Conference: <a onclick="searchConferences({{ $data['conferenceId'] }})">{{ $data['conferenceName'] }}</a></p>
     <p>Start time: {{$data['startTime']}}</p>
@@ -17,4 +17,3 @@
     <p>Confirmed: {{$data['isConfirmed'] ? 'yes' : 'no'}}</p>
 </div>
 @endsection
-

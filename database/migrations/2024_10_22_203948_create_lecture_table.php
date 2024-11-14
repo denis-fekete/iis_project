@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('lecture', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('poster');
+            $table->string('poster')->nullable();
             $table->boolean('is_confirmed');
             $table->dateTime('start_time');
             $table->dateTime('end_time');
 
             $table->unsignedBigInteger('conference_id');
             $table->unsignedBigInteger('speaker_id');
-            $table->unsignedBigInteger('room_id');
+            $table->unsignedBigInteger('room_id')->nullable();
             
             $table->foreign('conference_id')
                 ->references('id')

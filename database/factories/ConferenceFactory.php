@@ -20,7 +20,7 @@ class ConferenceFactory extends Factory
     {
         $allThemes = Themes::cases();
         $count = count($allThemes);
-        $theme = $allThemes[fake()->numberBetween(0, $count)];
+        $theme = $allThemes[fake()->numberBetween(0, $count - 1)];
         return [
             'title' => fake()->words(5, true),
             'description' => fake()->words(300, true),

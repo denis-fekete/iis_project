@@ -99,7 +99,7 @@ class LectureController extends Controller
     public function createGET($conference_id) {
         $createEmpty = $this->emptyInfo;
         $createEmpty['conference_id'] = $conference_id;
-        return view('create.edit')
+        return view('lectures.create')
             ->with('info', $createEmpty);
     }
 
@@ -109,14 +109,14 @@ class LectureController extends Controller
     public function createPOST(Request $request) {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|min:3|max:255',
-            'poster' => 'url',
+            'poster' => 'nullable|url',
             'start_time' => 'required|date',
             'end_time' => 'required|date|after:start_time',
         ]);
         if ($validator->fails())
             return redirect()->back()->withErrors($validator)->withInput();
 
-        LectureService::updateLectureInfo(auth()->user()->id, $request);
+        LectureService::createLecture(auth()->user()->id, $request);
         return $this->dashboard();
     }
 

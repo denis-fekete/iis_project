@@ -4,6 +4,7 @@
 @section('content')
 <form action="{{ url("lectures/create") }}" id="register_form" class="register_form" method="post">
     @csrf
+    <input type="hidden" name="conference_id" value="{{ $info['conference_id'] }}">
     <label class="form_label" for="title">Tiltle:</label>
     <input class="form_input" type="text" name="title" id="title" value="{{$info["title"]}}" required>
     <br>
@@ -19,4 +20,6 @@
     <button type="submit">Offer lecture</button>
     <br>
 </form>
+
+<script>
 @endsection

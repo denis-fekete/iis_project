@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Collection;
 class LectureService
 {
     public static function getLecturesAssignedToUser($id) {
-        return Lecture::where('id', '=', $id)->get();
+        return Lecture::where('speaker_id', '=', $id)->get();
     }
 
     public static function getLectureById($id) {
@@ -38,6 +38,7 @@ class LectureService
             'poster' => $data->input('poster') ?? '',
             'start_time' => $data->input('start_time'),
             'end_time' => $data->input('end_time'),
+            'is_confirmed' => false,
         ]);
     }
 
@@ -61,5 +62,12 @@ class LectureService
         ];
 
         return $data;
+    }
+
+    public static function cancelLecture($id) {
+        $lecture = Lecture::find($id);
+        if (!$lecture || $lecture->is_confirmed)
+            return 'Impossible to cancel lecture';
+        //TODO
     }
 }
