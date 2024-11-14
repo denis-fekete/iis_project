@@ -13,8 +13,8 @@
             <p>Not confirmed</p>
         @endif
         <button onclick="editLecture({{$item->id}})">Edit</button>
-        <button>Preview</button>
-        <button>Cancel</button>
+        <button onclick="previewLecture({{$item->id}})">Preview</button>
+        <button onclick="cancelLecture({{$item->id}})">Cancel</button>
     </div>
 @endforeach
 @endsection

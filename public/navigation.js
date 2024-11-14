@@ -55,14 +55,6 @@ function editConferenceReservations(id) {
     window.location = "/conferences/conference/reservations/" + id;
 }
 
-function createLectures() {
-    window.location = "/lectures/create";
-}
-
-function editLecture(id) {
-    window.location = "/lectures/edit/" + id;
-}
-
 function showSchedule(id) {
     window.location = "/reservations/schedule/" + id;
 }
@@ -71,3 +63,22 @@ function editConference(id) {
     window.location = "/conferences/edit/" + id;
 }
 
+//
+// Lectures navigation
+//
+
+function createLectures() {
+    window.location = "/lectures/create";
+}
+
+function editLecture(id) {
+    window.location = "/lectures/edit/" + id;
+}
+
+function previewLecture(id) {
+    window.location = "/lectures/edit/" + id;
+}
+
+function cancelLecture(id) {
+    window.location = "/lectures/cancel/" + id;
+}

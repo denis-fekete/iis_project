@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lecture;
+use App\Services\LectureService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -40,47 +41,42 @@ class LectureController extends Controller
         "description" => "",
         "poster" => "",
     ];
-    //DEBUG:
-    private ?array $globalLectures = null;
 
-    public function generateLectures() {
-        if($this->globalLectures == NULL)
-        {
-            for($i = 0; $i < 10; $i++)
-            {
-                $this->globalLectures[$i] = new TmpLecture($i);
-            }
-        }
+    /**
+    *   Lists all conferences that are owned by the user
+    */
+    public function dashboard() {
+        $userId = auth()->user()->id;
+        $lecures = LectureService::getLecturesAssignedToUser($userId);
+
+        return view('lectures.dashboard')->with('cards', $lecures);
     }
 
     /**
-     * Lists all conferences that are owned by the user
-     */
-    public function dashboard() {
-        $this->generateLectures();
-
-        //TODO: logic of getting user created conferences
-        // DEBUG:
-        $count = fake()->numberBetween(0, 3);
-        $lectures = [];
-        for($i = 0; $i < $count; $i++) {
-            $lectures[] = $this->globalLectures[$i];
-        }
-        // END OF DEBUG:
-
-        return view('lectures.dashboard')
-            ->with("cards", $lectures);
-    }
-
+    *   Returns edit view for chosen lecture
+    */
     public function editGET($id) {
-        $this->generateLectures();
-
-
-        // $lecture = $this->globalLectures[$lectureId];
-        $lecture = $this->globalLectures[0];
-        $lecture = json_decode(json_encode($lecture), true);
+        $lecture = LectureService::getLectureById($id);
         return view('lectures.edit')
             ->with("info", $lecture);
+    }
+
+    /**
+    *   Stores changes 
+    */
+    public function editPOST($id, Request $request) {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|min:3|max:255',
+            'poster' => 'url',
+            'start_time' => 'required|date',
+            'end_time' => 'required|date|after:start_time',
+        ]);
+        if ($validator->fails())
+            return redirect()->back()->withErrors($validator)->withInput();
+
+        LectureService::updateLectureInfo($id, $request);
+
+        return $this->dashboard();
     }
 
     /**
@@ -91,9 +87,7 @@ class LectureController extends Controller
             ->with('info', $this->emptyInfo);
     }
 
-    public function editPOST() {
-        // TODO:
-    }
+
 
     /**
      * Cancels lecture
