@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
-
+use App\Enums\OrderBy;
+use App\Enums\Themes;
+use App\Enums\OrderDirection;
 use App\Models\Conference;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -15,14 +17,75 @@ class ConferenceService
 {
     const MAX_DESCRIPTION_LEN = 160;
 
+    private const VALIDATOR_PARAMS = [
+        'title' => 'required|min:3|max:100',
+        'description' => 'required|min:20|max:10000',
+        'theme' => 'required|min:2|max:100',
+        'start_time' => 'required|date',
+        'end_time' => 'required|date',
+        'place_address' => 'required',
+        'price' => 'required',
+        'capacity' => 'required',
+    ];
 
     /**
      * Returns all conferences in database
      *
-     * @return Collection of Conferences
+     * @param  Themes|null $themes
+     * @param  OrderBy|null $orderBy
+     * @param  OrderDirection|null $orderDir
+     * @return Collection
      */
-    public function getAll(): Collection {
-        return Conference::all();
+    public static function getAll($themes, $orderBy, $orderDir): Collection {
+        $query = Conference::query();
+
+        // TODO: rework to allow more simultaneously
+        $allThemes = Themes::cases();
+
+        if($themes != Themes::All->value) {
+            foreach($allThemes as $item) {
+                if($item->value == $themes) {
+                    $query->where('theme', $item->value);
+                    break;
+                }
+            }
+        }
+
+        $orderDirection = "";
+        switch($orderDir) {
+            case OrderDirection::Descending->value:
+            case OrderDirection::Ascending->value:
+                $orderDirection = $orderDir;
+                break;
+            default:
+                error_log("Unknown order direction");
+                $orderDirection = 'asc';
+                break;
+        }
+
+        switch($orderBy) {
+            case OrderBy::Name->value :
+                $query->orderBy('title', $orderDirection);
+                break;
+            case OrderBy::Price->value :
+                $query->orderBy('price', $orderDirection);
+                break;
+            case OrderBy::Newest->value :
+            case OrderBy::Oldest->value :
+                $query->orderBy('start_time', $orderDirection);
+                break;
+            default:
+                error_log("Unknown order by type");
+                break;
+        }
+
+
+        $result = $query->get();
+        if($orderDir == OrderBy::Oldest->value) {
+            $result = $result->reverse();
+        }
+
+        return $result;
     }
 
     /**
@@ -30,8 +93,8 @@ class ConferenceService
      *
      * @return Collection of Conferences with capped length of description
      */
-    public function getAllShortDescription(): Collection {
-        $conferences = $this->getAll();
+    public static function getAllShortDescription($themes, $orderBy, $orderDir): Collection {
+        $conferences = self::getAll($themes, $orderBy, $orderDir);
 
         foreach($conferences as $key => $val) {
             $conferences[$key]->description = substr($conferences[$key]->description, 0, self::MAX_DESCRIPTION_LEN);
@@ -45,7 +108,7 @@ class ConferenceService
      * @param  mixed $id ID of the conference
      * @return Conference Conference or null if not found
      */
-    public function get($id) {
+    public static function get($id) {
         return Conference::find($id);
     }
 
@@ -55,7 +118,7 @@ class ConferenceService
      * @param  mixed $id ID of the conference
      * @return Conference Conference or null if not found
      */
-    public function getWithLectures($id) {
+    public static function getWithLectures($id) {
         // add owner and lectures info now for less database requests
         return Conference::with('owner:id,name,surname')
             ->with('lectures.lecturer:id,name,surname')
@@ -68,7 +131,7 @@ class ConferenceService
      * @param  mixed $id ID of the conference
      * @return Conference Conference or null if not found
      */
-    public function getWithReservations($id) {
+    public static function getWithReservations($id) {
         // add owner and lectures info now for less database requests
         return Conference::with('reservations.user')
             ->find($id);
@@ -80,7 +143,7 @@ class ConferenceService
      * @param  mixed $id ID of the conference
      * @return Conference Conference or null if not found
      */
-    public function getWithFormattedDate($id) {
+    public static function getWithFormattedDate($id) {
         $conference = Conference::find($id);
         $conference->start_time= $conference->start_time->format('Y-m-d\TH:i');
         $conference->end_time = $conference->end_time->format('Y-m-d\TH:i');
@@ -94,29 +157,20 @@ class ConferenceService
      * @param  mixed $id ID of user
      * @return void Array of conferences
      */
-    public function getMy($id) {
+    public static function getMy($id) {
         return Conference::where('owner_id', $id)->get();
     }
 
     /**
-     * Validated HTTP POST request and creates new conference if not problem occurred,
-     * if error with validation occurred an error message will be returned
+     * Validated HTTP POST request and creates new conference
      *
      * @param  Request $request HTTP POST request
      * @return String Returns empty string if no error occurred, others a error message
      * will be returned
      */
-    public function create(Request $request) {
-        $validator = Validator::make($request->all(), [
-                'title' => 'required|min:3|max:100',
-                'description' => 'required|min:20|max:10000',
-                'theme' => 'required|min:2|max:100',
-                'start_time' => 'required|date',
-                'end_time' => 'required|date',
-                'place_address' => 'required',
-                'price' => 'required',
-                'capacity' => 'required',
-        ]);
+    public static function create(Request $request) {
+
+        $validator =  Validator::make($request->all(), self::VALIDATOR_PARAMS);
 
         if($validator->fails()) {
             $errorMessages = collect($validator->errors()->toArray())
@@ -144,13 +198,55 @@ class ConferenceService
         return ''; // everything was alright, return no error message
     }
 
+    /**
+     * Validated HTTP POST request and edits existing conference
+     *
+     * @param  Request $request HTTP POST request
+     * @return String Returns empty string if no error occurred, others a error message
+     * will be returned
+     */
+    public static function edit(Request $request) {
+
+        $validator =  Validator::make($request->all(), self::VALIDATOR_PARAMS);
+
+        if($validator->fails()) {
+            $errorMessages = collect($validator->errors()->toArray())
+                ->flatten()
+                ->implode("\n"); // Joins each error with a newline
+
+            return $errorMessages;
+        }
+
+        $validated = $validator->validated();
+
+        $id = $request->input('id');
+        $conference = Conference::find($id);
+
+        if($conference == null) {
+            return "Error: provided conference doesn't exist";
+        }
+
+        $conference->title = $validated['title'];
+        $conference->description = $validated['description'];
+        $conference->theme = $validated['theme'];
+        $conference->start_time = $validated['start_time'];
+        $conference->end_time = $validated['end_time'];
+        $conference->place_address = $validated['place_address'];
+        $conference->price = $validated['price'];
+        $conference->capacity = $validated['capacity'];
+
+        $conference->save();
+
+        return ''; // everything was alright, return no error message
+    }
+
 
     /**
      * Returns empty conference with date set to now
      *
      * @return Conference
      */
-    public function emptyConferenceWithDate() : Conference {
+    public static function emptyConferenceWithDate() : Conference {
         $conference = new Conference();
         $conference->start_time = now();
         $conference->end_time = now();
@@ -187,7 +283,7 @@ class ConferenceService
      * @param  Request $request POST request containing form information
      * @return bool returns true on success
      */
-    public function editLecturesList(Request $request) {
+    public static function editLecturesList(Request $request) {
         $id = $request->input('id');
         $conference = Conference::find($id);
 
@@ -212,7 +308,7 @@ class ConferenceService
      * @param  Request $request POST request containing form information
      * @return bool returns true on success
      */
-    public function editReservationsList(Request $request) {
+    public static function editReservationsList(Request $request) {
         $id = $request->input('id');
         $conference = Conference::find($id);
 

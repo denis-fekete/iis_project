@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\OrderBy;
+use App\Enums\OrderDirection;
 use App\Enums\RoleType;
+use App\Enums\Themes;
 use App\Models\Conference;
 use App\Services\ConferenceService;
 use Dotenv\Exception\ValidationException;
@@ -13,21 +16,24 @@ use Illuminate\Support\Facades\DB;
 
 class ConferenceController extends Controller
 {
-    public function __construct(private ConferenceService $conferenceService)
-    {
-
-    }
-
     /**
      * Returns all cards that are available, or based on filters
      *
      * @return void search view with all conferences
      */
-    public function getAll() {
-        $conferences = $this->conferenceService->getAllShortDescription();
+    public function getAll($themes, $orderBy, $orderDir) {
+        $conferences = ConferenceService::getAllShortDescription($themes, $orderBy, $orderDir);
 
         return view('conferences.search')
-            ->with('conferences', $conferences);
+            ->with('conferences', $conferences)
+            ->with('info', [
+                'themes' => Themes::cases(),
+                'directions' => OrderDirection::cases(),
+                'orders' => OrderBy::cases(),
+                'default_theme' => $themes,
+                'default_orders' => $orderBy,
+                'default_directions' => $orderDir,
+                ]);
     }
 
     /**
@@ -37,7 +43,7 @@ class ConferenceController extends Controller
      * @return void details of the conference view
      */
     public function get($id) {
-        $conference = $this->conferenceService->getWithLectures($id);
+        $conference = ConferenceService::getWithLectures($id);
 
         return view('conferences.conference')
             ->with('conferences', $conference)
@@ -51,7 +57,7 @@ class ConferenceController extends Controller
      */
     public function dashboard() {
         $userId = auth()->user()->id;
-        $conferences = $this->conferenceService->getMy($userId);
+        $conferences = ConferenceService::getMy($userId);
 
         return view('conferences.dashboard')
             ->with("conferences", $conferences);
@@ -63,10 +69,34 @@ class ConferenceController extends Controller
      * @return void edit page view
      */
     public function creationForm() {
-        $conference = $this->conferenceService->emptyConferenceWithDate();
+        $conference = ConferenceService::emptyConferenceWithDate();
 
         return view('conferences.edit')
-            ->with('conference', $conference);
+            ->with('conference', $conference)
+            ->with('info', ['type' => 'create']);
+    }
+
+    /**
+     * Returns edit page filled current conference data
+     *
+     * @param  mixed $id of the conference
+     * @return void edit view
+     */
+    public function editForm($id) {
+        // get conference information
+        $conference = ConferenceService::getWithFormattedDate($id);
+
+        $user = auth()->user();
+        // check if user is owner or admin
+        if($user->id == $conference->owner_id) {
+
+            return view('conferences.edit')
+                ->with('conference', $conference)
+                ->with('info', ['type' => 'edit', 'id' => $id]);
+        } else {
+            return redirect('conferences/dashboard')
+                ->with('notification', 'You do not have permission to edit this conference');
+        }
     }
 
     /**
@@ -80,7 +110,7 @@ class ConferenceController extends Controller
      */
     public function create(Request $request) {
 
-        $res = $this->conferenceService->create($request);
+        $res = ConferenceService::create($request);
         if($res == '') {
             return redirect('conferences/dashboard')
                 ->with("notification", 'Conference was created successfully');
@@ -92,27 +122,34 @@ class ConferenceController extends Controller
     }
 
     /**
-     * Returns edit page filled current conference data
+     * Creates new conferences based on provided parameters, parameters are
+     * first validated, then used
      *
-     * @param  mixed $id of the conference
-     * @return void edit view
+     * @param request HTTP Post request that will be validated
+     *
+     * @return Redirect redirects uses to the dashboard on success or back to
+     * creation site if provided data are not correct
      */
-    public function edit($id) {
-        // get conference information
-        $conference = $this->conferenceService->getWithFormattedDate($id);
+    public function edit(Request $request) {
+        $id = $request->input('id');
 
-        $user = auth()->user();
-        // check if user is owner or admin
-        if($user->id == $conference->owner_id || $user->role == RoleType::Admin->value) {
-
-            return view('conferences.edit')
-                ->with('conference', $conference)
-                ->with('notification', '');
-        } else {
+        if($id == null) {
             return redirect('conferences/dashboard')
-                ->with('notification', 'You do not have permission to edit this conference');
+                ->withErrors(['id' => 'Error: Unknown conference ID']);
+        }
+
+        $res = ConferenceService::edit($request);
+
+        if($res == '') {
+            return redirect('conferences/dashboard')
+                ->with("notification", 'Conference changes were successfully saved');
+        } else {
+            return redirect('conferences/edit/' . ((string)$id))
+                ->withInput() // returns old input so user doesn't have to type it again
+                ->withErrors($res);
         }
     }
+
 
 
     /**
@@ -124,7 +161,7 @@ class ConferenceController extends Controller
      */
     public function listConferenceLectures($id) {
         // get conference information
-        $conference = $this->conferenceService->get($id);
+        $conference = ConferenceService::get($id);
 
         $user = auth()->user();
         // check if user is owner or admin
@@ -148,7 +185,7 @@ class ConferenceController extends Controller
     public function editLecturesList(Request $request) {
         $id = $request->input('id');
 
-        $res = $this->conferenceService->editLecturesList($request);
+        $res = ConferenceService::editLecturesList($request);
 
         if($res) {
             return redirect('/conferences/conference/lectures/' . $id)
@@ -168,12 +205,12 @@ class ConferenceController extends Controller
      */
     public function listConferenceReservations($id) {
         // get conference information
-        $conference = $this->conferenceService->getWithReservations($id);
+        $conference = ConferenceService::getWithReservations($id);
 
         $user = auth()->user();
 
         // check if user is owner or admin
-        if($user->id == $conference->owner_id || $user->role == RoleType::Admin->value) {
+        if($user->id == $conference->owner_id) {
             return view('conferences.reservations')
                 ->with('id', $conference->id)
                 ->with('reservations', $conference->reservations)
@@ -193,7 +230,7 @@ class ConferenceController extends Controller
     public function editReservationsList(Request $request) {
         $id = $request->input('id');
 
-        $res = $this->conferenceService->editReservationsList($request);
+        $res = ConferenceService::editReservationsList($request);
 
         if($res) {
             return redirect('/conferences/conference/reservations/' . $id)

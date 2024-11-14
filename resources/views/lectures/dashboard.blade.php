@@ -1,4 +1,4 @@
-@extends('layout.layout')
+@extends('layouts.layout')
 <link href="{{asset('css/conference.css')}}" rel="stylesheet">
 
 @section('content')

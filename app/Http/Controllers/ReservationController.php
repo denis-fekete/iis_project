@@ -9,29 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Expr\FuncCall;
 
-class Reservation {
-    public int $id;
-    public bool $is_confirmed;
-    public string $conference_id;
-    public string $user_id;
-
-    public function __construct(int $id)
-    {
-        $this->id = $id;
-        $this->is_confirmed = fake()->boolean();
-        $this->conference_id = fake()->words(3, true);
-        $this->user_id = fake()->name();
-    }
-}
-
 class ReservationController extends Controller
 {
-    public function __construct(private ReservationService $reservationService)
-    {
-
-    }
-
-
     public function getForm($id) {
 
         return view('/reservations/reserve')
@@ -49,7 +28,7 @@ class ReservationController extends Controller
         $userId = auth()->user()->id;
         $conferenceId = $request->input('conferenceId');
 
-        $err = $this->reservationService->create($request, $userId);
+        $err = ReservationService::create($request, $userId);
 
         if($err == '') {
             return redirect('/conferences/conference/' . $conferenceId)
@@ -61,23 +40,36 @@ class ReservationController extends Controller
 
     }
 
+    /**
+     * Returns all reservations in system
+     *
+     * @return Collection of reservations
+     */
     public function getAll() {
+        $id = auth()->user()->id;
 
-        $count = fake()->numberBetween(1, 5);
-        $reservations = [];
-
-        for($i = 0; $i < $count; $i++) {
-            $reservations[] = new Reservation($i);
-        }
+        $reservations = ReservationService::getAllMyWithConferenceInfo($id);
 
         return view('reservations.dashboard')
             ->with('reservations', $reservations);
     }
 
-    public function cancel($id) {
-        //TODO: cancel reservation
+    public function get($id) {
+        $reservation = ReservationService::get($id);
 
-        return redirect('/reservations')
-            ->with('notification', 'Reservation was deleted successfully');
+        return view('reservations.reservation')
+            ->with('reservation', $reservation);
+    }
+
+    public function cancel($id) {
+        $res = ReservationService::cancel(auth()->user()->id, $id);
+
+        if($res == '') {
+            return redirect('/reservations/dashboard')
+                ->with('notification', 'Reservation was deleted successfully');
+        } else {
+            return redirect('/reservations/dashboard')
+                ->withErrors(['auth' => $res]);
+        }
     }
 }

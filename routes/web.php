@@ -24,12 +24,17 @@ Route::get('/home', function () {
     ]);
 });
 
+Route::get('/profile', function () {
+    return view('profile');
+
+})->middleware('auth');
+
 // --------------------------------------------------------
 //
 // --------------------------------------------------------
 
 Route::prefix('conferences')->group(function () {
-    Route::get('/search', [ConferenceController::class, 'getAll']);
+    Route::get('/search/{themes};{orderBy};{orderDir}', [ConferenceController::class, 'getAll']);
     Route::get('/conference/{id}', [ConferenceController::class, 'get']);
     Route::get('/dashboard', [ConferenceController::class, 'dashboard'])
         ->middleware('auth'); // protect website => user must be logged in
@@ -37,7 +42,7 @@ Route::prefix('conferences')->group(function () {
     Route::get('/create', [ConferenceController::class, 'creationForm'])
         ->middleware('auth');
 
-    Route::get('/edit/{id}', [ConferenceController::class, 'edit'])
+    Route::get('/edit/{id}', [ConferenceController::class, 'editForm'])
         ->middleware('auth');
 
     Route::get('/conference/lectures/{id}', [ConferenceController::class, 'listConferenceLectures'])
@@ -53,6 +58,7 @@ Route::prefix('conferences')->group(function () {
         ->middleware('auth');
 
     Route::post('/create', [ConferenceController::class, 'create']);
+    Route::post('/edit', [ConferenceController::class, 'edit']);
 });
 
 Route::prefix('lectures')->group(function () {
@@ -76,42 +82,31 @@ Route::prefix('reservations')->group(function () {
         ->middleware('auth');
 });
 
-
 Route::get('/person/{id}', [SearchController::class, 'getPerson']);
 
 
-
-
 // --------------------------------------------------------
 //
 // --------------------------------------------------------
 
-Route::post('/register', [AuthController::class, 'newRegistration']);
+Route::prefix('auth')->group(function () {
+    Route::post('/register', [AuthController::class, 'registration']);
+    Route::get('/register', function () {
+        return view('auth.auth');
+    });
 
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/login', function () {
+        return view('auth.auth');
+    })->name('login');
 
-Route::post('/login', [AuthController::class, 'login']);
-
-// --------------------------------------------------------
-//
-// --------------------------------------------------------
-
-// middleware auth makes sure that only logged in user can access this path,
-// otherwise they will be routed to the route with name('login') view
-Route::get('/profile', function () {
-    return view('profile');
-
-})->middleware('auth');
-
-Route::get('/logout', [AuthController::class, 'logout']);
-
-
-Route::get('/register', function () {
-    return view('auth.register');
+    Route::get('/logout', [AuthController::class, 'logout']);
 });
 
+
+// --------------------------------------------------------
+//
+// --------------------------------------------------------
 
 Route::prefix('admin')->group(function () {
     Route::get('/dashboard', function () {

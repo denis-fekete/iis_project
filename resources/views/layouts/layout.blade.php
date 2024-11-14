@@ -14,17 +14,12 @@
                 Home
             </button>
 
-            <button onclick="window.location.href='{{ url('conferences/search') }}'">
+            <button onclick="window.location.href='{{ url('conferences/search/All;Name;asc') }}'">
                 Search
             </button>
 
             @if ($user == NULL)
-                <button onclick="window.location.href='{{ url('register') }}'">
-                    Register
-                </button>
-                <button onclick="window.location.href='{{ url('login') }}'">
-                    Login
-                </button>
+                <button type="button" onclick="showLogin()">Log In</button>
             @else
                 @if ($user->role === 'admin')
                     <button onclick="window.location.href='{{ url('admin/dashboard') }}'">
@@ -43,19 +38,29 @@
                 <button onclick="window.location.href='{{ url('profile') }}'">
                     My profile
                 </button>
-                <button onclick="window.location.href='{{ url('logout') }}'">
+                <button onclick="window.location.href='{{ url('auth/logout') }}'">
                     Logout
                 </button>
             @endif
         </div>
 
 
+        {{-- do not show notifications if not provided any --}}
         @if (session('notification') != null)
             <div class="notification">
                 <h3>{{session('notification')}}</h3>
             </div>
         @endif
 
+        {{-- if $info not provided set it as a empty array --}}
+        @if (session('info') == null)
+            @php
+                $info = array();
+            @endphp
+        @endif
+
+
+        {{-- do not show errors if not provided any --}}
         @if ($errors->any())
             <div style="background-color: red">
                 <ul>
@@ -66,6 +71,8 @@
             </div>
         @endif
 
+        @include('layouts.auth_popup')
+
         <div class="contents" id="contents">
             @yield('content')
         </div>
@@ -74,5 +81,12 @@
             <p>License</p>
         </div>
     </div>
+
+
+    @isset($info['open_login'])
+        <script>
+            showLogin();
+        </script>
+    @endisset
 </body>
 </html>

@@ -1,9 +1,24 @@
-@extends('layout.layout')
+@extends('layouts.layout')
 <link href="{{asset('css/conference.css')}}" rel="stylesheet">
 
 @section('content')
-<form action="{{ url('conferences/create') }}" id="register_form" class="register_form" method="post">
+
+@php
+    if($info['type'] == 'create') {
+        $url = 'conferences/create';
+    } else {
+        $url = 'conferences/edit';
+    }
+@endphp
+
+<form action="{{ url($url) }}" id="register_form" class="register_form" method="post">
     @csrf
+    @isset($info)
+        @isset($info['id'])
+            <input class="text" type="text" name="id" id="id" value={{ $info['id'] }} hidden>
+        @endisset
+    @endisset
+
     <label class="form_label" for="title">Tiltle:</label>
     <input class="form_input" type="text" name="title" id="title"
         value="{{old('title', $conference->title)}}" required>
@@ -36,7 +51,15 @@
     <input class="form_input" type="number" name="capacity" id="capacity"
         value="{{old('capacity', $conference->capacity)}}" required>
     <br>
-    <button type"submit">Submit</button>
+
+    @isset($info['type'])
+        @if ($info['type'] == 'create')
+            <button type"submit">Create new</button>
+        @else
+            <button type"submit">Save changes</button>
+        @endif
+    @endisset
+
     <br>
 </form>
 @endsection

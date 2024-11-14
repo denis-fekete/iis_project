@@ -1,12 +1,29 @@
-@extends('layout.layout')
+@extends('layouts.layout')
 
 @section('content')
 <link href="/css/registration.css" rel="stylesheet">
 <script src="/httpHandler.js"></script>
 
 <div>
-    <form action="{{ url('register') }}" id="register_form" class="register_form" method="post">
+    <h2>Login</h2>
+    <form action="{{ url('auth/login') }}" id="register_form" class="register_form" method="post">
         @csrf
+
+        <label class="form_label" for="email">Email:</label>
+        <input class="form_input" type="email" name="email" id="email"required>
+        <br>
+        <label class="form_label" for="password">Password:</label>
+        <input class="form_input" type="password" name="password" id="password"required>
+        <br>
+        <button type"submit">Login</button>
+    </form>
+</div>
+<br>
+<div>
+    <h2>Register</h2>
+    <form action="{{ url('auth/register') }}" id="register_form" class="register_form" method="post">
+        @csrf
+
         <label class="form_label" for="email">Email:</label>
         <input class="form_input" type="email" name="email" id="email"required>
         <br>
@@ -26,5 +43,5 @@
         <br>
     </form>
 </div>
+</div>
 @endsection
-
