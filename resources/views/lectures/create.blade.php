@@ -2,7 +2,7 @@
 <link href="{{asset('css/conference.css')}}" rel="stylesheet">
 
 @section('content')
-<form action="{{ url("lectures/editSave/{$info['id']}") }}" id="register_form" class="register_form" method="post">
+<form action="{{ url("lectures/create") }}" id="register_form" class="register_form" method="post">
     @csrf
     <label class="form_label" for="title">Tiltle:</label>
     <input class="form_input" type="text" name="title" id="title" value="{{$info["title"]}}" required>
@@ -16,7 +16,7 @@
     <label class="form_label" for="end_time">End time:</label>
     <input class="form_input" type="datetime-local" name="end_time" id="end_time" value="{{$info["end_time"]}}" required>
     <br>
-    <button type="submit">Save</button>
+    <button type="submit">Offer lecture</button>
     <br>
 </form>
 @endsection

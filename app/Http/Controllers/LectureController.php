@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Lecture;
 use App\Services\LectureService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -40,6 +41,9 @@ class LectureController extends Controller
         "title" => "",
         "description" => "",
         "poster" => "",
+        "start_time" => "",
+        "end_time" => "",
+        "conference_id" => "",
     ];
 
     /**
@@ -53,9 +57,18 @@ class LectureController extends Controller
     }
 
     /**
+    *   Shows info about lecture 
+    */
+    public function get($id) {
+        $data = LectureService::getLectureDetailView($id);
+        return view('lectures.lecture')->with('data', $data);
+    }
+
+    /**
     *   Returns edit view for chosen lecture
     */
     public function editGET($id) {
+        // TODO: CHECK POLICY
         $lecture = LectureService::getLectureById($id);
         return view('lectures.edit')
             ->with("info", $lecture);
@@ -65,6 +78,7 @@ class LectureController extends Controller
     *   Stores changes 
     */
     public function editPOST($id, Request $request) {
+        // TODO: CHECK POLICY
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|min:3|max:255',
             'poster' => 'url',
@@ -80,67 +94,38 @@ class LectureController extends Controller
     }
 
     /**
-     * Returns view for creating new lecture
-     */
-    public function createGET() {
-        return view('lectures.edit')
-            ->with('info', $this->emptyInfo);
+    *   Shows view for creating new lecture
+    */
+    public function createGET($conference_id) {
+        $createEmpty = $this->emptyInfo;
+        $createEmpty['conference_id'] = $conference_id;
+        return view('create.edit')
+            ->with('info', $createEmpty);
     }
 
+    /**
+    *   Creates new lecture
+    */
+    public function createPOST(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|min:3|max:255',
+            'poster' => 'url',
+            'start_time' => 'required|date',
+            'end_time' => 'required|date|after:start_time',
+        ]);
+        if ($validator->fails())
+            return redirect()->back()->withErrors($validator)->withInput();
 
+        LectureService::updateLectureInfo(auth()->user()->id, $request);
+        return $this->dashboard();
+    }
 
     /**
-     * Cancels lecture
-     */
+    *   Cancels lecture
+    */
     public function cancel() {
         //TODO:
         return redirect('lectures/dashboard')
             ->with('notification', 'Lecture deleted successfully');
     }
-
-    /**
-     * Creates new lecture based on provided parameters, parameters are
-     * first validated, then used
-     */
-    public function createPOST(Request $request) {
-
-        $validator = Validator::make($request->all(), [
-                'title' => 'required|min:3|max:100',
-                'poster' => 'max:1000',
-                'start_time' => 'required|date',
-                'end_time' => 'required|date',
-        ]);
-
-        if($validator->fails()) {
-            $errorMessages = collect($validator->errors()->toArray())
-                ->flatten()
-                ->implode("\n"); // Joins each error with a newline
-
-
-            return redirect('conferences/edit')
-                ->with("notification", $errorMessages)
-                ->with("info", $this->emptyInfo);
-
-        }
-
-        $validated = $validator->validated();
-
-        $lecture = Lecture::create([
-            'title' => $validated['title'],
-            'description' => $validated['description'], // must be present, must be email, must unique in user in column email
-            'theme' => $validated['theme'],
-            'start_time' => $validated['start_time'],
-            'end_time' => $validated['end_time'],
-            'place_address' => $validated['place_address'],
-            'price' => $validated['price'],
-            'capacity' => $validated['capacity'],
-            'owner_id' => auth()->user()->id,
-        ]);
-
-        return view('conferences/dashboard')
-            ->with('notification', 'Conference was created successfully')
-            ->with('info', $this->emptyInfo);
-    }
-
-
 }
