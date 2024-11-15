@@ -55,11 +55,13 @@ class LectureService
         ]);
     }
 
-    public static function getLectureDetailView($id) {
+    public static function getLectureDetailView($id, $userId) {
         $lecture = Lecture::find($id);
         $owner = User::find($lecture->speaker_id);
         $conference = Conference::find($lecture->conference_id);
         $room = Room::find($lecture->room_id);
+
+        $canEdit = LectureService::checkEditPolicy($id, $userId);
 
         $data = [
             'id' => $lecture->id,
@@ -74,6 +76,7 @@ class LectureService
             'conferenceName' => $conference->title,
             'conferenceId' => $conference->id,
             'isConfirmed' => $lecture->is_confirmed,
+            'canEdit' => $canEdit === null ? false : true,
         ];
 
         return $data;
