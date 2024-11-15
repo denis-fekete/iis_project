@@ -4,6 +4,7 @@
 @section('content')
 <div class="card">
     <button onclick="makeReservation('{{$conferences->id}}')">Make reservation</button>
+    <button onclick="createLecture('{{$conferences->id}}')">Offer a lecture</button>
 
     <p class="title">{{$conferences->title}}</p>
     <p class="description">{{$conferences->description}}</p>

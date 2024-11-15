@@ -67,8 +67,8 @@ function editConference(id) {
 // Lectures navigation
 //
 
-function createLectures() {
-    window.location = "/lectures/create";
+function createLecture(id) {
+    window.location = "/lectures/create/" + id;
 }
 
 function editLecture(id) {
