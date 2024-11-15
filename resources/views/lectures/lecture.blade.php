@@ -10,8 +10,10 @@
     @endif
     <p>{{ $data['description'] }}
     <p>Conference: <a onclick="searchConferences({{ $data['conferenceId'] }})">{{ $data['conferenceName'] }}</a></p>
-    <p>Start time: {{$data['startTime']}}</p>
-    <p>End time: {{$data['endTime']}}</p>
+    @if ($data['startTime'] && $data['endTime'])
+        <p>Start time: {{$data['startTime']}}</p>
+        <p>End time: {{$data['endTime']}}</p>
+    @endif
     @if ($data['room'])
         <p>Room: {{ $data['room'] }}</p>
     @endif

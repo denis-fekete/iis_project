@@ -167,9 +167,11 @@ class ConferenceController extends Controller
         // check if user is owner or admin
         if($user->id == $conference->owner_id || $user->role == RoleType::Admin->value) {
             return view('conferences.lectures')
-                ->with('id', $conference->id)
+                ->with('conference', $conference)
                 ->with('lectures', $conference->lectures)
-                ->with('notification', null);
+                ->with('notification', null)
+                ->with('rooms', $conference->rooms);
+
         } else {
             return redirect('conferences/dashboard')
                 ->with('notification', 'You do not have permission to access lectures of this conference');

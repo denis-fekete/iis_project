@@ -83,8 +83,6 @@ class LectureController extends Controller
             'title' => 'required|string|min:3|max:255',
             'description' => 'required|string',
             'poster' => 'nullable|url',
-            //'start_time' => 'required|date',
-            //'end_time' => 'required|date|after:start_time',
         ]);
         if ($validator->fails())
             return redirect()->back()->withErrors($validator)->withInput();
@@ -141,5 +139,46 @@ class LectureController extends Controller
             return redirect()->back()->with('error', $cancellationError);
 
         return $this->dashboard();
+    }
+
+    /**
+    *   Confirms lecture 
+    */
+    public function confirm(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'startTime' => 'required|date',
+            'endTime' => 'required|date|after:startTime',
+        ]);
+        if ($validator->fails())
+            return redirect()->back()->withErrors($validator)->withInput();
+
+        $lectureId = $request->input('id');
+        $userId = auth()->user()->id;
+        $checkPolicyError = LectureService::checkSchedulePolicy($lectureId, $userId);
+        if ($checkPolicyError)
+            return redirect()->back()->with('notification', $checkPolicyError);
+
+        $confirmError = LectureService::confirm($request);
+        if ($confirmError)
+            return redirect()->back()->with('notification', $confirmError);
+
+        return redirect('/conferences/conference/lectures/'.$request->conferenceId);
+    }
+
+    /**
+    *   Unconfirms lecture 
+    */
+    public function unconfirm(Request $request) {
+        $lectureId = $request->input('id');
+        $userId = auth()->user()->id;
+        $checkPolicyError = LectureService::checkSchedulePolicy($lectureId, $userId);
+        if ($checkPolicyError)
+            return redirect()->back()->with('error', $checkPolicyError);
+
+        $unconfirmError = LectureService::unconfirm($lectureId);
+        if ($unconfirmError)
+            return redirect()->back()->with('error', $unconfirmError);
+        
+        return redirect('/conferences/conference/lectures/'.$request->conferenceId);
     }
 }

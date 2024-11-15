@@ -6,9 +6,11 @@ use App\Models\Conference;
 use App\Models\Lecture;
 use App\Models\Room;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 
 class LectureService
 {
@@ -89,6 +91,57 @@ class LectureService
         return null;
     }
 
+    public static function confirm($data) {
+        $lecture = Lecture::find($data->input('id'));
+        if (!$lecture)
+            return 'Lecture does not exist';
+
+        if ($lecture->is_confirmed)
+            return 'Lecture is already confirmed';
+
+        $conference = Conference::find($lecture->conference_id);
+        $room = Room::find($data->input('roomId'));
+        $startTime = Carbon::parse($data->input('startTime'));
+        $endTime = Carbon::parse($data->input('endTime'));
+
+        if ($startTime < $conference->start_time || $endTime > $conference->end_time)
+            return 'Time beyond conference';
+
+        $collidingLectures = $conference->lectures()
+            ->where('is_confirmed', true)
+            ->where('id', '!=', $lecture->id)
+            ->where('room_id', $room->id)
+            ->where(function ($query) use ($startTime, $endTime) {
+                $query->whereBetween('start_time', [$startTime, $endTime])
+                      ->orWhereBetween('end_time', [$startTime, $endTime]);
+            })->exists();
+        
+        if ($collidingLectures)
+            return 'Collision with another lecture';
+
+        $lecture->room_id = $room->id;
+        $lecture->start_time = $startTime;
+        $lecture->end_time = $endTime;
+        $lecture->is_confirmed = true;
+        $lecture->update();
+
+        return null;
+    }
+
+    public static function unconfirm($lectureId) {
+        $lecture = Lecture::find($lectureId);
+        if (!$lecture->is_confirmed)
+            return 'Lecture was not confirmed';
+
+        $lecture->is_confirmed = false;
+        $lecture->room_id = null;
+        $lecture->start_time = null;
+        $lecture->end_time = null;
+        $lecture->update();
+
+        return null;
+    }
+
     public static function checkEditPolicy($lectureId, $userId) {
         $lecture = Lecture::find($lectureId);
         if (!$lecture)
@@ -101,12 +154,12 @@ class LectureService
     public static function checkSchedulePolicy($lectureId, $userId) {
         $lecture = Lecture::find($lectureId);
         if (!$lecture)
-            return 'lecture-does-not-exist';
+            return 'Cannot find lecture';
         $conference = Conference::find($lecture->conference_id);
         if (!$conference)
-            return 'unable-to-check-policy';
+            return 'Server error';
         if ($conference->owner_id != $userId)
-            return 'restricted';
+            return 'Restricted';
         return null;
-    } 
+    }
 }

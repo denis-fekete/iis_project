@@ -48,9 +48,6 @@ Route::prefix('conferences')->group(function () {
     Route::get('/conference/lectures/{id}', [ConferenceController::class, 'listConferenceLectures'])
         ->middleware('auth');
 
-    Route::post('/conference/lectures', [ConferenceController::class, 'editLecturesList'])
-        ->middleware('auth');
-
     Route::get('/conference/reservations/{id}', [ConferenceController::class, 'listConferenceReservations'])
         ->middleware('auth');
 
@@ -70,6 +67,9 @@ Route::prefix('lectures')->group(function () {
     Route::post('/create', [LectureController::class, 'createPOST']);
     Route::post('/editSave', [LectureController::class, 'editPOST']);
     Route::post('/cancel', [LectureController::class, 'cancel']);
+
+    Route::post('/confirm', [LectureController::class, 'confirm']);
+    Route::post('/unconfirm', [LectureController::class, 'unconfirm']);
 });
 
 Route::prefix('reservations')->group(function () {
