@@ -68,8 +68,8 @@ Route::prefix('lectures')->group(function () {
     Route::get('/lecture/{id}', [LectureController::class, 'get']);
 
     Route::post('/create', [LectureController::class, 'createPOST']);
-    Route::post('/editSave/{id}', [LectureController::class, 'editPOST']);
-    Route::post('/cancel/{id}', [LectureController::class, 'cancel']);
+    Route::post('/editSave', [LectureController::class, 'editPOST']);
+    Route::post('/cancel', [LectureController::class, 'cancel']);
 });
 
 Route::prefix('reservations')->group(function () {

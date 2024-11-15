@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Lecture;
 use App\Services\LectureService;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -77,20 +75,21 @@ class LectureController extends Controller
     /**
     *   Stores changes 
     */
-    public function editPOST($id, Request $request) {
+    public function editPOST(Request $request) {
         // TODO: CHECK POLICY
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|min:3|max:255',
-            'poster' => 'url',
+            'poster' => 'nullable|url',
             'start_time' => 'required|date',
             'end_time' => 'required|date|after:start_time',
         ]);
         if ($validator->fails())
             return redirect()->back()->withErrors($validator)->withInput();
 
-        LectureService::updateLectureInfo($id, $request);
+        $id = $request->input('id');
+        LectureService::updateLectureInfo($request->input('id'), $request);
 
-        return $this->dashboard();
+        return $this->get($id);
     }
 
     /**
@@ -123,9 +122,14 @@ class LectureController extends Controller
     /**
     *   Cancels lecture
     */
-    public function cancel() {
-        //TODO:
-        return redirect('lectures/dashboard')
-            ->with('notification', 'Lecture deleted successfully');
+    public function cancel(Request $request) {
+        $lectureId = $request->input('id');
+        $userId = auth()->user()->id;
+
+        $result = LectureService::cancelLecture($userId, $lectureId);
+        if (!$result)
+            return $this->dashboard();
+
+        return redirect()->back()->withErrors($result)->withInput();
     }
 }

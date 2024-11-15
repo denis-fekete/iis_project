@@ -2,8 +2,9 @@
 <link href="{{asset('css/conference.css')}}" rel="stylesheet">
 
 @section('content')
-<form action="{{ url("lectures/editSave/{$info['id']}") }}" id="register_form" class="register_form" method="post">
+<form action="{{ url("lectures/editSave") }}" id="register_form" class="register_form" method="post">
     @csrf
+    <input type="hidden" name="id" value="{{ $info['id'] }}">
     <label class="form_label" for="title">Tiltle:</label>
     <input class="form_input" type="text" name="title" id="title" value="{{$info["title"]}}" required>
     <br>

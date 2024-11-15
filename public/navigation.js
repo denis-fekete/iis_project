@@ -78,7 +78,3 @@ function editLecture(id) {
 function previewLecture(id) {
     window.location = "/lectures/lecture/" + id;
 }
-
-function cancelLecture(id) {
-    window.location = "/lectures/cancel/" + id;
-}

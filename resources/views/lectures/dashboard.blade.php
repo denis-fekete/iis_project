@@ -3,18 +3,14 @@
 
 @section('content')
 <h4>My lectures</h4>
-<button onclick="createLectures()">Create new lecture</button>
 @foreach ($cards as $item)
-    <div class="card">
+    <div class="card" onclick="previewLecture({{$item->id}})">
         <p class="card_title">{{$item->title}}</p>
         @if ( $item->is_confirmed )
             <p>Confirmed</p>
         @else
             <p>Not confirmed</p>
         @endif
-        <button onclick="editLecture({{$item->id}})">Edit</button>
-        <button onclick="previewLecture({{$item->id}})">Preview</button>
-        <button onclick="cancelLecture({{$item->id}})">Cancel</button>
     </div>
 @endforeach
 @endsection

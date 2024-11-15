@@ -49,6 +49,7 @@ class LectureService
         $room = Room::find($lecture->room_id);
 
         $data = [
+            'id' => $lecture->id,
             'title' => $lecture->title,
             'posterUrl' => $lecture->poster ?? null,
             'startTime' => $lecture->start_time,
@@ -64,10 +65,15 @@ class LectureService
         return $data;
     }
 
-    public static function cancelLecture($id) {
-        $lecture = Lecture::find($id);
+    public static function cancelLecture($speakerId, $lectureId) {
+        $lecture = Lecture::find($lectureId);
         if (!$lecture || $lecture->is_confirmed)
             return 'Impossible to cancel lecture';
-        //TODO
+
+        if ($lecture->speaker_id !== $speakerId)
+            return 'Not authorized';
+
+        $lecture->delete();
+        return null;
     }
 }
