@@ -66,7 +66,10 @@ class LectureController extends Controller
     *   Returns edit view for chosen lecture
     */
     public function editGET($id) {
-        // TODO: CHECK POLICY
+        $userId = auth()->user()->id;
+        if ($policyCheckResult = LectureService::checkEditPolicy($id, $userId))
+            return redirect()->back()->with('error', $policyCheckResult);
+
         $lecture = LectureService::getLectureById($id);
         return view('lectures.edit')
             ->with("info", $lecture);
@@ -76,17 +79,21 @@ class LectureController extends Controller
     *   Stores changes 
     */
     public function editPOST(Request $request) {
-        // TODO: CHECK POLICY
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|min:3|max:255',
+            'description' => 'required|string',
             'poster' => 'nullable|url',
-            'start_time' => 'required|date',
-            'end_time' => 'required|date|after:start_time',
+            //'start_time' => 'required|date',
+            //'end_time' => 'required|date|after:start_time',
         ]);
         if ($validator->fails())
             return redirect()->back()->withErrors($validator)->withInput();
 
         $id = $request->input('id');
+        $userId = auth()->user()->id;
+        if ($policyCheckResult = LectureService::checkEditPolicy($id, $userId))
+            return redirect()->back()->with('error', $policyCheckResult);
+
         LectureService::updateLectureInfo($request->input('id'), $request);
 
         return $this->get($id);
@@ -108,9 +115,8 @@ class LectureController extends Controller
     public function createPOST(Request $request) {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|min:3|max:255',
+            'description' => 'required|string',
             'poster' => 'nullable|url',
-            'start_time' => 'required|date',
-            'end_time' => 'required|date|after:start_time',
         ]);
         if ($validator->fails())
             return redirect()->back()->withErrors($validator)->withInput();
@@ -126,10 +132,14 @@ class LectureController extends Controller
         $lectureId = $request->input('id');
         $userId = auth()->user()->id;
 
-        $result = LectureService::cancelLecture($userId, $lectureId);
-        if (!$result)
-            return $this->dashboard();
+        $checkPolicyError = LectureService::checkEditPolicy($lectureId, $userId);
+        if ($checkPolicyError)
+            return redirect()->back()->with('error', $checkPolicyError);
 
-        return redirect()->back()->withErrors($result)->withInput();
+        $cancellationError = LectureService::cancelLecture($userId, $lectureId);
+        if ($cancellationError)
+            return redirect()->back()->with('error', $cancellationError);
+
+        return $this->dashboard();
     }
 }

@@ -22,6 +22,7 @@ class LectureFactory extends Factory
         return [
             'title' => fake()->words(4, true),
             'poster' => fake()->words(10, true),
+            'description' => fake()->words(59, true),
             'is_confirmed' => fake()->boolean(),
             'start_time' => fake()->date(),
             'end_time' => fake()->date(),

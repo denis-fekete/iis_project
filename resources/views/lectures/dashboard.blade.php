@@ -4,12 +4,13 @@
 @section('content')
 <h4>My lectures</h4>
 @foreach ($cards as $item)
-    <div class="card" onclick="previewLecture({{$item->id}})">
-        <p class="card_title">{{$item->title}}</p>
-        @if ( $item->is_confirmed )
-            <p>Confirmed</p>
+    <div class="card" onclick="previewLecture({{$item['id']}})">
+        <p>{{$item['title']}}</p>
+        <p>Confrence: {{ $item['conferenceTitle'] }}</p>
+        @if ( $item['isConfirmed'] )
+            <p>Confirmed: Yes</p>
         @else
-            <p>Not confirmed</p>
+            <p>Confirmed: No</p>
         @endif
     </div>
 @endforeach

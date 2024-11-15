@@ -17,6 +17,7 @@ class Lecture extends Model
         'roomId',
         'title',
         'poster',
+        'description',
         'is_confirmed',
         'start_time',
         'end_time'

@@ -8,6 +8,7 @@
     @if ($data['posterUrl'])
         <img src="{{$data['posterUrl']}}" alt='Poster' />
     @endif
+    <p>{{ $data['description'] }}
     <p>Conference: <a onclick="searchConferences({{ $data['conferenceId'] }})">{{ $data['conferenceName'] }}</a></p>
     <p>Start time: {{$data['startTime']}}</p>
     <p>End time: {{$data['endTime']}}</p>
@@ -18,7 +19,9 @@
     <p>Confirmed: {{$data['isConfirmed'] ? 'yes' : 'no'}}</p>
 
     <button onclick="editLecture({{$data['id']}})">Edit</button>
-    <button onclick="cancelLecture({{$data['id']}})">Cancel</button>
+    @if (!$data['isConfirmed'])
+        <button onclick="cancelLecture({{$data['id']}})">Cancel</button>
+    @endif
 </div>
 @endsection
 

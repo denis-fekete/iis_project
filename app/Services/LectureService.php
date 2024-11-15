@@ -13,7 +13,20 @@ use Illuminate\Database\Eloquent\Collection;
 class LectureService
 {
     public static function getLecturesAssignedToUser($id) {
-        return Lecture::where('speaker_id', '=', $id)->get();
+        $usersLectures = Lecture::where('speaker_id', '=', $id)->get();
+        $dashBoardLectureViewModels = [];
+        foreach ($usersLectures as $lecture) {
+            $conference = Conference::find($lecture->conference_id);
+            array_push($dashBoardLectureViewModels, [
+                'id' => $lecture->id,
+                'title' => $lecture->title,
+                'conferenceId' => $conference->id,
+                'conferenceTitle' => $conference->title,
+                'isConfirmed' => $lecture->is_confirmed,
+            ]);
+        }
+
+        return $dashBoardLectureViewModels;
     }
 
     public static function getLectureById($id) {
@@ -25,8 +38,7 @@ class LectureService
 
         $lecture->title = $data->input('title');
         $lecture->poster = $data->input('poster');
-        $lecture->start_time = $data->input('start_time');
-        $lecture->end_time = $data->input('end_time');
+        $lecture->description = $data->input('description');
         $lecture->save();
     }
 
@@ -35,9 +47,8 @@ class LectureService
             'conference_id' => $data->input('conference_id'),
             'speaker_id' => $userId,
             'title' => $data->input('title'),
+            'description' => $data->input('description'),
             'poster' => $data->input('poster') ?? '',
-            'start_time' => $data->input('start_time'),
-            'end_time' => $data->input('end_time'),
             'is_confirmed' => false,
         ]);
     }
@@ -51,9 +62,10 @@ class LectureService
         $data = [
             'id' => $lecture->id,
             'title' => $lecture->title,
+            'description' => $lecture->description,
             'posterUrl' => $lecture->poster ?? null,
-            'startTime' => $lecture->start_time,
-            'endTime' => $lecture->end_time,
+            'startTime' => $lecture->start_time ?? null,
+            'endTime' => $lecture->end_time ?? null,
             'ownerId' => $owner->id,
             'ownerName' => $owner->name.' '.$owner->surname,
             'room' => $room ? $room->name : null,
@@ -67,13 +79,34 @@ class LectureService
 
     public static function cancelLecture($speakerId, $lectureId) {
         $lecture = Lecture::find($lectureId);
-        if (!$lecture || $lecture->is_confirmed)
-            return 'Impossible to cancel lecture';
+        if (!$lecture)
+            return 'lecture-does-not-exist';
 
-        if ($lecture->speaker_id !== $speakerId)
-            return 'Not authorized';
+        if ($lecture->is_confirmed)
+            return 'confirmed-lecture-cannot-be-cancelled';
 
         $lecture->delete();
         return null;
     }
+
+    public static function checkEditPolicy($lectureId, $userId) {
+        $lecture = Lecture::find($lectureId);
+        if (!$lecture)
+            return 'lecture-does-not-exist';
+        if ($lecture->speaker_id != $userId)
+            return 'restricted';
+        return null;
+    }
+
+    public static function checkSchedulePolicy($lectureId, $userId) {
+        $lecture = Lecture::find($lectureId);
+        if (!$lecture)
+            return 'lecture-does-not-exist';
+        $conference = Conference::find($lecture->conference_id);
+        if (!$conference)
+            return 'unable-to-check-policy';
+        if ($conference->owner_id != $userId)
+            return 'restricted';
+        return null;
+    } 
 }
