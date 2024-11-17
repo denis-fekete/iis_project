@@ -1,5 +1,3 @@
-<link href="/css/registration.css" rel="stylesheet">
-
 @php
     $currentUrl = url()->current();
 @endphp

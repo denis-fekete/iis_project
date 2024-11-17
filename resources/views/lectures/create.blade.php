@@ -1,5 +1,4 @@
 @extends('layouts.layout')
-<link href="{{asset('css/conference.css')}}" rel="stylesheet">
 
 @section('content')
 <form action="{{ url("lectures/create") }}" id="register_form" class="register_form" method="post">

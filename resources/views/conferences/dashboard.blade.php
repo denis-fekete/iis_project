@@ -1,15 +1,14 @@
 @extends('layouts.layout')
-<link href="{{asset('css/conference.css')}}" rel="stylesheet">
 
 @section('content')
-<button onclick="createConference()">Create new conference</button>
+<button onclick="navitateTo('/conferences/create')">Create new conference</button>
 @foreach ($conferences as $item)
     <div class="card">
         <p class="card_title">{{$item->title}}</p>
-        <button onclick="editConference({{ $item->id }})" >Edit</button>
-        <button onclick="searchConferences({{ $item->id }})" >Preview</button>
-        <button onclick="editConferenceLectures({{ $item->id }})">Lectures</button>
-        <button onclick="editConferenceReservations({{ $item->id }})">Reservations</button>
+        <button onclick="navigateTo( '/conferences/edit/{{ $item->id }}' )"                     >Edit</button>
+        <button onclick="navigateTo( '/conferences/conference/{{ $item->id }})"                 >Preview</button>
+        <button onclick="navigateTo( '/conferences/conference/lectures/{{ $item->id }}'')"       >Lectures</button>
+        <button onclick="navigateTo( '/conferences/conference/reservations/{{ $item->id }}')    ">Reservations</button>
     </div>
 @endforeach
 @endsection

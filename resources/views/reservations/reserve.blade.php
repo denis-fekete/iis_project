@@ -1,7 +1,6 @@
 @extends('layouts.layout')
 
 @section('content')
-<link href="/css/registration.css" rel="stylesheet">
 
 @if ($user == null)
     <h3>You are not logged in, please do so or register to continue reservation</h3>

@@ -1,5 +1,4 @@
 @extends('layouts.layout')
-<link href="{{asset('css/conference.css')}}" rel="stylesheet">
 
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -21,7 +20,7 @@
     <p>Confirmed: {{$data['isConfirmed'] ? 'yes' : 'no'}}</p>
 
     @if (!$data['canEdit'])
-        <button onclick="editLecture({{$data['id']}})">Edit</button>
+        <button onclick="navigateTo( '/lectures/edit/{{ $data['id'] }}' )">Edit</button>
         @if (!$data['isConfirmed'])
             <button onclick="cancelLecture({{$data['id']}})">Cancel</button>
         @endif

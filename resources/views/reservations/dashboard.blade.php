@@ -1,5 +1,4 @@
 @extends('layouts.layout')
-<link href="{{asset('css/reservation.css')}}" rel="stylesheet">
 
 @section('content')
 
@@ -13,9 +12,9 @@
             To {{ $reservation->conference->end_time }}
             </p>
         <p class="reservation_number_of_peole">Number of people: {{ $reservation->number_of_people }}</p>
-        <button onclick="cancelReservation({{ $reservation->id }})">Cancel reservation</button>
+        <button onclick="navigateTo('/reservations/cancel/{{ $reservation->id }}')">Cancel reservation</button>
         <br>
-        <button onclick="showSchedule({{ $reservation->id }})">Show schedule</button>
+        <button onclick="navigateTo('reservations/schedule/{{ $reservation->id }}')">Show schedule</button>
     </div>
     <br>
 @endforeach

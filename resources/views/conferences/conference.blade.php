@@ -1,10 +1,9 @@
 @extends('layouts.layout')
-<link href="{{asset('css/conference.css')}}" rel="stylesheet">
 
 @section('content')
 <div class="card">
-    <button onclick="makeReservation('{{$conferences->id}}')">Make reservation</button>
-    <button onclick="createLecture('{{$conferences->id}}')">Offer a lecture</button>
+    <button onclick="navigateTo('/reservations/reserve/{{$conferences->id}}')">Make reservation</button>
+    <button onclick="navigateTo('/lectures/create/{{$conferences->id}}')">Offer a lecture</button>
 
     <p class="title">{{$conferences->title}}</p>
     <p class="description">{{$conferences->description}}</p>
@@ -20,7 +19,7 @@
             <p class="lecture_title">Title: {{$item->title}}</p>
             <p class="lecture_poster">{poster:<{{$item->poster}}>}</p>
 
-            <p class="lecture_speaker" onclick="searchForPerson( {{$item->lecturer->id}} )">
+            <p class="lecture_speaker" onclick="navigateTo('/person/{{$item->lecturer->id}}')">
                 Speaker: {{$item->lecturer->name}} {{$item->lecturer->surname}}
             </p>
 

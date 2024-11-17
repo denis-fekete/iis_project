@@ -51,28 +51,26 @@ class ConferenceService
             }
         }
 
-        $orderDirection = "";
         switch($orderDir) {
             case OrderDirection::Descending->value:
             case OrderDirection::Ascending->value:
-                $orderDirection = $orderDir;
                 break;
             default:
                 error_log("Unknown order direction");
-                $orderDirection = 'asc';
+                $orderDir = 'asc';
                 break;
         }
 
         switch($orderBy) {
             case OrderBy::Name->value :
-                $query->orderBy('title', $orderDirection);
+                $query->orderBy('title', $orderDir);
                 break;
             case OrderBy::Price->value :
-                $query->orderBy('price', $orderDirection);
+                $query->orderBy('price', $orderDir);
                 break;
             case OrderBy::Newest->value :
             case OrderBy::Oldest->value :
-                $query->orderBy('start_time', $orderDirection);
+                $query->orderBy('start_time', $orderDir);
                 break;
             default:
                 error_log("Unknown order by type");
