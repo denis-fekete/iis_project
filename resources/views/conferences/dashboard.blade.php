@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @section('content')
-<button onclick="navitateTo('/conferences/create')">Create new conference</button>
+<button onclick="navigateTo('/conferences/create')">Create new conference</button>
 @foreach ($conferences as $item)
     <div class="card">
         <p class="card_title">{{$item->title}}</p>

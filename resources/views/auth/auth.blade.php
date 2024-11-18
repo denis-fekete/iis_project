@@ -1,8 +1,6 @@
 @extends('layouts.layout')
 
 @section('content')
-<script src="/httpHandler.js"></script>
-
 <div>
     <h2>Login</h2>
     <form action="{{ url('auth/login') }}" id="register_form" class="register_form" method="post">
@@ -46,40 +44,4 @@
 @endsection
 
 
-<style>
-.register_form {
-    margin-top: 5px;
-}
 
-.form_label {
-    display: inline-block;
-    width: 120px;
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-.form_input {
-    display: inline-block;
-    text-align: left;
-}
-
-.background_blur {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-}
-
-.auth_window {
-    background: white;
-    padding: 20px;
-    max-width: 400px;
-    margin: 10% auto;
-    border-radius: 8px;
-    text-align: center;
-}
-
-</style>

@@ -4,9 +4,9 @@
 
 @php
     if($info['type'] == 'create') {
-        $url = 'conferences/create';
+        $url = '/conferences/create';
     } else {
-        $url = 'conferences/edit';
+        $url = '/conferences/edit';
     }
 @endphp
 
