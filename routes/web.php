@@ -81,6 +81,7 @@ Route::prefix('reservations')->group(function () {
     Route::get('/dashboard', [ReservationController::class, 'getAll']);
     Route::get('/cancel/{id}', [ReservationController::class, 'cancel']);
     Route::get('/schedule/{id}', [ReservationController::class, 'showSchedule']);
+    Route::post('/saveSchedule', [ReservationController::class, 'saveSchedule']);
 
     Route::post('/reserve', [ReservationController::class, 'create'])
         ->middleware('auth');

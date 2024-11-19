@@ -12,13 +12,13 @@ class LectureSchedule extends Model
     protected $table = 'lecture_schedule';
 
     protected $fillable = [
-        'user_id',
+        'reservation_id',
         'lecture_id'
     ];
 
-    public function user()
+    public function reservation()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(Reservation::class, 'reservation_id');
     }
 
     public function lecture()

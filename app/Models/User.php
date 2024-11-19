@@ -20,11 +20,6 @@ class User extends Authenticatable
         'role'
     ];
 
-    public function schedules()
-    {
-        return $this->hasMany(LectureSchedule::class, 'user_id');
-    }
-
     public function reservations()
     {
         return $this->hasMany(Reservation::class, 'user_id');

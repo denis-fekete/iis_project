@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Reservation as ModelsReservation;
 use App\Services\ConferenceService;
+use App\Services\LectureScheduleService;
 use App\Services\ReservationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -71,5 +72,26 @@ class ReservationController extends Controller
             return redirect('/reservations/dashboard')
                 ->withErrors(['auth' => $res]);
         }
+    }
+
+    public function showSchedule($id) {
+        $viewModels = LectureScheduleService::getLectureSchedule($id);
+        if (!$viewModels)
+            return redirect('/reservations/dashboard');
+
+        return view('reservations.schedule')
+            ->with('schedule', $viewModels)->with('reservationId', $id);
+    }
+
+    public function saveSchedule(Request $request) {
+        $result = LectureScheduleService::saveLectureSchedule(
+            $request->input('reservationId'),
+            $request->input('scheduled') ?? [],
+        );
+
+        if ($result)
+            return redirect()->back()->with('success', 'Schedule saved successfully!');
+    
+        return redirect()->back()->with('error', 'Failed to save schedule.');
     }
 }

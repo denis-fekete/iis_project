@@ -87,4 +87,13 @@
         color: #878381;
 
     }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 1em;
+        text-align: left;
+        background-color: #f9f9f9;
+    }
 </style>
