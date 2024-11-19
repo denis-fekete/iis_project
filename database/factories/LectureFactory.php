@@ -19,15 +19,19 @@ class LectureFactory extends Factory
      */
     public function definition(): array
     {
+        $conference = Conference::all()->random();
+        $start_time = fake()->dateTimeBetween($conference->start_time, $conference->end_time);
+        $end_time = fake()->dateTimeBetween($start_time, (clone $start_time)->modify('+2 days'));
+
         return [
             'title' => fake()->words(4, true),
             'poster' => fake()->words(10, true),
             'description' => fake()->words(59, true),
             'is_confirmed' => fake()->boolean(),
-            'start_time' => fake()->date(),
-            'end_time' => fake()->date(),
+            'start_time' => $start_time,
+            'end_time' => $end_time,
             'speaker_id' => User::all()->random()->id,
-            'conference_id' => Conference::all()->random()->id,
+            'conference_id' => $conference->id,
             'room_id' => Room::all()->random()->id,
         ];
     }
