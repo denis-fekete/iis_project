@@ -77,4 +77,14 @@
         background: #EEEBCC;
         color: #3E3C3E;
     }
+
+    .text_link {
+        text-decoration: underline;
+        color: #885E97;
+    }
+
+    .text_theme {
+        color: #878381;
+
+    }
 </style>

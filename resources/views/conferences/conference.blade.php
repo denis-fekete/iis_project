@@ -1,25 +1,42 @@
 @extends('layouts.layout')
 
 @section('content')
+<div class="title_block">
+    <p class="title">{{$conferences->title}}</h1>
+</div>
+
 <div class="card">
-    <button onclick="navigateTo('/reservations/reserve/{{$conferences->id}}')">Make reservation</button>
-    <button onclick="navigateTo('/lectures/create/{{$conferences->id}}')">Offer a lecture</button>
-
-    <p class="title">{{$conferences->title}}</p>
-    <p class="description">{{$conferences->description}}</p>
-    <p class="theme">{{$conferences->theme}}</p>
-    <p class="date">{{$conferences->start_time}} - {{$conferences->end_time}}</p>
-    <p class="price">Price per person: {{$conferences->price}}Kč</p>
-    <p class="capacity">Capacity: {{$conferences->capacity}}</p>
-    <p class="owner">Organizer: {{$conferences->owner->name}} {{$conferences->owner->surname}}</p>
-    <hr>
-    <p>Lectures:</p>
-    @foreach ($conferences->lectures as $item)
-        <div class="lecture">
-            <p class="lecture_title">Title: {{$item->title}}</p>
-            <p class="lecture_poster">{poster:<{{$item->poster}}>}</p>
-
-            <p class="lecture_speaker" onclick="navigateTo('/person/{{$item->lecturer->id}}')">
+    <img class="conference_image" src="https://picsum.photos/seed/{{$conferences->title}}/1800/400" alt="Placeholder image">
+    <br><br>
+    <div class="horizontal_grid">
+        <button onclick="navigateTo('/reservations/reserve/{{$conferences->id}}')">Make reservation</button>
+        <button onclick="navigateTo('/lectures/create/{{$conferences->id}}')">Offer a lecture</button>
+    </div>
+    <br>
+    <div class="horizontal_grid">
+        <p class="text_link">Organizer: {{$conferences->owner->name}} {{$conferences->owner->surname}}</p>
+        <p class="text_theme">Theme:{{$conferences->theme}}</p>
+    </div>
+    <br>
+    <p>{{$conferences->description}}</p>
+    <br>
+    <p>Capacity: {{$conferences->capacity}}</p>
+    <p>{{$conferences->start_time}} - {{$conferences->end_time}}</p>
+    <p>Price per person: {{$conferences->price}}Kč</p>
+    <br>
+</div>
+<br>
+<div class="title_block">
+    <p class="title">Lectures</h1>
+</div>
+@foreach ($conferences->lectures as $item)
+    @if($item->is_confirmed == true)
+        <div class="card">
+            <p class="title">Title: {{$item->title}}</p>
+            <br>
+            <img class="conference_image" src="https://picsum.photos/seed/{{$item->title}}/1800/300" alt="Placeholder image">
+            <br><br>
+            <p class="text_link" onclick="navigateTo('/person/{{$item->lecturer->id}}')">
                 Speaker: {{$item->lecturer->name}} {{$item->lecturer->surname}}
             </p>
 
@@ -29,13 +46,19 @@
             </p>
         <p class="lecture_time">Time from {{ $item["start_time"] }} to {{ $item["end_time"] }}</p>
             <div class="room">
-                <p class="room_id">Room id: {{$item["room_id"]}}</p>
+                {{-- <p class="room_id">Room id: {{$item["room_id"]}}</p> --}}
                 <p class="room_name">Room name: TBD</p>
                 <p class="room_address">Room address: TBD</p>
             </div>
         </div>
         <br>
-    @endforeach
-</div>
+    @endif
+@endforeach
+
 @endsection
 
+<style>
+    .conference_image {
+        max-width: 100%;
+    }
+</style>

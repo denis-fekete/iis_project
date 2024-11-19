@@ -47,25 +47,28 @@
 
 <div class="grid_vertical_2_collumns">
 @foreach ($conferences as $item)
-    <div class="card">
-        <div class="card" onclick="navigateTo('/conferences/conference/{{ $item->id }}')">
+    @if(isset($info['role']) && $info['role'] == 'admin')
+        <div class="card">
             <p class="card_title">{{$item->title}}</p>
             <img class="card_image" src="https://picsum.photos/seed/{{$item->title}}/600/150" alt="Placeholder image">
             <p class="card_description">{{$item->description}}</p>
             <p class="card_theme">Themes: {{$item->theme}}</p>
             <p class="card_price">Price: {{$item->price}}Kč</p>
+            <br>
+            <button onclick="navigateTo( '/admin/conferences/edit/{{ $item->id }}' )"                   >Edit</button>
+            <button onclick="navigateTo( '/admin/conferences/conference/lectures/{{ $item->id }}')"     >Lectures</button>
+            <button onclick="navigateTo( '/admin/conferences/conference/reservations/{{ $item->id }}')" >Reservations</button>
+            <button onclick="navigateTo('/conferences/conference/{{ $item->id }}')"                     >Details</button>
         </div>
-        @isset($info['role'])
-            @if($info['role'] == 'admin')
-                <br>
-                <div>
-                    <button onclick="navigateTo( '/admin/conferences/edit/{{ $item->id }}' )"                   >Edit</button>
-                    <button onclick="navigateTo( '/admin/conferences/conference/lectures/{{ $item->id }}')"     >Lectures</button>
-                    <button onclick="navigateTo( '/admin/conferences/conference/reservations/{{ $item->id }}')" >Reservations</button>
-                </div>
-            @endif
-        @endisset
-    </div>
+    @else
+        <div class="card" onclick="navigateTo('/conferences/conference/{{ $item->id }}')">
+            <p class="title">{{$item->title}}</p>
+            <img class="card_image" src="https://picsum.photos/seed/{{$item->title}}/600/150" alt="Placeholder image">
+            <p>{{$item->description}}</p>
+            <p class="text_theme">Themes: {{$item->theme}}</p>
+            <p class="card_price">Price: {{$item->price}}Kč</p>
+        </div>
+    @endisset
 
 @endforeach
 </div>
@@ -100,22 +103,4 @@
         max-width: 100%;
     }
 
-    .card_title{
-        font-size: 1.5em;
-        font-weight: bold;
-        color:red;
-    }
-
-    .card_description {
-        font-size: 1em;
-    }
-
-    .card_organizer_name {
-        font-size: 1em;
-        color:lightskyblue
-    }
-    .card_theme {
-        font-size: 12px;
-        color:gray
-    }
 </style>
