@@ -1,9 +1,9 @@
 <div class="page_header grid-container grid-container-fit" id="page_header">
-    <button onclick="window.location.href='{{ url('home') }}'" >
+    <button onclick="navigateTo('/home')" >
         Home
     </button>
 
-    <button onclick="window.location.href='{{ url('conferences/search/All;Name;asc') }}'">
+    <button onclick="navigateTo('/conferences/search/All;Name;asc')">
         Search
     </button>
 
@@ -32,3 +32,5 @@
         </button>
     @endif
 </div>
+
+
