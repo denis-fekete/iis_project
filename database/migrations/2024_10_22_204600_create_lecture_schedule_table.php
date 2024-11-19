@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('lecture_schedule', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('reservation_id');
             $table->unsignedBigInteger('lecture_id');
 
-            $table->foreign('user_id')
+            $table->foreign('reservation_id')
                 ->references('id')
-                ->on('user')
+                ->on('reservation')
                 ->onDelete('cascade');
             
             $table->foreign('lecture_id')

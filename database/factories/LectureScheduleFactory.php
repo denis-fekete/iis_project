@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Lecture;
-use App\Models\User;
+use App\Models\Reservation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +19,7 @@ class LectureScheduleFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::all()->random()->id,
+            'reservation_id' => Reservation::all()->random()->id,
             'lecture_id' => Lecture::all()->random()->id,
         ];
     }
