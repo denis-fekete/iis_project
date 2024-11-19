@@ -83,12 +83,12 @@ class ConferenceController extends Controller
      * @return void edit view
      */
     public function editForm($id) {
-        // get conference information
-        $conference = ConferenceService::getWithFormattedDate($id);
 
         $user = auth()->user();
         // check if user is owner or admin
-        if($user->id == $conference->owner_id || $user->role == RoleType::Admin->value) {
+        if(self::CheckPermissions($user, $id)) {
+            // get conference information
+            $conference = ConferenceService::getWithFormattedDate($id);
 
             return view('conferences.edit')
                 ->with('conference', $conference)
@@ -137,14 +137,9 @@ class ConferenceController extends Controller
     public function edit(Request $request) {
         $id = $request->input('id');
 
-        if($id == null) {
-            return redirect('conferences/dashboard')
-                ->withErrors(['id' => 'Error: Unknown conference ID']);
-        }
-
         $user = auth()->user();
-        $ownerId = ConferenceService::getOwner($id);
-        if($user->id == $ownerId || $user->role == RoleType::Admin->value) {
+
+        if(self::CheckPermissions($user, $id)) {
             $res = ConferenceService::edit($request);
         } else {
             $res = "Error: You do not have permission for this";
@@ -160,8 +155,6 @@ class ConferenceController extends Controller
         }
     }
 
-
-
     /**
      * Show lecture edit for a current conference
      *
@@ -170,18 +163,18 @@ class ConferenceController extends Controller
      * user doesn't have permissions
      */
     public function listConferenceLectures($id) {
-        // get conference information
-        $conference = ConferenceService::get($id);
-
         $user = auth()->user();
-        // check if user is owner or admin
-        if($user->id == $conference->owner_id || $user->role == RoleType::Admin->value) {
+
+        if(self::CheckPermissions($user, $id)) {
+            // get conference information
+            $conference = ConferenceService::get($id);
+
             return view('conferences.lectures')
                 ->with('conference', $conference)
                 ->with('lectures', $conference->lectures)
                 ->with('notification', null)
-                ->with('rooms', $conference->rooms);
-
+                ->with('rooms', $conference->rooms)
+                ->with('info', ['role' => $user->role]);
         } else {
             return redirect('conferences/dashboard')
                 ->with('notification', 'You do not have permission to access lectures of this conference');
@@ -196,15 +189,18 @@ class ConferenceController extends Controller
      */
     public function editLecturesList(Request $request) {
         $id = $request->input('id');
+        $user = auth()->user();
 
-        $res = ConferenceService::editLecturesList($request);
+        if(self::CheckPermissions($user, $id)) {
+            $res = ConferenceService::editLecturesList($request);
 
-        if($res) {
-            return redirect('/conferences/conference/lectures/' . $id)
-                ->with('notification', "Your changes were saved");
-        } else {
-            return redirect('/conferences/conference/lectures/' . $id)
-                ->with('notification', "Something went wrong, try it again later"); // TODO: change to ERROR
+            if($res) {
+                return redirect('/conferences/conference/lectures/' . $id)
+                    ->with('notification', "Your changes were saved");
+            } else {
+                return redirect('/conferences/conference/lectures/' . $id)
+                    ->with('notification', "Something went wrong, try it again later"); // TODO: change to ERROR
+            }
         }
     }
 
@@ -216,17 +212,18 @@ class ConferenceController extends Controller
      * user doesn't have permissions
      */
     public function listConferenceReservations($id) {
-        // get conference information
-        $conference = ConferenceService::getWithReservations($id);
-
         $user = auth()->user();
 
         // check if user is owner or admin
-        if($user->id == $conference->owner_id) {
+        if(self::CheckPermissions($user, $id)) {
+            // get conference information
+            $conference = ConferenceService::getWithReservations($id);
+
             return view('conferences.reservations')
                 ->with('id', $conference->id)
                 ->with('reservations', $conference->reservations)
-                ->with('notification', null);
+                ->with('notification', null)
+                ->with('info', ['role' => $user->role]);
         } else {
             return redirect('conferences/dashboard')
                 ->with('notification', 'You do not have permission to access lectures of this conference');
@@ -251,6 +248,27 @@ class ConferenceController extends Controller
             return redirect('/conferences/conference/lectures/' . $id)
                 ->with('notification', "Something went wrong, try it again later"); // TODO: change to ERROR
         }
+    }
+
+    /**
+     * CheckPermissions
+     *
+     * @param  mixed $user User model that will be checked
+     * @param  mixed $conferenceId ID of the conference that user is trying to access
+     * @return bool True if user has permission to access conference, false if not
+     */
+    private static function CheckPermissions($user, $conferenceId) {
+        if($user == null) {
+            return false;
+        } else if($user->role == RoleType::Admin->value) {
+            return true;
+        }
+
+        if($conferenceId == null) {
+            return false;
+        }
+
+        return (ConferenceService::getOwner($conferenceId) == $user->id);
     }
 
 }

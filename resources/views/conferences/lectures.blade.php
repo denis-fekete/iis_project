@@ -5,7 +5,7 @@
 @isset($info['role'])
     @if($info['role'] == 'admin')
         <div id='admin_contents'>
-            @yield('admin_contents')
+            <h2>Editing as administrator</h2>
         <div>
     @endif
 @endisset
