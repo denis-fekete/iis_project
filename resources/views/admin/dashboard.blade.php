@@ -2,10 +2,13 @@
 
 @section('content')
 <div>
-    <h1>Admin dashboard</h1>
-
-    <button onclick="navigateTo('/admin/rooms/dashboard')">Rooms</button>
-    <button onclick="navigateTo('/admin/conferences/search')">Conferences</button>
+    <div class="navigation">
+        <div class="title_block">
+            <p class="title">Admin dashboard</p>
+        </div>
+        <button class="navigation_button" onclick="navigateTo('/admin/rooms/dashboard')">Rooms</button>
+        <button class="navigation_button" onclick="navigateTo('/admin/conferences/search')">Conferences</button>
+    </div>
 </div>
 @endsection
 

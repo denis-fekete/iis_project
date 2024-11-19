@@ -2,21 +2,26 @@
 
 @section('content')
 
-<h2>Reservations:</h2>
+<div class="title_block">
+    <p class="title">My reservations</h1>
+</div>
 
+<div class="grid_vertical">
 @foreach ($reservations as $reservation)
-    <div class="reservation">
+    <div class="card">
         <p class="conference_title">Title: {{ $reservation->conference->title }}</p>
         <p class="conference_time"> Time:
             From {{ $reservation->conference->start_time }}
             To {{ $reservation->conference->end_time }}
             </p>
         <p class="reservation_number_of_peole">Number of people: {{ $reservation->number_of_people }}</p>
-        <button onclick="navigateTo('/reservations/cancel/{{ $reservation->id }}')">Cancel reservation</button>
         <br>
+        <div class="grid_horizontal">
+        <button onclick="navigateTo('/reservations/cancel/{{ $reservation->id }}')">Cancel reservation</button>
         <button onclick="navigateTo('/reservations/schedule/{{ $reservation->id }}')">Show schedule</button>
+        </div>
     </div>
-    <br>
 @endforeach
+</div>
 
 @endsection

@@ -6,19 +6,21 @@
     $url = 'conferences/conference/reservations';
 @endphp
 
-@isset($info['role'])
-    @if($info['role'] == 'admin')
-        @php
-            $url = 'admin/conferences/conference/reservations';
-        @endphp
+<div class="title_block">
+    @isset($info['role'])
+        @if($info['role'] == 'admin')
+            <br>
+            <p class="title">(Editing as administrator)</p>
+            @php
+                $url = 'admin/conferences/conference/reservations';
+            @endphp
+        @endif
+    @endisset
 
-        <div id='admin_contents'>
-            <h2>Editing as administrator</h2>
-        <div>
-    @endif
-@endisset
+    <p class="title">Conference reservations</p>
+</div>
 
-<h2>Reservations</h2>
+<div class="card">
 <form action="{{ url($url) }}" id="register_form" class="register_form" method="post">
 <input type="number" name="id" value="{{ $id }}" hidden required>
 @csrf
@@ -40,4 +42,5 @@
 @endforeach
 <button type"submit">Save</button>
 </form>
+<div>
 @endsection

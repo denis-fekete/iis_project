@@ -55,7 +55,7 @@ class LectureController extends Controller
     }
 
     /**
-    *   Shows info about lecture 
+    *   Shows info about lecture
     */
     public function get($id) {
         $userId = auth()->user()->id;
@@ -77,7 +77,7 @@ class LectureController extends Controller
     }
 
     /**
-    *   Stores changes 
+    *   Stores changes
     */
     public function editPOST(Request $request) {
         $validator = Validator::make($request->all(), [
@@ -143,7 +143,7 @@ class LectureController extends Controller
     }
 
     /**
-    *   Confirms lecture 
+    *   Confirms lecture
     */
     public function confirm(Request $request) {
         $validator = Validator::make($request->all(), [
@@ -157,17 +157,17 @@ class LectureController extends Controller
         $userId = auth()->user()->id;
         $checkPolicyError = LectureService::checkSchedulePolicy($lectureId, $userId);
         if ($checkPolicyError)
-            return redirect()->back()->with('notification', $checkPolicyError);
+            return redirect()->back()->with('notification', array($checkPolicyError));
 
         $confirmError = LectureService::confirm($request);
         if ($confirmError)
-            return redirect()->back()->with('notification', $confirmError);
+            return redirect()->back()->with('notification', array($confirmError));
 
         return redirect('/conferences/conference/lectures/'.$request->conferenceId);
     }
 
     /**
-    *   Unconfirms lecture 
+    *   Unconfirms lecture
     */
     public function unconfirm(Request $request) {
         $lectureId = $request->input('id');
@@ -179,7 +179,7 @@ class LectureController extends Controller
         $unconfirmError = LectureService::unconfirm($lectureId);
         if ($unconfirmError)
             return redirect()->back()->with('error', $unconfirmError);
-        
+
         return redirect('/conferences/conference/lectures/'.$request->conferenceId);
     }
 }

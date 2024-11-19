@@ -22,9 +22,11 @@ Route::get('/', function () {
 });
 
 Route::get('/home', function () {
-    return view('home', [
-        'user' => auth()->user()
-    ]);
+    return view('home', ['user' => auth()->user()])
+        ->with('notification', [
+            'test notification',
+            'second notification test',
+            ]);
 });
 
 Route::get('/profile', function () {
@@ -58,9 +60,12 @@ Route::prefix('conferences')->group(function () {
 });
 
 Route::prefix('lectures')->group(function () {
-    Route::get('/dashboard', [LectureController::class, 'dashboard']);
-    Route::get('/create/{id}', [LectureController::class, 'createGET']);
-    Route::get('/edit/{id}', [LectureController::class, 'editGET']);
+    Route::get('/dashboard', [LectureController::class, 'dashboard'])
+        ->middleware('auth');
+    Route::get('/create/{id}', [LectureController::class, 'createGET'])
+        ->middleware('auth');
+    Route::get('/edit/{id}', [LectureController::class, 'editGET'])
+        ->middleware('auth');
     Route::get('/lecture/{id}', [LectureController::class, 'get']);
 
     Route::post('/create', [LectureController::class, 'createPOST']);

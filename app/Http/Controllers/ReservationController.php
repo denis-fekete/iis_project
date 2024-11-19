@@ -32,7 +32,7 @@ class ReservationController extends Controller
 
         if($err == '') {
             return redirect('/conferences/conference/' . $conferenceId)
-                ->with('notification', 'Reservation was created successfully');
+                ->with('notification', ['Reservation was created successfully']);
         } else {
             return redirect()->back()
                 ->withErrors($err);
@@ -66,7 +66,7 @@ class ReservationController extends Controller
 
         if($res == '') {
             return redirect('/reservations/dashboard')
-                ->with('notification', 'Reservation was deleted successfully');
+                ->with('notification', ['Reservation was deleted successfully']);
         } else {
             return redirect('/reservations/dashboard')
                 ->withErrors(['auth' => $res]);

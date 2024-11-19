@@ -93,12 +93,13 @@
 }
 
 .auth_window {
-    background: white;
+    background: #E1DDA8;
     padding: 20px;
     max-width: 400px;
     margin: 10% auto;
     border-radius: 8px;
     text-align: center;
+    box-shadow: 2px 2px 1px #3E3C3E;
 }
 
 </style>

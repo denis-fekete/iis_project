@@ -1,7 +1,11 @@
 @extends('layouts.layout')
 
 @section('content')
-<h4>My lectures</h4>
+<div class="title_block">
+    <p class="title">My lectures</h1>
+</div>
+
+<div class="grid_vertical">
 @foreach ($cards as $item)
     <div class="card" onclick="navigateTo( '/lectures/lectures/{{ $item['id'] }}' )">
         <p>{{$item['title']}}</p>
@@ -13,4 +17,5 @@
         @endif
     </div>
 @endforeach
+</div>
 @endsection

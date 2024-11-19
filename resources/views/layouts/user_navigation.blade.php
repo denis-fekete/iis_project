@@ -1,36 +1,64 @@
-<div class="page_header grid-container grid-container-fit" id="page_header">
-    <button onclick="navigateTo('/home')" >
+<div class="navigation">
+    <button class="navigation_button" onclick="navigateTo('/home')" >
         Home
     </button>
 
-    <button onclick="navigateTo('/conferences/search/All;Name;asc')">
+    <button class="navigation_button" onclick="navigateTo('/conferences/search/All;Name;asc')">
         Search
     </button>
 
     @if ($user == NULL)
-        <button type="button" onclick="showLogin()">Log In</button>
+        <button class="navigation_button" onclick="showLogin()">Log In</button>
     @else
         @if ($user->role === 'admin')
-            <button onclick="navigateTo('/admin/dashboard')">
+            <button class="navigation_button" onclick="navigateTo('/admin/dashboard')">
                 Admin
             </button>
         @endif
-        <button onclick="navigateTo('/reservations/dashboard')">
+        <button class="navigation_button" onclick="navigateTo('/reservations/dashboard')">
             Reservations
         </button>
-        <button onclick="navigateTo('/lectures/dashboard')">
+        <button class="navigation_button" onclick="navigateTo('/lectures/dashboard')">
             My Lectures
         </button>
-        <button onclick="navigateTo('/conferences/dashboard')">
+        <button class="navigation_button" onclick="navigateTo('/conferences/dashboard')">
             My Conferences
         </button>
-        <button onclick="navigateTo('/profile')">
+        <button class="navigation_button" onclick="navigateTo('/profile')">
             My profile
         </button>
-        <button onclick="navigateTo('/auth/logout')">
+        <button class="navigation_button" onclick="navigateTo('/auth/logout')">
             Logout
         </button>
     @endif
 </div>
+
+<style>
+    .navigation {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        height: fit-content;
+        margin-bottom: 1em;
+    }
+
+    .navigation_button {
+        align-content: center;
+        height: 5vh ;
+        background-color: #FAAC40;
+
+        color: #3E3C3E;
+        font-size: 1.2em;
+        font-weight: bold;
+
+        border: 2px solid #3E3C3E;
+
+        border-radius: 0px;
+        box-shadow: none;
+    }
+
+    .navigation_button:hover{
+        background-color: #F7BE58;
+}
+</style>
 
 

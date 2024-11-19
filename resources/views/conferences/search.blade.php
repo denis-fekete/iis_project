@@ -2,7 +2,11 @@
 
 @section('content')
 
-<div class="filters">
+<div class="title_block">
+    <p class="title">Search</h1>
+</div>
+
+<div class="card">
     <fieldset class="radio_box">
         @foreach ($info['themes'] as $item)
             <input type="radio" name="themes" value="{{$item->value}}"
@@ -41,9 +45,9 @@
     <input type="submit" onclick="applyFilters()" value="Apply">
 </div>
 
-<div class="all_cards">
+<div class="grid_vertical_2_collumns">
 @foreach ($conferences as $item)
-    <div>
+    <div class="card">
         <div class="card" onclick="navigateTo('/conferences/conference/{{ $item->id }}')">
             <p class="card_title">{{$item->title}}</p>
             <img class="card_image" src="https://picsum.photos/seed/{{$item->title}}/600/150" alt="Placeholder image">
@@ -53,6 +57,7 @@
         </div>
         @isset($info['role'])
             @if($info['role'] == 'admin')
+                <br>
                 <div>
                     <button onclick="navigateTo( '/admin/conferences/edit/{{ $item->id }}' )"                   >Edit</button>
                     <button onclick="navigateTo( '/admin/conferences/conference/lectures/{{ $item->id }}')"     >Lectures</button>
@@ -80,50 +85,37 @@
 </script>
 
 <style>
-.all_cards {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-inline: 5%;
-    margin-top: 1%;
-    margin-bottom: 1%;
-}
 
-.card {
-    background-color: wheat;
-    margin-inline: 5%;
-    padding-inline: 5%;
-    padding-bottom: 1%;
-}
 
-.radio_group {
-    grid-template-columns: repeat(2, 1fr);
-}
+    .radio_box {
+        border: none;
+        margin-bottom: 0.3em;
+    }
 
-.filters {
-    margin-inline: 4%;
-    background-color: wheat;
-}
+    .radio_group {
+        grid-template-columns: repeat(2, 1fr);
+    }
 
-.card_image {
-    max-width: 100%;
-}
+    .card_image {
+        max-width: 100%;
+    }
 
-.card_title{
-    font-size: 20px;
-    color:red;
-}
+    .card_title{
+        font-size: 1.5em;
+        font-weight: bold;
+        color:red;
+    }
 
-.card_description {
-    font-size: 15px;
-}
-.card_organizer_name {
-    font-size: 15px;
-    color:lightskyblue
-}
-.card_theme {
-    font-size: 12px;
-    color:gray
-}
+    .card_description {
+        font-size: 1em;
+    }
 
+    .card_organizer_name {
+        font-size: 1em;
+        color:lightskyblue
+    }
+    .card_theme {
+        font-size: 12px;
+        color:gray
+    }
 </style>

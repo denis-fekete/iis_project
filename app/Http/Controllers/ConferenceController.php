@@ -46,8 +46,7 @@ class ConferenceController extends Controller
         $conference = ConferenceService::getWithLectures($id);
 
         return view('conferences.conference')
-            ->with('conferences', $conference)
-            ->with('notification', null);
+           ->with('conferences', $conference);
     }
 
     /**
@@ -99,7 +98,7 @@ class ConferenceController extends Controller
                     ]);
         } else {
             return redirect('conferences/dashboard')
-                ->with('notification', 'You do not have permission to edit this conference');
+                ->with('notification', ['You do not have permission to edit this conference']);
         }
     }
 
@@ -117,7 +116,7 @@ class ConferenceController extends Controller
         $res = ConferenceService::create($request);
         if($res == '') {
             return redirect('conferences/dashboard')
-                ->with("notification", 'Conference was created successfully');
+                ->with("notification", ['Conference was created successfully']);
         } else {
             return redirect('conferences/create')
                 ->withInput() // returns old input so user doesn't have to type it again
@@ -147,7 +146,7 @@ class ConferenceController extends Controller
 
         if($res == '') {
             return redirect()->back()
-                ->with("notification", 'Conference changes were successfully saved');
+                ->with("notification", ['Conference changes were successfully saved']);
         } else {
             return redirect('conferences/edit/' . ((string)$id))
                 ->withInput() // returns old input so user doesn't have to type it again
@@ -172,12 +171,11 @@ class ConferenceController extends Controller
             return view('conferences.lectures')
                 ->with('conference', $conference)
                 ->with('lectures', $conference->lectures)
-                ->with('notification', null)
                 ->with('rooms', $conference->rooms)
                 ->with('info', ['role' => $user->role]);
         } else {
             return redirect('conferences/dashboard')
-                ->with('notification', 'You do not have permission to access lectures of this conference');
+                ->with('notification', ['You do not have permission to access lectures of this conference']);
         }
     }
 
@@ -196,10 +194,10 @@ class ConferenceController extends Controller
 
             if($res) {
                 return redirect('/conferences/conference/lectures/' . $id)
-                    ->with('notification', "Your changes were saved");
+                    ->with('notification', ['Your changes were saved']);
             } else {
                 return redirect('/conferences/conference/lectures/' . $id)
-                    ->with('notification', "Something went wrong, try it again later"); // TODO: change to ERROR
+                    ->with('notification', ['Something went wrong, try it again later']); // TODO: change to ERROR
             }
         }
     }
@@ -222,11 +220,10 @@ class ConferenceController extends Controller
             return view('conferences.reservations')
                 ->with('id', $conference->id)
                 ->with('reservations', $conference->reservations)
-                ->with('notification', null)
                 ->with('info', ['role' => $user->role]);
         } else {
             return redirect('conferences/dashboard')
-                ->with('notification', 'You do not have permission to access lectures of this conference');
+                ->with('notification', ['You do not have permission to access lectures of this conference']);
         }
     }
 
@@ -243,10 +240,10 @@ class ConferenceController extends Controller
 
         if($res) {
             return redirect('/conferences/conference/reservations/' . $id)
-                ->with('notification', "Your changes were saved");
+                ->with('notification', ['Your changes were saved']);
         } else {
             return redirect('/conferences/conference/lectures/' . $id)
-                ->with('notification', "Something went wrong, try it again later"); // TODO: change to ERROR
+                ->with('notification', ['Something went wrong, try it again later']);
         }
     }
 

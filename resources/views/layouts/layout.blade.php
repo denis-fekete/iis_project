@@ -5,47 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-<div class="body grid-container">
-    {{-- include navigation bar --}}
-    @include('layouts.user_navigation')
+    @include('layouts.common_styles')
 
-    {{-- do not show notifications if not provided any --}}
-    @if (session('notification') != null)
-        <div class="notification">
-            <h3>{{session('notification')}}</h3>
-        </div>
-    @endif
+    <div class="body_container">
+        <header>
+            @include('layouts.user_navigation')
+        </header>
 
-    {{-- if $info not provided set it as a empty array --}}
-    @if (session('info') == null)
-        @php
-            $info = array();
-        @endphp
-    @endif
+        <main>
+            @include('layouts.notification')
 
-    {{-- do not show errors if not provided any --}}
-    @if ($errors->any())
-        <div style="background-color: red">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{$error}}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+            @include('layouts.auth_popup')
 
-    {{-- include login 'popup' window --}}
-    @include('layouts.auth_popup')
+            {{-- add specific contents of the page --}}
+            <div class="contents" id="contents">
+                @yield('content')
+            </div>
+        </main>
 
-    {{-- add specific contents of the page --}}
-    <div class="contents" id="contents">
-        @yield('content')
-    </div>
-
-    <div class="page_footer" id="page_footer">
-        <p>License</p>
-    </div>
-</div> {{-- /body --}}
+        <footer>
+            <div class="page_footer" id="page_footer">
+                <p>License</p>
+            </div>
+        </footer>
+    </div>  {{-- body_container --}}
+</body>
+</html>
 
 {{-- if user was redirected with open_login, open login outright --}}
 @isset($info['open_login'])
@@ -54,8 +39,12 @@
     </script>
 @endisset
 
-</body>
-</html>
+{{-- open notifications if set --}}
+@isset($notification)
+    <script>
+        showNotification();
+    </script>
+@endisset
 
 <script>
     window.appBaseUrl = "{{ config('app.url') }}";
@@ -65,36 +54,40 @@
 </script>
 
 <style>
-.page_header {
-    background-color: lightgray;
-    width: 100%;
-    /* height: fit-content; */
-    height: 50px;
-}
+    * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+    }
 
-.body {
-    margin: 0px;
-    grid-template-rows: repeat(auto-fit, minmax(50px, 1fr));
-}
+    body {
+        height: 100%;
+    }
 
-.grid-container {
-    display: grid;
-}
+    .body_container {
+        display: flex;
+        flex-direction: column;
+        background-color: #FFF8F0;
+        min-height: 100vh;
+    }
 
-.grid-container-fit {
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-}
+    main {
+        flex: 1;
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+    }
 
-.contents {
-    background-color: aqua;
-    width: 100%;
-    /* height: 500px; */
-    height: fit-content;
-}
+    footer {
+        background: #3E3C3E;
+        color: #fff;
+        text-align: center;
+        padding: 1rem;
+    }
 
-.page_footer {
-    background-color: gray;
-    width: 100%;
-    height: 50px;
-}
+    .contents {
+        width: 100%;
+        height: fit-content;
+    }
+
 </style>
+

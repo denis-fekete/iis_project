@@ -2,18 +2,26 @@
 
 @section('content')
 
-@isset($info['role'])
-    @if($info['role'] == 'admin')
-        <div id='admin_contents'>
-            <h2>Editing as administrator</h2>
-        <div>
-    @endif
-@endisset
+<div class="title_block">
+    @isset($info['role'])
+        @if($info['role'] == 'admin')
+            <br>
+            <p class="title">(Editing as administrator)</p>
+            @php
+                $url = 'admin/conferences/conference/reservations';
+            @endphp
+        @endif
+    @endisset
 
-<p>Conference starts at: {{ $conference->start_time }}</p>
-<p>Conference ends at: {{ $conference->end_time }}</p>
-<h2>Lectures</h2>
-@csrf
+    <p class="title">Conference lectures</p>
+</div>
+
+<div class="card">
+    <p>Conference starts at: {{ $conference->start_time }}</p>
+    <p>Conference ends at: {{ $conference->end_time }}</p>
+</div>
+
+<div class="card">
 @foreach ($lectures as $item)
     <p>Lecture: <a href="{{ '/lectures/lecture/'.$item->id}}">{{$item->title}}</a></p>
     @if (!$item->is_confirmed)
@@ -49,5 +57,7 @@
         </form>
     @endif
     <hr>
+
 @endforeach
+</div>
 @endsection
