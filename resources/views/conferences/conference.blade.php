@@ -14,8 +14,13 @@
     </div>
     <br>
     <div class="horizontal_grid">
-        <p class="text_link">Organizer: {{$conferences->owner->name}} {{$conferences->owner->surname}}</p>
-        <p class="text_theme">Theme:{{$conferences->theme}}</p>
+        <p>Organizer:
+            <a class="text_link"
+                onclick="navigateTo('/person/{{$conferences->owner->id}}')">
+                {{$conferences->owner->name}} {{$conferences->owner->surname}}
+                </a></p>
+
+        <p>Theme: <a class="text_theme">{{$conferences->theme}}</a></p>
     </div>
     <br>
     <p>{{$conferences->description}}</p>
@@ -36,9 +41,11 @@
             <br>
             <img class="conference_image" src="https://picsum.photos/seed/{{$item->title}}/1800/300" alt="Placeholder image">
             <br><br>
-            <p class="text_link" onclick="navigateTo('/person/{{$item->lecturer->id}}')">
-                Speaker: {{$item->lecturer->name}} {{$item->lecturer->surname}}
-            </p>
+            <p>Speaker:
+                <a class="text_link"
+                    onclick="navigateTo('/person/{{$item->lecturer->id}}')">
+                    {{$item->lecturer->name}} {{$item->lecturer->surname}}
+                    </a></p>
 
             <p class="lecture_confirmed">Confirmed: {{
                     $item["is_confirmed"] ? 'yes' : 'no'

@@ -52,7 +52,7 @@
             <p class="card_title">{{$item->title}}</p>
             <img class="card_image" src="https://picsum.photos/seed/{{$item->title}}/600/150" alt="Placeholder image">
             <p class="card_description">{{$item->description}}</p>
-            <p class="card_theme">Themes: {{$item->theme}}</p>
+            <p class="card_theme">{{$item->theme}}</p>
             <p class="card_price">Price: {{$item->price}}Kč</p>
             <br>
             <button onclick="navigateTo( '/admin/conferences/edit/{{ $item->id }}' )"                   >Edit</button>
@@ -65,7 +65,7 @@
             <p class="title">{{$item->title}}</p>
             <img class="card_image" src="https://picsum.photos/seed/{{$item->title}}/600/150" alt="Placeholder image">
             <p>{{$item->description}}</p>
-            <p class="text_theme">Themes: {{$item->theme}}</p>
+            <p class="text_theme">{{$item->theme}}</p>
             <p class="card_price">Price: {{$item->price}}Kč</p>
         </div>
     @endisset

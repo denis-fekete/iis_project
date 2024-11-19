@@ -43,7 +43,7 @@
 
     .navigation_button {
         align-content: center;
-        height: 5vh ;
+        height: 7vh ;
         background-color: #FAAC40;
 
         color: #3E3C3E;

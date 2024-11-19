@@ -7,7 +7,7 @@
 
 <div class="grid_vertical">
 @foreach ($cards as $item)
-    <div class="card" onclick="navigateTo( '/lectures/lectures/{{ $item['id'] }}' )">
+    <div class="card" onclick="navigateTo( '/lectures/lecture/{{ $item['id'] }}' )">
         <p>{{$item['title']}}</p>
         <p>Confrence: {{ $item['conferenceTitle'] }}</p>
         @if ( $item['isConfirmed'] )
