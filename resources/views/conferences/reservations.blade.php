@@ -2,11 +2,13 @@
 
 @section('content')
 
-@if ($notification != null)
-    <div class="notification">
-        <h3>{{$notification}}</h3>
-    </div>
-@endif
+@isset($info['role'])
+    @if($info['role'] == 'admin')
+        <div id='admin_content'>
+            @yield('admin_content')
+        <div>
+    @endif
+@endisset
 
 <h2>Reservations</h2>
 <form action="{{ url('conferences/conference/reservations') }}" id="register_form" class="register_form" method="post">

@@ -11,23 +11,23 @@
         <button type="button" onclick="showLogin()">Log In</button>
     @else
         @if ($user->role === 'admin')
-            <button onclick="window.location.href='{{ url('admin/dashboard') }}'">
+            <button onclick="navigateTo('/admin/dashboard')">
                 Admin
             </button>
         @endif
-        <button onclick="window.location.href='{{ url('reservations/dashboard') }}'">
+        <button onclick="navigateTo('/reservations/dashboard')">
             Reservations
         </button>
-        <button onclick="window.location.href='{{ url('lectures/dashboard') }}'">
+        <button onclick="navigateTo('/lectures/dashboard')">
             My Lectures
         </button>
-        <button onclick="window.location.href='{{ url('conferences/dashboard') }}'">
+        <button onclick="navigateTo('/conferences/dashboard')">
             My Conferences
         </button>
-        <button onclick="window.location.href='{{ url('profile') }}'">
+        <button onclick="navigateTo('/profile')">
             My profile
         </button>
-        <button onclick="window.location.href='{{ url('auth/logout') }}'">
+        <button onclick="navigateTo('/auth/logout')">
             Logout
         </button>
     @endif

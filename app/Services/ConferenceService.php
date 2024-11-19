@@ -100,6 +100,7 @@ class ConferenceService
 
         return $conferences;
     }
+
     /**
      * Returns a conference by id
      *
@@ -108,6 +109,16 @@ class ConferenceService
      */
     public static function get($id) {
         return Conference::find($id);
+    }
+
+    /**
+     * Returns a conference by id
+     *
+     * @param  mixed $id ID of the conference
+     * @return Conference Conference or null if not found
+     */
+    public static function getOwner($id) {
+        return Conference::find($id)->owner_id;
     }
 
     /**
@@ -173,7 +184,7 @@ class ConferenceService
         if($validator->fails()) {
             $errorMessages = collect($validator->errors()->toArray())
                 ->flatten()
-                ->implode("\n"); // Joins each error with a newline
+                ->implode("\n");
 
 
             return $errorMessages;
@@ -183,7 +194,7 @@ class ConferenceService
 
         $conference = Conference::create([
             'title' => $validated['title'],
-            'description' => $validated['description'], // must be present, must be email, must unique in user in column email
+            'description' => $validated['description'],
             'theme' => $validated['theme'],
             'start_time' => $validated['start_time'],
             'end_time' => $validated['end_time'],
@@ -204,13 +215,12 @@ class ConferenceService
      * will be returned
      */
     public static function edit(Request $request) {
-
         $validator =  Validator::make($request->all(), self::VALIDATOR_PARAMS);
 
         if($validator->fails()) {
             $errorMessages = collect($validator->errors()->toArray())
                 ->flatten()
-                ->implode("\n"); // Joins each error with a newline
+                ->implode("\n");
 
             return $errorMessages;
         }

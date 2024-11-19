@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @section('content')
-
+<h2>Admin Conferences dashboard</h2>
 <div class="filters">
     <fieldset class="radio_box">
         @foreach ($info['themes'] as $item)
@@ -43,13 +43,15 @@
 
 <div class="all_cards">
 @foreach ($conferences as $item)
-    <div class="card" onclick="navigateTo('/conferences/conference/{{ $item->id }}')">
-        <p class="card_title">{{$item->title}}</p>
-        <img class="card_image" src="https://picsum.photos/seed/{{$item->title}}/600/150" alt="Placeholder image">
-        <p class="card_description">{{$item->description}}</p>
-        <p class="card_theme">Themes: {{$item->theme}}</p>
-        <p class="card_price">Price: {{$item->price}}Kč</p>
-
+    <div>
+        <div class="card">
+            <p class="card_title">{{$item->title}}</p>
+            <p class="card_theme">Themes: {{$item->theme}}</p>
+            <button onclick="navigateTo( '/conferences/conference/{{ $item->id }}' )"                   >Preview</button>
+            <button onclick="navigateTo( '/admin/conferences/edit/{{ $item->id }}' )"                   >Edit</button>
+            <button onclick="navigateTo( '/admin/conferences/conference/lectures/{{ $item->id }}')"     >Lectures</button>
+            <button onclick="navigateTo( '/admin/conferences/conference/reservations/{{ $item->id }}')" >Reservations</button>
+        </div>
     </div>
 @endforeach
 </div>
@@ -71,7 +73,6 @@
 <style>
 .all_cards {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
     gap: 10px;
     margin-inline: 5%;
     margin-top: 1%;
@@ -94,22 +95,12 @@
     background-color: wheat;
 }
 
-.card_image {
-    max-width: 100%;
-}
 
 .card_title{
     font-size: 20px;
     color:red;
 }
 
-.card_description {
-    font-size: 15px;
-}
-.card_organizer_name {
-    font-size: 15px;
-    color:lightskyblue
-}
 .card_theme {
     font-size: 12px;
     color:gray

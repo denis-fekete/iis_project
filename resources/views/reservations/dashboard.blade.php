@@ -14,7 +14,7 @@
         <p class="reservation_number_of_peole">Number of people: {{ $reservation->number_of_people }}</p>
         <button onclick="navigateTo('/reservations/cancel/{{ $reservation->id }}')">Cancel reservation</button>
         <br>
-        <button onclick="navigateTo('reservations/schedule/{{ $reservation->id }}')">Show schedule</button>
+        <button onclick="navigateTo('/reservations/schedule/{{ $reservation->id }}')">Show schedule</button>
     </div>
     <br>
 @endforeach

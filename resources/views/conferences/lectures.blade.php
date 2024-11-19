@@ -2,11 +2,13 @@
 
 @section('content')
 
-@if ($notification != null)
-    <div class="notification">
-        <h3>{{$notification}}</h3>
-    </div>
-@endif
+@isset($info['role'])
+    @if($info['role'] == 'admin')
+        <div id='admin_contents'>
+            @yield('admin_contents')
+        <div>
+    @endif
+@endisset
 
 <p>Conference starts at: {{ $conference->start_time }}</p>
 <p>Conference ends at: {{ $conference->end_time }}</p>

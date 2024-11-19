@@ -58,8 +58,9 @@
 </html>
 
 <script>
+    window.appBaseUrl = "{{ config('app.url') }}";
     function navigateTo(url) {
-        window.location = url;
+        window.location = `${window.appBaseUrl}${url}`;
     }
 </script>
 

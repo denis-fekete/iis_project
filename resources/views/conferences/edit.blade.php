@@ -8,7 +8,17 @@
     } else {
         $url = '/conferences/edit';
     }
+
 @endphp
+
+@isset($info['role'])
+    @if($info['role'] == 'admin')
+        <div id='admin_contents'>
+            @yield('admin_contents')
+        <div>
+    @endif
+@endisset
+
 
 <form action="{{ url($url) }}" id="register_form" class="register_form" method="post">
     @csrf

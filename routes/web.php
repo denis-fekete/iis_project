@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminConferenceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ConferenceController;
 use Illuminate\Support\Facades\Route;
@@ -9,6 +10,8 @@ use App\Http\Controllers\FormController;
 use App\Http\Controllers\LectureController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\RoomController;
+use App\Services\RoomService;
 
 // --------------------------------------------------------
 //
@@ -34,7 +37,7 @@ Route::get('/profile', function () {
 // --------------------------------------------------------
 
 Route::prefix('conferences')->group(function () {
-    Route::get('/search/{themes};{orderBy};{orderDir}', [ConferenceController::class, 'getAll']);
+    Route::get('/search/{themes};{orderBy};{orderDir}', [ConferenceController::class, 'search']);
     Route::get('/conference/{id}', [ConferenceController::class, 'get']);
     Route::get('/dashboard', [ConferenceController::class, 'dashboard'])
         ->middleware('auth'); // protect website => user must be logged in
@@ -109,6 +112,29 @@ Route::prefix('auth')->group(function () {
 // --------------------------------------------------------
 
 Route::prefix('admin')->group(function () {
+    // Route::prefix('rooms')->group(function () {
+    //     Route::get('/dashboard', [RoomController::class, 'dashboard'])
+    //         ->middleware('auth');
+    //     Route::get('/create', [RoomController::class, 'creationForm'])
+    //         ->middleware('auth');
+    //     Route::post('/create', [RoomController::class, 'create'])
+    //         ->middleware('auth');
+
+    // });
+Route::prefix('conferences')->group(function () {
+        Route::get('/dashboard', [AdminConferenceController::class, 'dashboardDefault'])
+            ->middleware('auth');
+        Route::get('/dashboard/{themes};{orderBy};{orderDir}', [AdminConferenceController::class, 'dashboard'])
+            ->middleware('auth');
+        Route::get('/edit/{id}', [AdminConferenceController::class, 'editForm'])
+            ->middleware('auth');
+        Route::get('/conference/lectures/{id}', [AdminConferenceController::class, 'listConferenceLectures'])
+            ->middleware('auth');
+        Route::get('/conference/reservations/{id}', [AdminConferenceController::class, 'listConferenceReservations'])
+            ->middleware('auth');
+
+        });
+
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->middleware('auth');

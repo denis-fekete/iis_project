@@ -21,7 +21,7 @@ class ConferenceController extends Controller
      *
      * @return void search view with all conferences
      */
-    public function getAll($themes, $orderBy, $orderDir) {
+    public function search($themes, $orderBy, $orderDir) {
         $conferences = ConferenceService::getAllShortDescription($themes, $orderBy, $orderDir);
 
         return view('conferences.search')
@@ -88,11 +88,15 @@ class ConferenceController extends Controller
 
         $user = auth()->user();
         // check if user is owner or admin
-        if($user->id == $conference->owner_id) {
+        if($user->id == $conference->owner_id || $user->role == RoleType::Admin->value) {
 
             return view('conferences.edit')
                 ->with('conference', $conference)
-                ->with('info', ['type' => 'edit', 'id' => $id]);
+                ->with('info', [
+                    'type' => 'edit',
+                    'id' => $id,
+                    'role' => $user->role,
+                    ]);
         } else {
             return redirect('conferences/dashboard')
                 ->with('notification', 'You do not have permission to edit this conference');
@@ -138,10 +142,16 @@ class ConferenceController extends Controller
                 ->withErrors(['id' => 'Error: Unknown conference ID']);
         }
 
-        $res = ConferenceService::edit($request);
+        $user = auth()->user();
+        $ownerId = ConferenceService::getOwner($id);
+        if($user->id == $ownerId || $user->role == RoleType::Admin->value) {
+            $res = ConferenceService::edit($request);
+        } else {
+            $res = "Error: You do not have permission for this";
+        }
 
         if($res == '') {
-            return redirect('conferences/dashboard')
+            return redirect()->back()
                 ->with("notification", 'Conference changes were successfully saved');
         } else {
             return redirect('conferences/edit/' . ((string)$id))
