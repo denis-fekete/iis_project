@@ -95,5 +95,27 @@
         font-size: 1em;
         text-align: left;
         background-color: #f9f9f9;
+        text-align: center;
+    }
+
+    .table th {
+        background-color: #FAAC40;;
+        color: #333;
+        text-transform: uppercase;
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+    .table tr:hover {
+        background-color: #ffeeba;
+    }
+
+    .table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+    .schedule-save {
+        text-align: center;
     }
 </style>

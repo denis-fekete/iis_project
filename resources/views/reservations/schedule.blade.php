@@ -6,18 +6,6 @@
     <p class="title">Lecures schedule</h1>
 </div>
 
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
-@if (session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-@endif
-
 @if ($schedule && count($schedule) > 0)
     <form id="scheduleForm" method="POST" action="{{ url('/reservations/saveSchedule') }}">
         @csrf
@@ -52,7 +40,7 @@
             </tbody>
         </table>
 
-        <div class="button-container">
+        <div class="schedule-save">
             <button type="submit">Save</button>
         </div>
     </form>
