@@ -118,4 +118,33 @@
     .schedule-save {
         text-align: center;
     }
+
+    .lecture-title {
+        font-size: 2em;
+        font-weight: bold;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .lecture-poster {
+        display: block;
+        margin: 0 auto 20px auto;
+        border-radius: 10px;
+    }
+
+    .lecture-description {
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+
+    .lecture-attributes {
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+
+    .lecture-control {
+        text-align: center;
+        margin-top: 20px;
+    }
+
 </style>

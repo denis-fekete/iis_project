@@ -3,27 +3,35 @@
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="card">
-    <p>{{$data['title']}}</p>
+    <h1 class="lecture-title">{{$data['title']}}</h1>
+    <ph>
     @if ($data['posterUrl'])
-        <img src="{{$data['posterUrl']}}" alt='Poster' />
+        <img src="{{$data['posterUrl']}}" alt='Poster' class="lecture-poster"/>
     @endif
-    <p>{{ $data['description'] }}
-    <p>Conference: <a href="/conferences/conference/{{$data['conferenceId']}}">{{ $data['conferenceName'] }}</a></p>
-    @if ($data['startTime'] && $data['endTime'])
-        <p>Start time: {{$data['startTime']}}</p>
-        <p>End time: {{$data['endTime']}}</p>
-    @endif
-    @if ($data['room'])
-        <p>Room: {{ $data['room'] }}</p>
-    @endif
-    <p>Speaker: <a href="/person/{{$data['ownerId']}}">{{ $data['ownerName'] }}</a></p>
-    <p>Confirmed: {{$data['isConfirmed'] ? 'yes' : 'no'}}</p>
+    <div class="lecture-description">
+        <p><h3>Description:</h3></p>
+        <p>{{ $data['description'] }}</p>
+    </div>
+    <div class="lecture-attributes">
+        <p>Conference: <a href="/conferences/conference/{{$data['conferenceId']}}">{{ $data['conferenceName'] }}</a></p>
+        @if ($data['startTime'] && $data['endTime'])
+            <p>Start time: {{$data['startTime']}}</p>
+            <p>End time: {{$data['endTime']}}</p>
+        @endif
+        @if ($data['room'])
+            <p>Room: {{ $data['room'] }}</p>
+        @endif
+        <p>Speaker: <a href="/person/{{$data['ownerId']}}">{{ $data['ownerName'] }}</a></p>
+        <p>Confirmed: {{$data['isConfirmed'] ? 'yes' : 'no'}}</p>
+    </div>
 
     @if (!$data['canEdit'])
-        <button onclick="navigateTo( '/lectures/edit/{{ $data['id'] }}' )">Edit</button>
-        @if (!$data['isConfirmed'])
-            <button onclick="cancelLecture({{$data['id']}})">Cancel</button>
-        @endif
+        <div class="lecture-control">
+            <button onclick="navigateTo( '/lectures/edit/{{ $data['id'] }}' )">Edit</button>
+            @if (!$data['isConfirmed'])
+                <button onclick="cancelLecture({{$data['id']}})">Cancel</button>
+            @endif
+        </div>
     @endif
 </div>
 @endsection
