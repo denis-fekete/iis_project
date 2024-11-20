@@ -258,7 +258,7 @@ class ConferenceController extends Controller
 
         if(self::CheckPermissions($user, $id)) {
             $rooms = ConferenceService::listRooms($id);
-            if (!$rooms)
+            if ($rooms === null)
                 return redirect('conferences/dashboard')
                     ->with('notification', ['Unable to load list of rooms.']);
 
