@@ -7,7 +7,7 @@
     </div>
     <br>
     <div class="navigation">
-        <button class="navigation_button" onclick="navigateTo('/admin/users/dashboard')">Users</button>
+        <button class="navigation_button" onclick="navigateTo('/admin/users/search')">Users</button>
         <button class="navigation_button" onclick="navigateTo('/admin/rooms/dashboard')">Rooms</button>
         <button class="navigation_button" onclick="navigateTo('/admin/conferences/search')">Conferences</button>
     </div>

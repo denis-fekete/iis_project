@@ -31,6 +31,8 @@ class AuthController extends Controller
         if(auth()->attempt(request()->only(['email', 'password']))) {
             if($returnUrl !== null) {
                 return redirect($returnUrl);
+            } else {
+                return redirect('/home');
             }
         }
     }

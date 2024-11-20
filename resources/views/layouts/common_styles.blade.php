@@ -92,7 +92,10 @@
 
     .text_theme {
         color: #878381;
+    }
 
+    .delete_btn {
+        background-color: #FD5620;
     }
 
     .table {

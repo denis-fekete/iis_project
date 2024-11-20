@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AdminConferenceController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ConferenceController;
 use Illuminate\Support\Facades\Route;
@@ -99,6 +99,8 @@ Route::prefix('users')->group(function () {
         ->middleware('auth');
     Route::post('/profile/edit', [UserController::class, 'editUser'])
         ->middleware('auth');
+    Route::get('/delete/{id}', [UserController::class, 'delete'])
+        ->middleware('auth');
 });
 
 
@@ -137,9 +139,9 @@ Route::prefix('admin')->group(function () {
 
     // });
     Route::prefix('conferences')->group(function () {
-        Route::get('/search', [AdminConferenceController::class, 'searchDefault'])
+        Route::get('/search', [AdminController::class, 'conferencesSearchDefault'])
             ->middleware('auth');
-        Route::get('/search/{themes};{orderBy};{orderDir}', [AdminConferenceController::class, 'search'])
+        Route::get('/search/{themes};{orderBy};{orderDir}', [AdminController::class, 'conferencesSearch'])
             ->middleware('auth');
         Route::get('/edit/{id}', [ConferenceController::class, 'editForm'])
             ->middleware('auth');
@@ -150,15 +152,15 @@ Route::prefix('admin')->group(function () {
 
         Route::post('/conference/reservations', [ConferenceController::class, 'editReservationsList'])
             ->middleware('auth');
-        });
+    });
 
     Route::prefix('users')->group(function () {
-        Route::get('/dashboard', [AdminConferenceController::class, 'dashboard'])
+        Route::get('/search', [AdminController::class, 'usersSearch'])
             ->middleware('auth');
-        });
+        Route::get('/edit/{$id}', [AdminController::class, 'usersEdit'])
+            ->middleware('auth');
+    });
 
-
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->middleware('auth');
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])
+        ->middleware('auth');
 });

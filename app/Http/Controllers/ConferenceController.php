@@ -45,6 +45,10 @@ class ConferenceController extends Controller
     public function get($id) {
         $conference = ConferenceService::getWithLectures($id);
 
+        if($conference == null) {
+            return view('unknown');
+        }
+
         return view('conferences.conference')
            ->with('conferences', $conference);
     }

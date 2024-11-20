@@ -29,8 +29,7 @@
             </div>
         </footer>
     </div>  {{-- body_container --}}
-</body>
-</html>
+
 
 {{-- if user was redirected with open_login, open login outright --}}
 @isset($info['open_login'])
@@ -38,6 +37,14 @@
         showLogin();
     </script>
 @endisset
+
+@if(session('info'))
+    @isset($info['open_login'])
+        <script>
+            showLogin();
+        </script>
+    @endisset
+@endif
 
 {{-- open notifications if set --}}
 @isset($notification)
@@ -91,3 +98,5 @@
 
 </style>
 
+</body>
+</html>

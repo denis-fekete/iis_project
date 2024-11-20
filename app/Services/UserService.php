@@ -66,6 +66,10 @@ class UserService
                 ];
     }
 
+    public static function getAll() {
+        return User::all();
+    }
+
     /**
      * Edits user data based on input $request
      *
@@ -132,11 +136,11 @@ class UserService
 
         $validated = $validator->validated();
 
+        $user = User::create([
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
 
-        $user = User::create();
-
-        $user->email = $validated['email'];
-        $user->password = Hash::make($validated['password']);
+        ]);
 
         if(isset($validated['name']))
             $user->name = $validated['name'];
@@ -154,5 +158,13 @@ class UserService
         $user->save();
 
         return ''; // everything was alright, return no error message
+    }
+
+    public static function delete($id) {
+        $userObj = User::find($id);
+
+        if($userObj != null) {
+            $userObj->delete();
+        }
     }
 }

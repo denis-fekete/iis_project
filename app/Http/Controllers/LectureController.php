@@ -60,6 +60,10 @@ class LectureController extends Controller
     public function get($id) {
         $userId = auth()->user()->id;
         $data = LectureService::getLectureDetailView($id, $userId);
+
+        if($data == null) {
+            return view('unknown');
+        }
         return view('lectures.lecture')->with('data', $data);
     }
 

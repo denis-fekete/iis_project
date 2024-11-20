@@ -5,15 +5,18 @@
     <p class="title">Profile</p>
 </div>
 
-@if(isset($info['myself']) && $info['myself'] == true)
-    <div class="card" id="profile_info">
-        <p>Email: {{$person->email}} </p>
-        <p>Fullname: {{$person->title_before}} {{$person->name}} {{$person->surname}} {{$person->title_after}} </p>
-        <p>Description: {{$person->description}}</p>
-        <br>
-        <button onclick="enterEdit()">Edit</button>
-    </div>
 
+<div class="card" id="profile_info">
+    <p>Email: {{$person->email}} </p>
+    <p>Fullname: {{$person->title_before}} {{$person->name}} {{$person->surname}} {{$person->title_after}} </p>
+    <p>Description: {{$person->description}}</p>
+    <br>
+    @if(isset($info['canEdit']) && $info['canEdit'] == true)
+        <button onclick="enterEdit()">Edit</button>
+    @endif
+</div>
+@if(isset($info['canEdit']) && $info['canEdit'] == true)
+</div>
     <div class="card" id="profile_edit">
         <form action="{{ url('/users/profile/edit') }}" id="register_form" method="post">
             @csrf
@@ -45,12 +48,7 @@
             <input type="submit" value="Submit">
         </form>
         <button onclick="exitEdit()">Exit editing</button>
-    </div>
-@else
-    <div class="card">
-        <p>Email: {{$person->email}} </p>
-        <p>Fullname: {{$person->title_before}} {{$person->name}} {{$person->surname}} {{$person->title_after}} </p>
-        <p>Description: {{$person->description}}</p>
+        <button class="delete_btn" onclick="navigateTo('/users/delete/{{$person->id}}')">Delete account</button>
     </div>
 @endif
 
@@ -71,6 +69,7 @@
 <div class="title_block">
     <p class="title">Old lectures</p>
 </div>
+
 @foreach ($pastLectures as $item)
     <div class="card">
         <p>Title: {{$item->title}} </p>
@@ -81,36 +80,38 @@
 @endforeach
 
 
-<style>
-    #profile_info {
-        display: block;
-    }
+@if(isset($info['canEdit']) && $info['canEdit'] == true)
+    <style>
+        #profile_info {
+            display: block;
+        }
 
-    #profile_edit {
-        display: none;
-    }
-</style>
+        #profile_edit {
+            display: none;
+        }
+    </style>
 
-<script>
-    function enterEdit() {
-        document.getElementById('profile_info').style.display = 'none';
-        document.getElementById('profile_edit').style.display = 'block';
-    }
+    <script>
+        function enterEdit() {
+            document.getElementById('profile_info').style.display = 'none';
+            document.getElementById('profile_edit').style.display = 'block';
+        }
 
-    function exitEdit() {
-        document.getElementById('profile_info').style.display = 'block';
-        document.getElementById('profile_edit').style.display = 'none';
-    }
-</script>
+        function exitEdit() {
+            document.getElementById('profile_info').style.display = 'block';
+            document.getElementById('profile_edit').style.display = 'none';
+        }
+    </script>
 
-@if(session('info'))
-    @if(isset(session('info')['editing']) && session('info')['editing'] == true)
-        <script>
-            // when document is fully loaded call enterEdit() if we want to still edit
-            document.addEventListener('DOMContentLoaded', function() {
-                enterEdit();
-            });
-        </script>
+    @if(session('info'))
+        @if(isset(session('info')['editing']) && session('info')['editing'] == true)
+            <script>
+                // when document is fully loaded call enterEdit() if we want to still edit
+                document.addEventListener('DOMContentLoaded', function() {
+                    enterEdit();
+                });
+            </script>
+        @endif
     @endif
 @endif
 
