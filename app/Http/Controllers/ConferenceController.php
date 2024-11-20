@@ -7,6 +7,7 @@ use App\Enums\OrderDirection;
 use App\Enums\RoleType;
 use App\Enums\Themes;
 use App\Models\Conference;
+use App\Services\AdminService;
 use App\Services\ConferenceService;
 use Dotenv\Exception\ValidationException;
 use Illuminate\Auth\Events\Validated;
@@ -92,6 +93,11 @@ class ConferenceController extends Controller
         if(self::CheckPermissions($user, $id)) {
             // get conference information
             $conference = ConferenceService::getWithFormattedDate($id);
+
+            if($conference == null) {
+                return view('unknown');
+            }
+
 
             return view('conferences.edit')
                 ->with('conference', $conference)
@@ -296,7 +302,7 @@ class ConferenceController extends Controller
     }
 
     /**
-     * Update specified room's name 
+     * Update specified room's name
      *
      * @param Request $request POST request containing room information
      * @return Object redirects user to current conference room list
@@ -337,6 +343,23 @@ class ConferenceController extends Controller
         } else {
             return redirect('conferences/dashboard')
                 ->with('notification', ['You do not have permission for this action!']);
+        }
+    }
+
+    /**
+     * Deletes conference if user has appropriate privileges
+     *
+     * @param  string $id Id of user to be deleted
+     * @return void
+     */
+    public function delete($id) {
+        $user = auth()->user();
+        if($user != null && ($user->id == $id || AdminService::amIAdmin())) {
+            ConferenceService::delete($id);
+            return redirect()->back();
+        } else {
+            return redirect()->back()
+                ->withErrors('privileges', "You do not have privileges to do this action");
         }
     }
 

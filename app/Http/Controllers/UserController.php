@@ -90,6 +90,12 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * Deletes user if user has appropriate privileges
+     *
+     * @param  string $id Id of user to be deleted
+     * @return void
+     */
     public function delete($id) {
         $user = auth()->user();
         if($user != null && ($user->id == $id || AdminService::amIAdmin())) {

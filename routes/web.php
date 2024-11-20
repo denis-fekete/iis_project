@@ -47,6 +47,8 @@ Route::prefix('conferences')->group(function () {
         ->middleware('auth');
     Route::get('/edit/{id}', [ConferenceController::class, 'editForm'])
         ->middleware('auth');
+    Route::get('/delete/{id}', [ConferenceController::class, 'delete'])
+        ->middleware('auth');
     Route::get('/conference/lectures/{id}', [ConferenceController::class, 'listConferenceLectures'])
         ->middleware('auth');
     Route::get('/conference/reservations/{id}', [ConferenceController::class, 'listConferenceReservations'])
