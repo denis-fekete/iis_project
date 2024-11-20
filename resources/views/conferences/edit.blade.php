@@ -69,8 +69,15 @@
                 <button type"submit">Save changes</button>
             @endif
         @endisset
-
-        <br>
     </form>
+
+    @isset($info['type'])
+        @if ($info['type'] == 'edit')
+            <br>
+            <button class="delete_btn" onclick="navigateTo('/conferences/delete/{{$conference->id}}')">Delete</button>
+        @endif
+    @endisset
+
+
 </div>
 @endsection

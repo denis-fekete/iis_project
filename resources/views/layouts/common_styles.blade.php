@@ -76,6 +76,13 @@
     input {
         background: #EEEBCC;
         color: #3E3C3E;
+        margin-bottom: 0.5em;
+    }
+
+    input:disabled {
+        background: #9DD9D2;
+        color: #3E3C3E;
+        font-style: italic;
     }
 
     .text_link {
@@ -85,7 +92,10 @@
 
     .text_theme {
         color: #878381;
+    }
 
+    .delete_btn {
+        background-color: #FD5620;
     }
 
     .table {

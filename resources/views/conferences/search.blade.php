@@ -72,7 +72,6 @@
 
 @endforeach
 </div>
-@endsection
 
 <script>
     function applyFilters() {
@@ -88,8 +87,6 @@
 </script>
 
 <style>
-
-
     .radio_box {
         border: none;
         margin-bottom: 0.3em;
@@ -102,5 +99,6 @@
     .card_image {
         max-width: 100%;
     }
-
 </style>
+
+@endsection

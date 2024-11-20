@@ -58,6 +58,10 @@ class ReservationController extends Controller
     public function get($id) {
         $reservation = ReservationService::get($id);
 
+        if($reservation == null) {
+            return view('unknown');
+        }
+
         return view('reservations.reservation')
             ->with('reservation', $reservation);
     }
@@ -91,7 +95,7 @@ class ReservationController extends Controller
 
         if (!$result)
             return redirect()->back()->with('notification', ['Schedule saved successfully!']);
-    
+
         return redirect()->back()->with('notification', [$result]);
     }
 }

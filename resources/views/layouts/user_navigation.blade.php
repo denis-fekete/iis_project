@@ -24,7 +24,7 @@
         <button class="navigation_button" onclick="navigateTo('/conferences/dashboard')">
             My Conferences
         </button>
-        <button class="navigation_button" onclick="navigateTo('/profile')">
+        <button class="navigation_button" onclick="navigateTo('/users/profile')">
             My profile
         </button>
         <button class="navigation_button" onclick="navigateTo('/auth/logout')">
@@ -51,9 +51,12 @@
         font-weight: bold;
 
         border: 2px solid #3E3C3E;
-
-        border-radius: 0px;
+        /* border-radius: 0px; */
         box-shadow: none;
+
+        border-radius: 20px;
+        /* box-shadow: 2px 2px 5px #3E3C3E; */
+
     }
 
     .navigation_button:hover{

@@ -33,12 +33,13 @@
 
     {{-- do not show errors if not provided any --}}
     @if ($errors->any())
+        <script>
+            showNotification();
+        </script>
         <div style="background-color: red">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{$error}}</li>
-                @endforeach
-            </ul>
+            @foreach ($errors->all() as $error)
+                <p>{{$error}}</p>
+            @endforeach
         </div>
     @endif
 </div>

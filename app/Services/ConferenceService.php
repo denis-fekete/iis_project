@@ -155,9 +155,10 @@ class ConferenceService
      */
     public static function getWithFormattedDate($id) {
         $conference = Conference::find($id);
-        $conference->start_time= $conference->start_time->format('Y-m-d\TH:i');
-        $conference->end_time = $conference->end_time->format('Y-m-d\TH:i');
-
+        if($conference != null) {
+            $conference->start_time= $conference->start_time->format('Y-m-d\TH:i');
+            $conference->end_time = $conference->end_time->format('Y-m-d\TH:i');
+        }
         return $conference;
     }
 
@@ -350,7 +351,7 @@ class ConferenceService
         $confirmedLectures = $conference->lectures()
             ->where('is_confirmed', 1)
             ->get();
-        
+
         $roomViewModels = [];
         foreach ($rooms as $room) {
             $isRoomUsed = $confirmedLectures->contains('room_id', $room->id);
@@ -362,6 +363,14 @@ class ConferenceService
         }
 
         return $roomViewModels;
+    }
+
+    public static function delete($id) {
+        $conferenceObj = Conference::find($id);
+
+        if($conferenceObj != null) {
+            $conferenceObj->delete();
+        }
     }
 
     /**
@@ -394,12 +403,13 @@ class ConferenceService
         return true;
     }
 
+
     /**
      * Updates specified room
      *
-     * @param  $conferenceId - id of the conference
-     * @param  $roomId - id of the room
-     * @param  $newName - new name of the room
+     * @param mixed $conferenceId - id of the conference
+     * @param mixed $roomId - id of the room
+     * @param mixed $newName - new name of the room
      * @return void
      */
     public static function updateRoom($conferenceId, $roomId, $newName) {
