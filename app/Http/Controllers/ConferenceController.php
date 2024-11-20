@@ -248,6 +248,95 @@ class ConferenceController extends Controller
     }
 
     /**
+     * Show all conference rooms
+     *
+     * @param int $id contains id of the conference
+     * @return Object redirects user rooms view
+     */
+    public function listConferenceRooms($id) {
+        $user = auth()->user();
+
+        if(self::CheckPermissions($user, $id)) {
+            $rooms = ConferenceService::listRooms($id);
+            if (!$rooms)
+                return redirect('conferences/dashboard')
+                    ->with('notification', ['Unable to load list of rooms.']);
+
+            return view('conferences.rooms')
+                ->with('id', $id)
+                ->with('rooms', $rooms);
+        } else {
+            return redirect('conferences/dashboard')
+                ->with('notification', ['You do not have permission to access lectures of this conference']);
+        }
+    }
+
+    /**
+     * Creates new room for conference
+     *
+     * @param Request $request POST request containing new room information
+     * @return Object redirects user to current conference room list
+     */
+    public function createRoom(Request $request) {
+        $conferenceId = $request->input('conference_id');
+        $roomName = $request->input('name');
+        $user = auth()->user();
+
+        if(self::CheckPermissions($user, $conferenceId)) {
+            ConferenceService::createRoom($conferenceId, $roomName);
+            return redirect('/conferences/conference/rooms/'.$conferenceId);
+        } else {
+            return redirect('conferences/dashboard')
+                ->with('notification', ['You do not have permission for this action!']);
+        }
+    }
+
+    /**
+     * Update specified room's name 
+     *
+     * @param Request $request POST request containing room information
+     * @return Object redirects user to current conference room list
+     */
+    public function updateRoom(Request $request) {
+        $conferenceId = $request->input('conference_id');
+        $roomId = $request->input('room_id');
+        $newName = $request->input('name');
+        $user = auth()->user();
+
+        if(self::CheckPermissions($user, $conferenceId)) {
+            $result = ConferenceService::updateRoom($conferenceId, $roomId, $newName);
+            if (!$result)
+                return redirect('conferences/dashboard');
+            return redirect('/conferences/conference/rooms/'.$conferenceId);
+        } else {
+            return redirect('conferences/dashboard')
+                ->with('notification', ['You do not have permission for this action!']);
+        }
+    }
+
+    /**
+     * Deletes specified room
+     *
+     * @param Request $request POST request containing room information
+     * @return Object redirects user to current conference room list
+     */
+    public function deleteRoom(Request $request) {
+        $conferenceId = $request->input('conference_id');
+        $roomId = $request->input('room_id');
+        $user = auth()->user();
+
+        if(self::CheckPermissions($user, $conferenceId)) {
+            $result = ConferenceService::deleteRoom($conferenceId, $roomId);
+            if (!$result)
+                return redirect('conferences/dashboard');
+            return redirect('/conferences/conference/rooms/'.$conferenceId);
+        } else {
+            return redirect('conferences/dashboard')
+                ->with('notification', ['You do not have permission for this action!']);
+        }
+    }
+
+    /**
      * CheckPermissions
      *
      * @param  mixed $user User model that will be checked
@@ -267,5 +356,4 @@ class ConferenceController extends Controller
 
         return (ConferenceService::getOwner($conferenceId) == $user->id);
     }
-
 }

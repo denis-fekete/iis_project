@@ -17,6 +17,7 @@
             <button onclick="navigateTo( '/conferences/conference/{{ $item->id }}')"                 >Preview</button>
             <button onclick="navigateTo( '/conferences/conference/lectures/{{ $item->id }}')"       >Lectures</button>
             <button onclick="navigateTo( '/conferences/conference/reservations/{{ $item->id }}')    ">Reservations</button>
+            <button onclick="navigateTo( '/conferences/conference/rooms/{{ $item->id }}')"          >Rooms</button>
         </div>
     </div>
 @endforeach
