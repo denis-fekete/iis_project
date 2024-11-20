@@ -55,26 +55,37 @@ class LectureScheduleService
     public static function saveLectureSchedule($reservationId, $scheduled) {
         $reservation = Reservation::find($reservationId);
         if (!$reservation)
-            return false;
+            return 'The reservation does not exist.';
 
         $conference = $reservation->conference()->first();
         if (!$conference)
-            return false;
+            return 'Unable to save schedule.';
 
-        $lectures = $conference->lectures()->pluck('id')->toArray();
-        foreach ($lectures as $lectureId) {
-            LectureSchedule::where('lecture_id', $lectureId)
+        $lectures = $conference->lectures()->get();
+        $scheduledLectureIds = array_keys($scheduled);
+        $scheduledLectures = $lectures->whereIn('id', $scheduledLectureIds);
+
+        foreach ($scheduledLectures as $lecture1)
+            foreach ($scheduledLectures as $lecture2)
+                if ($lecture1->id !== $lecture2->id &&
+                    $lecture1->start_time < $lecture2->end_time && 
+                    $lecture1->end_time > $lecture2->start_time)
+                        return 'Time collision detected between '.$lecture1->title .' and '.$lecture2->title.'.';
+
+
+        foreach ($lectures as $lecture) {
+            LectureSchedule::where('lecture_id', $lecture->id)
                 ->where('reservation_id', $reservationId)
                 ->delete();
             
-            if (in_array($lectureId, array_keys($scheduled))) {
+            if (in_array($lecture->id, array_keys($scheduled))) {
                 LectureSchedule::create([
-                    'lecture_id' => $lectureId,
+                    'lecture_id' => $lecture->id,
                     'reservation_id' => $reservationId,
                 ]);
             }
         }
 
-        return true;
+        return null;
     }
 }

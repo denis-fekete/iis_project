@@ -105,5 +105,56 @@
         font-size: 1em;
         text-align: left;
         background-color: #f9f9f9;
+        text-align: center;
     }
+
+    .table th {
+        background-color: #FAAC40;;
+        color: #333;
+        text-transform: uppercase;
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+    .table tr:hover {
+        background-color: #ffeeba;
+    }
+
+    .table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+    .schedule-save {
+        text-align: center;
+    }
+
+    .lecture-title {
+        font-size: 2em;
+        font-weight: bold;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .lecture-poster {
+        display: block;
+        margin: 0 auto 20px auto;
+        border-radius: 10px;
+    }
+
+    .lecture-description {
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+
+    .lecture-attributes {
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+
+    .lecture-control {
+        text-align: center;
+        margin-top: 20px;
+    }
+
 </style>

@@ -6,6 +6,7 @@ use App\Enums\OrderBy;
 use App\Enums\Themes;
 use App\Enums\OrderDirection;
 use App\Models\Conference;
+use App\Models\Room;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
@@ -331,6 +332,84 @@ class ConferenceService
 
         $conference->save();
 
+        return true;
+    }
+
+    /**
+     * Returns the list of all rooms for the specified conference.
+     *
+     * @param  $conferenceId - id of the conference
+     * @return list ruturns list of model views of the conference with useful attributes
+     */
+    public static function listRooms($conferenceId) {
+        $conference = Conference::find($conferenceId);
+        if (!$conference)
+            return null;
+
+        $rooms = $conference->rooms()->get();
+        $confirmedLectures = $conference->lectures()
+            ->where('is_confirmed', 1)
+            ->get();
+        
+        $roomViewModels = [];
+        foreach ($rooms as $room) {
+            $isRoomUsed = $confirmedLectures->contains('room_id', $room->id);
+            array_push($roomViewModels, [
+                'id' => $room->id,
+                'name' => $room->name,
+                'canBeDeleted' => !$isRoomUsed,
+            ]);
+        }
+
+        return $roomViewModels;
+    }
+
+    /**
+     * Creates new room
+     *
+     * @param  $conferenceId - id of the conference
+     * @param  $roomName - name of new room
+     * @return void
+     */
+    public static function createRoom($conferenceId, $roomName) {
+        Room::create([
+            'name' => $roomName,
+            'conference_id' => $conferenceId,
+        ]);
+    }
+
+    /**
+     * Deletes specified room
+     *
+     * @param  $conferenceId - id of the conference
+     * @param  $roomName - name of new room
+     * @return void
+     */
+    public static function deleteRoom($conferenceId, $roomId) {
+        $room = Room::find($roomId);
+        if ($room->conference_id != $conferenceId)
+            return false;
+
+        $room->delete();
+        return true;
+    }
+
+    /**
+     * Updates specified room
+     *
+     * @param  $conferenceId - id of the conference
+     * @param  $roomId - id of the room
+     * @param  $newName - new name of the room
+     * @return void
+     */
+    public static function updateRoom($conferenceId, $roomId, $newName) {
+        $room = Room::find($roomId);
+        if ($room->conference_id != $conferenceId)
+            return false;
+
+        $room->update([
+            'name' => $newName,
+        ]);
         return true;
     }
 }

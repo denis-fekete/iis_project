@@ -81,7 +81,7 @@ class ReservationController extends Controller
     public function showSchedule($id) {
         $viewModels = LectureScheduleService::getLectureSchedule($id);
         if (!$viewModels)
-            return redirect('/reservations/dashboard');
+            return redirect('/reservations/dashboard')->with('notification', ['Failed to open schedule!']);
 
         return view('reservations.schedule')
             ->with('schedule', $viewModels)->with('reservationId', $id);
@@ -93,9 +93,9 @@ class ReservationController extends Controller
             $request->input('scheduled') ?? [],
         );
 
-        if ($result)
-            return redirect()->back()->with('success', 'Schedule saved successfully!');
+        if (!$result)
+            return redirect()->back()->with('notification', ['Schedule saved successfully!']);
 
-        return redirect()->back()->with('error', 'Failed to save schedule.');
+        return redirect()->back()->with('notification', [$result]);
     }
 }
