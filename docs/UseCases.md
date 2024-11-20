@@ -21,10 +21,10 @@ Legend:
 ### User
 - ✅ list all conferences
     - ✅ see details about conference
-        - ❌ list lecturers of conference
-            - ❌ see details about lecturer (list of lectures, own bio, etc...)
+        - ✅ list lecturers of conference
+            - ❌ (partialy) see details about lecturer (list of lectures, own bio, etc...)
         - ✅ start reservation process
-        - ❌ can offer my own lecture to any future conference and become a potential speaker
+        - ✅ can offer my own lecture to any future conference and become a potential speaker
 - ✅ list all reservations
     - ✅ become visitor without doing anything
     - ❌ pay for a ticket
@@ -35,8 +35,8 @@ Legend:
         - ❌ see details about lectures
 - ✅ list lectures
     - ✅ do nothing and because confirmed speaker
-    - ❌ see details                        
-        - ❌ edit details
+    - ✅ see details                        
+        - ✅ edit details
         - ❌ add new presentation (plain text)
     - ❌ see statistics (number of user that are planning to attend lecture)
     - ✅ see state (accepted/pending)

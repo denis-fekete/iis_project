@@ -16,7 +16,7 @@
     <div class="horizontal_grid">
         <p>Organizer:
             <a class="text_link"
-                onclick="navigateTo('/person/{{$conferences->owner->id}}')">
+                onclick="navigateTo('/users/search/{{$conferences->owner->id}}')">
                 {{$conferences->owner->name}} {{$conferences->owner->surname}}
                 </a></p>
 
@@ -43,7 +43,7 @@
             <br><br>
             <p>Speaker:
                 <a class="text_link"
-                    onclick="navigateTo('/person/{{$item->lecturer->id}}')">
+                    onclick="navigateTo('/users/search/{{$item->lecturer->id}}')">
                     {{$item->lecturer->name}} {{$item->lecturer->surname}}
                     </a></p>
 

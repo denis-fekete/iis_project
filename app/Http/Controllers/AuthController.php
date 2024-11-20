@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\Role;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
@@ -12,31 +13,17 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-
     /**
      * Registers new user into system if credentials are valid (not too long,
      * not too short, etc...), if not errors are send back for user to correct
      * them
+     *
+     * @param  Request $request Input with registration data
+     * @return void
      */
     public function registration(Request $request)
     {
-        // validate data using built-in validator method
-        // if validation fails laravel will automatically send errors and method will end
-        $validated = request()->validate([
-            'name' => 'required|min:3|max:40', // must be present
-            'surname' => 'required|min:3|max:40', // must be present
-            'email' => 'required|email|unique:user,email', // must be present, must be email, must unique in user in column email
-            'password' => 'required|confirmed|min:8' // confirmed -> must come with second parameter for confirmation
-        ]);
-
-
-        // create user with validated data, hash the password so its not store in plain text
-        $user = User::create([
-            'name' => $validated['name'],
-            'surname' => $validated['surname'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-        ]);
+        UserService::create($request);
 
         $returnUrl = $request->input('return_to');
 
@@ -51,6 +38,9 @@ class AuthController extends Controller
     /**
      * Logs in existing user, if credentials are wrong (don't exist in system)
      * user will be given error messages
+     *
+     * @param  Request Input with login data
+     * @return void
      */
     public function login(Request $request) {
         validator($request->all(), [

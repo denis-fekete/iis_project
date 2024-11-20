@@ -29,10 +29,10 @@ Route::get('/home', function () {
             ]);
 });
 
-Route::get('/profile', function () {
-    return view('profile');
-
-})->middleware('auth');
+Route::get('/home1', function () {
+    return redirect('/home')
+        ->withErrors(['test' => 'Test error message']);
+});
 
 // --------------------------------------------------------
 //
@@ -87,7 +87,20 @@ Route::prefix('reservations')->group(function () {
         ->middleware('auth');
 });
 
-Route::get('/person/{id}', [SearchController::class, 'getPerson']);
+// --------------------------------------------------------
+//
+// --------------------------------------------------------
+
+
+
+Route::prefix('users')->group(function () {
+    Route::get('/search/{id}', [UserController::class, 'getPerson']);
+    Route::get('/profile', [UserController::class, 'profile'])
+        ->middleware('auth');
+    Route::post('/profile/edit', [UserController::class, 'editUser'])
+        ->middleware('auth');
+});
+
 
 
 // --------------------------------------------------------
@@ -123,7 +136,7 @@ Route::prefix('admin')->group(function () {
     //         ->middleware('auth');
 
     // });
-Route::prefix('conferences')->group(function () {
+    Route::prefix('conferences')->group(function () {
         Route::get('/search', [AdminConferenceController::class, 'searchDefault'])
             ->middleware('auth');
         Route::get('/search/{themes};{orderBy};{orderDir}', [AdminConferenceController::class, 'search'])
@@ -138,6 +151,12 @@ Route::prefix('conferences')->group(function () {
         Route::post('/conference/reservations', [ConferenceController::class, 'editReservationsList'])
             ->middleware('auth');
         });
+
+    Route::prefix('users')->group(function () {
+        Route::get('/dashboard', [AdminConferenceController::class, 'dashboard'])
+            ->middleware('auth');
+        });
+
 
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
