@@ -8,6 +8,12 @@
 
 <div class="card">
     <fieldset class="radio_box">
+        <input type="radio" name="themes" value=""
+                @if ($info['default_theme'] == "")
+                    checked
+                @endif
+        >
+        <label>All</label>
         @foreach ($info['themes'] as $item)
             <input type="radio" name="themes" value="{{$item->value}}"
                 @if ($item->value == $info['default_theme'])
@@ -41,7 +47,12 @@
             >
         <label>Descending</label>
     </fieldset>
-
+    <input type="text" name="search" id="searchString"
+        @isset($info['default_search'])
+            value="{{$info['default_search']}}"
+        @endisset
+        >
+    <br>
     <input type="submit" onclick="applyFilters()" value="Apply">
 </div>
 
@@ -52,7 +63,7 @@
             <p class="card_title">{{$item->title}}</p>
             <img class="card_image" src="https://picsum.photos/seed/{{$item->title}}/600/150" alt="Placeholder image">
             <p class="card_description">{{$item->description}}</p>
-            <p class="card_theme">{{$item->theme}}</p>
+            <p class="text_theme">{{$item->theme}}</p>
             <p class="card_price">Price: {{$item->price}}Kč</p>
             <br>
             <button onclick="navigateTo( '/admin/conferences/edit/{{ $item->id }}' )"                   >Edit</button>
@@ -78,11 +89,14 @@
         const theme = document.querySelector('input[name="themes"]:checked')?.value;
         const order = document.querySelector('input[name="orders"]:checked')?.value;
         const direction = document.querySelector('input[name="directions"]:checked')?.value;
+        let search = document.getElementById('searchString').value;
 
-         window.location = "/conferences/search/" +
-            theme + ";" +
-            order + ";" +
-            direction;
+        navigateTo("/conferences/search?" +
+            "themes=" + theme + "&" +
+            "orderBy=" + order + "&" +
+            "orderDir=" + direction + "&" +
+            "searchFor=" + search
+            );
     }
 </script>
 

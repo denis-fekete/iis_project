@@ -22,8 +22,14 @@ class ConferenceController extends Controller
      *
      * @return void search view with all conferences
      */
-    public function search($themes, $orderBy, $orderDir) {
-        $conferences = ConferenceService::getAllShortDescription($themes, $orderBy, $orderDir);
+    // public function search($themes, $orderBy, $orderDir, $searchString = null) {
+    public function search() {
+        $themes = request()->input('themes', null);
+        $orderBy = request()->input('orderBy', 'Name');
+        $orderDir = request()->input('orderDir', 'asc');
+        $searchString = request()->input('searchFor', null);
+
+        $conferences = ConferenceService::getAllShortDescription($themes, $orderBy, $orderDir, $searchString);
 
         return view('conferences.search')
             ->with('conferences', $conferences)
@@ -34,6 +40,7 @@ class ConferenceController extends Controller
                 'default_theme' => $themes,
                 'default_orders' => $orderBy,
                 'default_directions' => $orderDir,
+                'default_search' => $searchString,
                 ]);
     }
 
@@ -77,7 +84,10 @@ class ConferenceController extends Controller
 
         return view('conferences.edit')
             ->with('conference', $conference)
-            ->with('info', ['type' => 'create']);
+            ->with('info', [
+                'type' => 'create',
+                'themes' => Themes::cases(),
+                ]);
     }
 
     /**
@@ -102,6 +112,7 @@ class ConferenceController extends Controller
             return view('conferences.edit')
                 ->with('conference', $conference)
                 ->with('info', [
+                    'themes' => Themes::cases(),
                     'type' => 'edit',
                     'id' => $id,
                     'role' => $user->role,
@@ -353,6 +364,7 @@ class ConferenceController extends Controller
      * @return void
      */
     public function delete($id) {
+        error_log('deleted' . $id);
         $user = auth()->user();
         if($user != null && ($user->id == $id || AdminService::amIAdmin())) {
             ConferenceService::delete($id);
@@ -362,6 +374,7 @@ class ConferenceController extends Controller
                 ->withErrors('privileges', "You do not have privileges to do this action");
         }
     }
+
 
     /**
      * CheckPermissions

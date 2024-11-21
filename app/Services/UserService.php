@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\OrderDirection;
 use App\Models\Lecture;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -66,8 +67,45 @@ class UserService
                 ];
     }
 
-    public static function getAll() {
+    /**
+     * Returns all users
+     *
+     * @return Collection
+     */
+    public static function getAll() : Collection {
         return User::all();
+    }
+
+    /**
+     * Returns user by provided parameters
+     *
+     * @param  OrderDirection|string|null $orderDir order direction, ascending or descending
+     * @param  string|null $searchString searching in name, surname, or title of the users
+     * @return Collection
+     */
+    public static function search($orderDir = null, $searchString = null) : Collection {
+        $query = User::query();
+
+        if($searchString != null && $searchString != '%') {
+            $query->where('name', 'LIKE', '%' . $searchString . '%')
+                ->orWhere('surname', 'LIKE', '%' . $searchString . '%')
+                ->orWhere('title_before', 'LIKE', '%' . $searchString . '%')
+                ->orWhere('title_after', 'LIKE', '%' . $searchString . '%');
+        }
+
+        switch($orderDir) {
+            case OrderDirection::Descending->value:
+            case OrderDirection::Ascending->value:
+                break;
+            default:
+                $orderDir = 'asc';
+                break;
+        }
+
+
+        $result = $query->get();
+
+        return $result;
     }
 
     /**

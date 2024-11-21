@@ -9,11 +9,9 @@
 <div class="grid_vertical">
 @foreach ($reservations as $reservation)
     <div class="card">
-        <p>Title: {{ $reservation->conference->title }}</p>
-        <p> Time:
-            From {{ $reservation->conference->start_time }}
-            To {{ $reservation->conference->end_time }}
-            </p>
+        <p class="title_2" >Conference: {{ $reservation->conference->title }}</p>
+        <p> From: {{ $reservation->conference->start_time }} </p>
+        <p> To: {{ $reservation->conference->end_time }}</p>
         <p>Number of people: {{ $reservation->number_of_people }}</p>
         <p>Confirmed:
             @if($reservation->is_confirmed == 1)

@@ -32,24 +32,22 @@ class ConferenceService
     /**
      * Returns all conferences in database
      *
-     * @param  Themes|null $themes
-     * @param  OrderBy|null $orderBy
-     * @param  OrderDirection|null $orderDir
-     * @return Collection
+     * @param  Themes|null $themes themes that will be displayed
+     * @param  OrderBy|null $orderBy order by a parameter
+     * @param  OrderDirection|null $orderDir ascending or descending
+     * @param  string|null $searchString string that will be searched in `title` of conferences
+     * @return Collection a collection of all conferences that meet the criteria
      */
-    public static function getAll($themes, $orderBy, $orderDir): Collection {
+    public static function getAll($themes = null, $orderBy = null, $orderDir = null, $searchString = null): Collection {
         $query = Conference::query();
 
-        // TODO: rework to allow more simultaneously
-        $allThemes = Themes::cases();
+        if($searchString != null) {
+            $query->where('title', 'LIKE', '%' . $searchString . '%');
+        }
 
-        if($themes != Themes::All->value) {
-            foreach($allThemes as $item) {
-                if($item->value == $themes) {
-                    $query->where('theme', $item->value);
-                    break;
-                }
-            }
+
+        if($themes != null) {
+            $query->where('theme', $themes);
         }
 
         switch($orderDir) {
@@ -57,7 +55,6 @@ class ConferenceService
             case OrderDirection::Ascending->value:
                 break;
             default:
-                error_log("Unknown order direction");
                 $orderDir = 'asc';
                 break;
         }
@@ -74,7 +71,6 @@ class ConferenceService
                 $query->orderBy('start_time', $orderDir);
                 break;
             default:
-                error_log("Unknown order by type");
                 break;
         }
 
@@ -92,8 +88,8 @@ class ConferenceService
      *
      * @return Collection of Conferences with capped length of description
      */
-    public static function getAllShortDescription($themes, $orderBy, $orderDir): Collection {
-        $conferences = self::getAll($themes, $orderBy, $orderDir);
+    public static function getAllShortDescription($themes = null, $orderBy = null, $orderDir = null, $searchString = null): Collection {
+        $conferences = self::getAll($themes, $orderBy, $orderDir, $searchString);
 
         foreach($conferences as $key => $val) {
             $conferences[$key]->description = substr($conferences[$key]->description, 0, self::MAX_DESCRIPTION_LEN);

@@ -17,13 +17,14 @@
 </div>
 
 <div class="card">
+    <p class="title_2">Conference: {{ $conference->title }}</p>
     <p>Conference starts at: {{ $conference->start_time }}</p>
     <p>Conference ends at: {{ $conference->end_time }}</p>
 </div>
-
-<div class="card">
+<br>
 @foreach ($lectures as $item)
-    <p>Lecture: <a href="{{ '/lectures/lecture/'.$item->id}}">{{$item->title}}</a></p>
+    <div class="card">
+    <p>Lecture: <a class="text_link" onclick="navigateTo('/lectures/lecture/{{$item->id}}')">{{$item->title}}</a></p>
     @if (!$item->is_confirmed)
         <form action="{{ url("/lectures/confirm") }}" method="post">
             @csrf
@@ -38,10 +39,14 @@
             </select>
             <br>
             <label>Start time:</label>
-            <input type="datetime-local" name="startTime" required>
+            <input type="datetime-local" name="startTime"
+                value="{{ old('start_time', $conference->start_time ? $conference->start_time->format('Y-m-d\TH:i') : '') }}"
+                required>
             <br>
             <label>End time:</label>
-            <input type="datetime-local" name="endTime" required>
+            <input type="datetime-local" name="endTime"
+                value="{{ old('end_time', $conference->end_time ? $conference->end_time->format('Y-m-d\TH:i') : '') }}"
+                required>
             <br>
             <button type="submit">Confirm</button>
         </form>
@@ -56,8 +61,7 @@
             <button type="submit">Cancel</button>
         </form>
     @endif
-    <hr>
-
+    </div>
+    <br>
 @endforeach
-</div>
 @endsection

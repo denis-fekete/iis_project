@@ -3,7 +3,7 @@
         Home
     </button>
 
-    <button class="navigation_button" onclick="navigateTo('/conferences/search/All;Name;asc')">
+    <button class="navigation_button" onclick="navigateTo('/conferences/search')">
         Search
     </button>
 
@@ -43,7 +43,7 @@
 
     .navigation_button {
         align-content: center;
-        height: 7vh ;
+        height: 2em ;
         background-color: #FAAC40;
 
         color: #3E3C3E;
@@ -51,12 +51,9 @@
         font-weight: bold;
 
         border: 2px solid #3E3C3E;
-        /* border-radius: 0px; */
-        box-shadow: none;
 
-        border-radius: 20px;
-        /* box-shadow: 2px 2px 5px #3E3C3E; */
-
+        border-radius: 10px;
+        box-shadow: 2px 2px 5px #3E3C3E;
     }
 
     .navigation_button:hover{
