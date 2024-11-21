@@ -6,17 +6,16 @@
     $url = 'conferences/conference/reservations';
 @endphp
 
-<div class="title_block">
-    @isset($info['role'])
-        @if($info['role'] == 'admin')
-            <br>
-            <p class="title">(Editing as administrator)</p>
-            @php
-                $url = 'admin/conferences/conference/reservations';
-            @endphp
-        @endif
-    @endisset
+@isset($info['editingAsAdmin'])
+    @if($info['editingAsAdmin'] == true)
+        <div class="title_block">
+        <p class="title">Editing as administrator</p>
+        </div>
+    @endif
+@endisset
 
+
+<div class="title_block">
     <p class="title">Conference reservations</p>
 </div>
 

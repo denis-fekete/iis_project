@@ -27,8 +27,11 @@
     <br>
     <p>{{$conferences->description}}</p>
     <br>
+    <p>Start date: {{$conferences->start_time}}</p>
+    <p>End date: {{$conferences->end_time}}</p>
+    <br>
+    <p>Address: {{$conferences->place_address}}</p>
     <p>Capacity: {{$conferences->capacity}}</p>
-    <p>{{$conferences->start_time}} - {{$conferences->end_time}}</p>
     <p>Price per person: {{$conferences->price}}Kč</p>
     <br>
 </div>
@@ -39,7 +42,7 @@
 @foreach ($conferences->lectures as $item)
     @if($item->is_confirmed == true)
         <div class="card">
-            <p class="title">Title: {{$item->title}}</p>
+            <p class="title_2" >{{$item->title}}</p>
             <br>
             @if ($item->poster)
                 <img class="lecture-poster" src="{{$item->poster}}" alt="Placeholder image">
@@ -50,16 +53,9 @@
                     onclick="navigateTo('/users/search/{{$item->lecturer->id}}')">
                     {{$item->lecturer->name}} {{$item->lecturer->surname}}
                     </a></p>
-
-            <p class="lecture_confirmed">Confirmed: {{
-                    $item["is_confirmed"] ? 'yes' : 'no'
-                }}
-            </p>
-        <p class="lecture_time">Time from {{ $item["start_time"] }} to {{ $item["end_time"] }}</p>
+        <p class="lecture_time">Time from {{ $item->start_time }} to {{ $item->end_time }}</p>
             <div class="room">
-                {{-- <p class="room_id">Room id: {{$item["room_id"]}}</p> --}}
-                <p class="room_name">Room name: TBD</p>
-                <p class="room_address">Room address: TBD</p>
+                <p class="room_id">Room: {{$item->room->name}}</p>
             </div>
         </div>
         <br>

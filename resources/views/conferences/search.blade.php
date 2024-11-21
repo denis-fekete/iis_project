@@ -8,6 +8,12 @@
 
 <div class="card">
     <fieldset class="radio_box">
+        <input type="radio" name="themes" value=""
+                @if ($info['default_theme'] == "")
+                    checked
+                @endif
+        >
+        <label>All</label>
         @foreach ($info['themes'] as $item)
             <input type="radio" name="themes" value="{{$item->value}}"
                 @if ($item->value == $info['default_theme'])
@@ -41,7 +47,12 @@
             >
         <label>Descending</label>
     </fieldset>
-
+    <input type="text" name="search" id="searchString"
+        @isset($info['default_search'])
+            value="{{$info['default_search']}}"
+        @endisset
+        >
+    <br>
     <input type="submit" onclick="applyFilters()" value="Apply">
 </div>
 
@@ -54,13 +65,15 @@
                 <img class="conference-list-image" src="{{$item->poster}}" alt="Placeholder image">
             @endif
             <p class="card_description">{{$item->description}}</p>
-            <p class="card_theme">{{$item->theme}}</p>
+            <p class="text_theme">{{$item->theme}}</p>
             <p class="card_price">Price: {{$item->price}}Kč</p>
             <br>
             <button onclick="navigateTo( '/admin/conferences/edit/{{ $item->id }}' )"                   >Edit</button>
             <button onclick="navigateTo( '/admin/conferences/conference/lectures/{{ $item->id }}')"     >Lectures</button>
             <button onclick="navigateTo( '/admin/conferences/conference/reservations/{{ $item->id }}')" >Reservations</button>
+            <button onclick="navigateTo( '/admin/conferences/conference/rooms/{{ $item->id }}')"        >Rooms</button>
             <button onclick="navigateTo('/conferences/conference/{{ $item->id }}')"                     >Details</button>
+
         </div>
     @else
         <div class="card" onclick="navigateTo('/conferences/conference/{{ $item->id }}')">
@@ -82,11 +95,14 @@
         const theme = document.querySelector('input[name="themes"]:checked')?.value;
         const order = document.querySelector('input[name="orders"]:checked')?.value;
         const direction = document.querySelector('input[name="directions"]:checked')?.value;
+        let search = document.getElementById('searchString').value;
 
-         window.location = "/conferences/search/" +
-            theme + ";" +
-            order + ";" +
-            direction;
+        navigateTo("/conferences/search?" +
+            "themes=" + theme + "&" +
+            "orderBy=" + order + "&" +
+            "orderDir=" + direction + "&" +
+            "searchFor=" + search
+            );
     }
 </script>
 

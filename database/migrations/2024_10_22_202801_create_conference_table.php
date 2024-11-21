@@ -22,7 +22,6 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->unsignedInteger('capacity');
             $table->string('poster');
-
             $table->unsignedBigInteger('owner_id');
 
             $table->foreign('owner_id')

@@ -11,8 +11,8 @@
 
 @endphp
 
-@isset($info['role'])
-    @if($info['role'] == 'admin')
+@isset($info['editingAsAdmin'])
+    @if($info['editingAsAdmin'] == true)
         <div class="title_block">
         <p class="title">Editing as administrator</p>
         </div>
@@ -20,26 +20,49 @@
 @endisset
 
 
-<div class="card">
-    <form action="{{ url($url) }}" id="register_form" class="register_form" method="post">
-        @csrf
-        @isset($info)
-            @isset($info['id'])
-                <input class="text" type="text" name="id" id="id" value={{ $info['id'] }} hidden>
-            @endisset
+<form action="{{ url($url) }}" id="register_form" class="register_form" method="post">
+    @csrf
+    @isset($info)
+        @isset($info['id'])
+            <input class="text" type="text" name="id" id="id" value={{ $info['id'] }} hidden>
         @endisset
+    @endisset
 
-        <label class="form_label" for="title">Tiltle:</label>
-        <input class="form_input" type="text" name="title" id="title"
+    <div class="title_block">
+        <input class="title title_input" type="text" name="title" placeholder="Title"
             value="{{old('title', $conference->title)}}" required>
+    </div>
+
+    <div class="card">
+        {{-- TODO: insert IMAGE --}}
+        <div class="horizontal_grid">
+            <button disabled>Make reservation</button>
+            <button disabled>Offer a lecture</button>
+        </div>
         <br>
-        <label class="form_label" for="description">Description:</label>
-        <input class="form_input" type="text" name="description" id="description"
-            value="{{old('description', $conference->description)}}" required>
+
+        <p>Organizer:
+            <a class="text_link">
+                {{$user->title_before}} {{$user->name}} {{$user->surname}} {{$user->title_after}}
+        </a></p>
+        <label for="theme">Theme:</label>
+        <select type="text" name="theme">
+            @foreach ($info['themes'] as $theme)
+                <option value="{{$theme->value}}"
+                    @if ($theme->value == old('theme', $conference->theme))
+                        selected
+                    @endif
+                    >{{$theme->value}}
+                </option>
+            @endforeach
+        </select>
+
+        <br><br>
+        <label for="description">Description:</label>
+        <textarea type="textarea" name="description" id="description" required>
+            {{ old('description', $conference->description) }}
+        </textarea>
         <br>
-        <label class="form_label" for="theme">Theme:</label>
-        <input class="form_input" type="text" name="theme" id="theme"
-            value="{{old('theme', $conference->theme)}}" required>
         <br>
         <label class="form_label" for="poster">Poster URL:</label>
         <input class="form_input" type="url" name="poster" id="poster"
@@ -48,24 +71,36 @@
         <label class="form_label" for="stat_time">Start time:</label>
         <input class="form_input" type="datetime-local" name="start_time" id="start_time"
             value="{{old('start_time', $conference->start_time)}}" required>
+        <label for="start_time">Start time:</label>
+        <input name="start_time" type="datetime-local"
+            value="{{ old('start_time', $conference->start_time ? $conference->start_time->format('Y-m-d\TH:i') : '') }}"
+            required>
         <br>
-        <label class="form_label" for="end_time">End time:</label>
-        <input class="form_input" type="datetime-local" name="end_time" id="end_time"
-            value="{{old('end_time', $conference->end_time)}}" required>
+
+        <label for="end_time">End time:</label>
+        <input name="end_time" type="datetime-local"
+            value="{{ old('end_time', $conference->end_time ? $conference->end_time->format('Y-m-d\TH:i') : '') }}"
+            required>
         <br>
-        <label class="form_label" for="address">Address:</label>
-        <input class="form_input" type="address" name="place_address" id="address"
-            value="{{old('place_address', $conference->place_address)}}" required>
+
+        <label for="address">Address:</label>
+        <input type="text" name="place_address"
+            value="{{old('place_address', $conference->place_address)}}"
+            required>
         <br>
-        <label class="form_label" for="price">Price:</label>
-        <input class="form_input" type="number" name="price" id="price"
-            value="{{old('price', $conference->price)}}" required>
-        <br>
-        <label class="form_label" for="capacity" >Capacity:</label>
-        <input class="form_input" type="number" name="capacity" id="capacity"
+
+        <label for="capacity" >Capacity:</label>
+        <input type="number" name="capacity"
             value="{{old('capacity', $conference->capacity)}}" required>
         <br>
 
+        <label for="price">Price per person:
+            <input type="number" name="price"
+                value="{{old('price', $conference->price)}}" required>
+        Kč</label>
+        <br>
+
+        <br>
         @isset($info['type'])
             @if ($info['type'] == 'create')
                 <button type"submit">Create new</button>
@@ -73,15 +108,23 @@
                 <button type"submit">Save changes</button>
             @endif
         @endisset
-    </form>
 
-    @isset($info['type'])
-        @if ($info['type'] == 'edit')
-            <br>
-            <button class="delete_btn" onclick="navigateTo('/conferences/delete/{{$conference->id}}')">Delete</button>
-        @endif
-    @endisset
+    </div>
+</form>
+        @isset($info['type'])
+            @if ($info['type'] == 'edit')
+                <br>
+                <button class="delete_btn" onclick="navigateTo('/conferences/delete/{{$conference->id}}')">Delete</button>
+            @endif
+        @endisset
 
+<script>
+    // disable submit on Enter to allow new lines
+    document.getElementById('description').addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+        }
+    });
+</script>
 
-</div>
 @endsection

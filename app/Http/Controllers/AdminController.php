@@ -26,9 +26,14 @@ class AdminController extends Controller
      *
      * @return void search view with all conferences
      */
-    public function conferencesSearch($themes, $orderBy, $orderDir) {
+    public function conferencesSearch() {
         if(AdminService::amIAdmin()) {
-            $conferences = ConferenceService::getAllShortDescription($themes, $orderBy, $orderDir);
+            $themes = request()->input('themes', null);
+            $orderBy = request()->input('orderBy', 'Name');
+            $orderDir = request()->input('orderDir', 'asc');
+            $searchString = request()->input('searchFor', null);
+
+            $conferences = ConferenceService::getAllShortDescription($themes, $orderBy, $orderDir, $searchString);
 
             return view('conferences.search')
                 ->with('conferences', $conferences)
@@ -39,6 +44,7 @@ class AdminController extends Controller
                     'default_theme' => $themes,
                     'default_orders' => $orderBy,
                     'default_directions' => $orderDir,
+                    'default_search' => $searchString,
                     'role' => auth()->user()->role,
                     ]);
         } else {
@@ -54,7 +60,7 @@ class AdminController extends Controller
      */
     public function conferencesSearchDefault() {
         if(AdminService::amIAdmin()) {
-            return redirect('/admin/conferences/search/All;Name;asc');
+            return redirect('/admin/conferences/search');
         } else {
             return AdminService::invalidAccess();
         }
@@ -67,11 +73,15 @@ class AdminController extends Controller
      */
     public function usersSearch() {
         if(AdminService::amIAdmin()) {
-            $users = UserService::getAll();
+            $orderDir = request()->input('orderDir', 'asc');
+            $searchString = request()->input('searchFor', null);
+
+            $users = UserService::search($orderDir, $searchString);
             return view('admin.users.search')
                 ->with('users', $users)
                 ->with('info', [
-                    'default_directions' => 'asc',
+                    'default_directions' => $orderDir,
+                    'default_search' => $searchString,
                 ]);
         } else {
             return AdminService::invalidAccess();

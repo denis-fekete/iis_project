@@ -1,21 +1,49 @@
 <style>
+
+    /* --------------------------------------------------------------------- */
+    /* Text */
+    /* --------------------------------------------------------------------- */
+
+    p, a {
+        font-size: 1em;
+    }
+
     .title {
         font-weight: bold;
-        font-size: 1.3em;
+        font-size: 2em;
         color: #3E3C3E;
     }
 
+    .title_2 {
+        font-weight: bold;
+        font-size: 1.2em;
+        color: #3E3C3E;
+    }
+
+    .text_link {
+        text-decoration: underline;
+        color: #885E97;
+    }
+
+    .text_theme {
+        color: #878381;
+    }
+
+    /* --------------------------------------------------------------------- */
+    /* Styling */
+    /* --------------------------------------------------------------------- */
+
     .title_block {
-        height: 5vh;
+        height: auto;
         background-color: #E1DDA8;
-        padding: 1em;
-        border: solid 2px #3E3C3E;
 
         display: flex;
         align-items: center;
         justify-content: center;
 
-        margin-bottom: 0.5em;
+        margin-bottom: 1em;
+        border-radius: 5px;
+        box-shadow: 2px 2px 5px #3E3C3E;
     }
 
     .grid_vertical {
@@ -41,23 +69,27 @@
         margin-top: 0.5em;
     }
 
-
     .card {
         background-color: #E1DDA8;
-        margin-inline: 5%;
+        margin-inline: 2%;
         padding: 1em;
         padding-bottom: 1em;
         border-radius: 20px;
         box-shadow: 2px 2px 5px #3E3C3E;
     }
 
+    /* --------------------------------------------------------------------- */
+    /* Inputs */
+    /* --------------------------------------------------------------------- */
+
     button,input[type="submit"] {
-        font-size: 1em;
+        font-size: 1.1em;
 
         height: auto;
         width: auto;
 
-        padding-inline: 0.4em;
+        margin-top: 0.1em;
+        padding-inline: 0.6em;
         padding-top: 0.1em;
         padding-bottom: 0.1em;
 
@@ -65,7 +97,7 @@
         color: #3E3C3E;
 
         border: none;
-        border-radius: 20px;
+        border-radius: 10px;
         box-shadow: 2px 2px 5px #3E3C3E;
     }
 
@@ -74,9 +106,31 @@
     }
 
     input {
+        font-size: 0.9em;
         background: #EEEBCC;
         color: #3E3C3E;
-        margin-bottom: 0.5em;
+        margin-bottom: 0.2em;
+    }
+
+    .title_input {
+        width: 100%;
+        text-align: center;
+        background-color: transparent;
+    }
+
+    textarea {
+        resize: vertical;
+        width: 100%;
+        max-width: 100%;
+        min-width: 100%;
+        background-color: transparent;
+        border: solid 2px #3E3C3E;
+        box-shadow: none;
+    }
+
+    select {
+        background-color: transparent;
+        padding: 0.2em;
     }
 
     input:disabled {
@@ -85,18 +139,15 @@
         font-style: italic;
     }
 
-    .text_link {
-        text-decoration: underline;
-        color: #885E97;
-    }
-
-    .text_theme {
-        color: #878381;
-    }
-
     .delete_btn {
         background-color: #FD5620;
     }
+
+
+    /* --------------------------------------------------------------------- */
+    /* Tables */
+    /* --------------------------------------------------------------------- */
+
 
     .table {
         width: 100%;
@@ -128,6 +179,12 @@
     .schedule-save {
         text-align: center;
     }
+
+
+    /* --------------------------------------------------------------------- */
+    /* Other */
+    /* --------------------------------------------------------------------- */
+
 
     .lecture-title {
         font-size: 2em;

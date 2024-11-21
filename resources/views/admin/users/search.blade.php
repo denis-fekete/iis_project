@@ -21,11 +21,16 @@
             >
         <label>Descending</label>
     </fieldset>
-
+    <input type="text" name="search" id="searchString"
+        @isset($info['default_search'])
+            value="{{$info['default_search']}}"
+        @endisset
+        >
+    <br>
     <input type="submit" onclick="applyFilters()" value="Apply">
 </div>
 
-<div class="grid_vertical">
+<div class="grid_vertical_2_collumns">
 @foreach ($users as $item)
 
 <div class="card">
@@ -33,7 +38,7 @@
     <br>
     <div class="grid_horizontal">
         <button onclick="navigateTo('/users/search/{{ $item->id }}')">View</button>
-        <button onclick="navigateTo('/users/delete/{{ $item->id }}')">Delete</button>
+        <button class="delete_btn" onclick="navigateTo('/users/delete/{{ $item->id }}')">Delete</button>
     </div>
 </div>
 
@@ -42,14 +47,13 @@
 
 <script>
     function applyFilters() {
-        const theme = document.querySelector('input[name="themes"]:checked')?.value;
-        const order = document.querySelector('input[name="orders"]:checked')?.value;
         const direction = document.querySelector('input[name="directions"]:checked')?.value;
+        let search = document.getElementById('searchString').value;
 
-         window.location = "/conferences/search/" +
-            theme + ";" +
-            order + ";" +
-            direction;
+        navigateTo("/admin/users/search?" +
+            "orderDir=" + direction + "&" +
+            "searchFor=" + search
+            );
     }
 </script>
 

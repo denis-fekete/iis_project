@@ -37,17 +37,17 @@ Legend:
     - ✅ do nothing and because confirmed speaker
     - ✅ see details                        
         - ✅ edit details
-        - ❌ add new presentation (plain text)
+        - ✅ add new presentation (plain text)
     - ❌ see statistics (number of user that are planning to attend lecture)
     - ✅ see state (accepted/pending)
     - ✅ cancel lecture
 - ✅ list my conferences
     - ✅ create conference
     - ✅ enter conference edit mode
-        - ❌ add lecture to my conference
-        - ❌ add new rooms to my conference
+        - ✅ add lecture to my conference
+        - ✅ add new rooms to my conference
         - ✅ list all offered lectures
-        - ❌ approve offered lectures, set time and place
+        - ✅ approve offered lectures, set time and place
         - ✅ list all potential and confirmed viewers
         - ✅ change state of viewers from potential to confirmed
     - ✅ see details about conference
