@@ -21,6 +21,8 @@ class ReservationService
     public static function create(Request $request, $userId) : string {
         $conferenceId = $request->input('conferenceId');
         $people = $request->input('number_of_people');
+        if ($people < 1)
+            return "Number of people cannot be negative!";
 
         $capacityLeft = ConferenceService::capacityLeft($conferenceId);
         if($capacityLeft < 0) {
@@ -59,10 +61,26 @@ class ReservationService
      * @param  string $id ID of user whose Reservations will be returned
      * @return Collection of Reservations
      */
-    public static function getAllMyWithConferenceInfo($id) : Collection {
-        return Reservation::where('user_id', $id)
-            ->with('conference:id,title,start_time,end_time')
-            ->get();
+    public static function getUserReservations($id) {
+        $reservations = Reservation::where('user_id', $id)->get();
+        $reservationViewModels = [];
+        foreach ($reservations as $res) {
+            $conference = $res->conference()->first();
+            $moneyToPay = $conference->price * $res->number_of_people;
+            array_push($reservationViewModels, [
+                'reservationId' => $res->id,
+                'conferenceId' => $res->conference_id,
+                'conferenceName' => $conference->title,
+                'startTime' => $conference->start_time,
+                'endTime' => $conference->end_time,
+                'peopleCount' => $res->number_of_people,
+                'confirmed' => $res->is_confirmed == 1 ? true : false,
+                'toPay' => $moneyToPay,
+                'bankAccount' => $conference->bank_account,
+            ]);
+        }
+
+        return $reservationViewModels;
     }
 
     /**

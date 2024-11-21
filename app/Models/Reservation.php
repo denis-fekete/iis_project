@@ -16,7 +16,6 @@ class Reservation extends Model
         'conference_id',
         'is_confirmed',
         'number_of_people',
-        'is_paid',
     ];
 
     public function user()

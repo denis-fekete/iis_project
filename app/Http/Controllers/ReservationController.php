@@ -13,7 +13,6 @@ use PhpParser\Node\Expr\FuncCall;
 class ReservationController extends Controller
 {
     public function getForm($id) {
-
         return view('/reservations/reserve')
             ->with('conferenceId', $id)
             ->with('max', ConferenceService::capacityLeft($id))
@@ -38,7 +37,6 @@ class ReservationController extends Controller
             return redirect()->back()
                 ->withErrors($err);
         }
-
     }
 
     /**
@@ -49,7 +47,7 @@ class ReservationController extends Controller
     public function getAll() {
         $id = auth()->user()->id;
 
-        $reservations = ReservationService::getAllMyWithConferenceInfo($id);
+        $reservations = ReservationService::getUserReservations($id);
 
         return view('reservations.dashboard')
             ->with('reservations', $reservations);
