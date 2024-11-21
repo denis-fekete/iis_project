@@ -61,8 +61,8 @@
     @if(isset($info['role']) && $info['role'] == 'admin')
         <div class="card">
             <p class="card_title">{{$item->title}}</p>
-            @if ($item->title)
-                <img class="conference-list-image" src="{{$item->poster}}" alt="Placeholder image">
+            @if ($item->poster)
+                <img class="card_image" src="{{$item->poster}}" alt="Placeholder image">
             @endif
             <p class="card_description">{{$item->description}}</p>
             <p class="text_theme">{{$item->theme}}</p>
@@ -79,7 +79,7 @@
         <div class="card" onclick="navigateTo('/conferences/conference/{{ $item->id }}')">
             <p class="title">{{$item->title}}</p>
             @if ($item->title)
-                <img class="conference-list-image" src="{{$item->poster}}" alt="Placeholder image">
+                <img class="card_image" src="{{$item->poster}}" alt="Placeholder image">
             @endif
             <p>{{$item->description}}</p>
             <p class="text_theme">{{$item->theme}}</p>
@@ -117,7 +117,12 @@
     }
 
     .card_image {
-        width: 100%;
+        display: block;
+        margin: 0 auto 20px auto;
+        border-radius: 10px;
+        max-width: 100%;
+        max-height: 300px;
+        object-fit: cover;
     }
 </style>
 
