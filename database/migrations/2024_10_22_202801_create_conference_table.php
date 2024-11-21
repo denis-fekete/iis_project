@@ -21,8 +21,9 @@ return new class extends Migration
             $table->string('place_address');
             $table->decimal('price', 10, 2);
             $table->unsignedInteger('capacity');
-
+            $table->string('poster');
             $table->unsignedBigInteger('owner_id');
+            $table->string('bank_account');
 
             $table->foreign('owner_id')
                 ->references('id')

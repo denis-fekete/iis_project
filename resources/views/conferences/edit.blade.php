@@ -64,7 +64,13 @@
         </textarea>
         <br>
         <br>
-
+        <label class="form_label" for="poster">Poster URL:</label>
+        <input class="form_input" type="url" name="poster" id="poster"
+            value="{{old('poster', $conference->poster)}}" required>
+        <br>
+        <label class="form_label" for="stat_time">Start time:</label>
+        <input class="form_input" type="datetime-local" name="start_time" id="start_time"
+            value="{{old('start_time', $conference->start_time)}}" required>
         <label for="start_time">Start time:</label>
         <input name="start_time" type="datetime-local"
             value="{{ old('start_time', $conference->start_time ? $conference->start_time->format('Y-m-d\TH:i') : '') }}"
@@ -92,6 +98,11 @@
             <input type="number" name="price"
                 value="{{old('price', $conference->price)}}" required>
         Kč</label>
+        <br>
+
+        <label for="bank_account">Your banc account number:
+            <input type="text" name="bank_account"
+                value="{{old('bank_account', $conference->bank_account)}}" required />
         <br>
 
         <br>

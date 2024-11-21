@@ -20,7 +20,9 @@ class Conference extends Model
         'end_time',
         'place_address',
         'price',
-        'capacity'
+        'capacity',
+        'poster',
+        'bank_account',
     ];
 
     // tells laravel to cast time into Carbon instead of string (easier to manipulate)

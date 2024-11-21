@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->boolean('is_confirmed')->default(false);
             $table->unsignedInteger('number_of_people')->default(1);
+            $table->boolean('is_paid')->default(false);
 
             $table->unsignedBigInteger('conference_id');
             $table->unsignedBigInteger('user_id');

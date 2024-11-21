@@ -50,6 +50,8 @@ class DatabaseSeeder extends Seeder
             'price' => fake()->randomFloat(2, 0, 10000),
             'capacity' => fake()->numberBetween(1, 10000),
             'owner_id' => $admin->id,
+            'poster' => 'https://marketplace.canva.com/EAGCxslOSOU/1/0/1131w/canva-blue-and-white-geometric-shapes-conference-poster-WytXZKj8OgA.jpg',
+            'bank_account' => 'CZ1111000000111111111111',
         ]);
 
         for($i = 0; $i < 3; $i++) {
@@ -70,6 +72,7 @@ class DatabaseSeeder extends Seeder
                 'speaker_id' => $admin->id,
                 'conference_id' => $adminConference->id,
                 'room_id' => Room::all()->random()->id,
+                'poster' => 'https://i.pinimg.com/236x/fb/2f/71/fb2f71ab6666351681955a5e518a70b1.jpg',
             ]);
         }
     }

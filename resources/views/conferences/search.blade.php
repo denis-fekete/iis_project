@@ -61,7 +61,9 @@
     @if(isset($info['role']) && $info['role'] == 'admin')
         <div class="card">
             <p class="card_title">{{$item->title}}</p>
-            <img class="card_image" src="https://picsum.photos/seed/{{$item->title}}/1000/200" alt="Placeholder image">
+            @if ($item->title)
+                <img class="conference-list-image" src="{{$item->poster}}" alt="Placeholder image">
+            @endif
             <p class="card_description">{{$item->description}}</p>
             <p class="text_theme">{{$item->theme}}</p>
             <p class="card_price">Price: {{$item->price}}Kč</p>
@@ -76,7 +78,9 @@
     @else
         <div class="card" onclick="navigateTo('/conferences/conference/{{ $item->id }}')">
             <p class="title">{{$item->title}}</p>
-            <img class="card_image" src="https://picsum.photos/seed/{{$item->title}}/600/150" alt="Placeholder image">
+            @if ($item->title)
+                <img class="conference-list-image" src="{{$item->poster}}" alt="Placeholder image">
+            @endif
             <p>{{$item->description}}</p>
             <p class="text_theme">{{$item->theme}}</p>
             <p class="card_price">Price: {{$item->price}}Kč</p>

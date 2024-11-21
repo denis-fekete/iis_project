@@ -27,6 +27,8 @@ class ConferenceService
         'place_address' => 'required',
         'price' => 'required',
         'capacity' => 'required',
+        'poster' => 'required|url',
+        'bank_account' => 'required',
     ];
 
     /**
@@ -199,6 +201,8 @@ class ConferenceService
             'place_address' => $validated['place_address'],
             'price' => $validated['price'],
             'capacity' => $validated['capacity'],
+            'poster' => $validated['poster'],
+            'bank_account' => $validated['bank_account'],
             'owner_id' => auth()->user()->id,
         ]);
 
@@ -240,6 +244,8 @@ class ConferenceService
         $conference->place_address = $validated['place_address'];
         $conference->price = $validated['price'];
         $conference->capacity = $validated['capacity'];
+        $conference->poster = $validated['poster'];
+        $conference->bank_account = $validated['bank_account'];
 
         $conference->save();
 
