@@ -6,7 +6,9 @@
 </div>
 
 <div class="card">
-    <img class="conference_image" src="https://picsum.photos/seed/{{$conferences->title}}/1800/400" alt="Placeholder image">
+    @if ($conferences->poster)
+        <img class="lecture-poster" src="{{$conferences->poster}}" alt="Placeholder image">
+    @endif
     <br><br>
     <div class="horizontal_grid">
         <button onclick="navigateTo('/reservations/reserve/{{$conferences->id}}')">Make reservation</button>
@@ -39,7 +41,9 @@
         <div class="card">
             <p class="title">Title: {{$item->title}}</p>
             <br>
-            <img class="conference_image" src="https://picsum.photos/seed/{{$item->title}}/1800/300" alt="Placeholder image">
+            @if ($item->poster)
+                <img class="lecture-poster" src="{{$item->poster}}" alt="Placeholder image">
+            @endif
             <br><br>
             <p>Speaker:
                 <a class="text_link"
@@ -63,9 +67,3 @@
 @endforeach
 
 @endsection
-
-<style>
-    .conference_image {
-        max-width: 100%;
-    }
-</style>

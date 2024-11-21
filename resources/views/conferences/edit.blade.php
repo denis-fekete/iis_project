@@ -41,6 +41,10 @@
         <input class="form_input" type="text" name="theme" id="theme"
             value="{{old('theme', $conference->theme)}}" required>
         <br>
+        <label class="form_label" for="poster">Poster URL:</label>
+        <input class="form_input" type="url" name="poster" id="poster"
+            value="{{old('poster', $conference->poster)}}" required>
+        <br>
         <label class="form_label" for="stat_time">Start time:</label>
         <input class="form_input" type="datetime-local" name="start_time" id="start_time"
             value="{{old('start_time', $conference->start_time)}}" required>

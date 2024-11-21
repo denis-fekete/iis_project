@@ -140,6 +140,8 @@
         display: block;
         margin: 0 auto 20px auto;
         border-radius: 10px;
+        max-width: 100%;
+        max-height: 500px;
     }
 
     .lecture-description {
@@ -155,6 +157,14 @@
     .lecture-control {
         text-align: center;
         margin-top: 20px;
+    }
+
+    .conference-list-image {
+        display: block;
+        margin: 0 auto 20px auto;
+        border-radius: 10px;
+        max-width: 100%;
+        max-height: 400px;
     }
 
 </style>
