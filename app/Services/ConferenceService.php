@@ -6,6 +6,7 @@ use App\Enums\OrderBy;
 use App\Enums\Themes;
 use App\Enums\OrderDirection;
 use App\Models\Conference;
+use App\Models\Reservation;
 use App\Models\Room;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -137,12 +138,48 @@ class ConferenceService
      * Returns a conference by id and puts owner id and name into it
      *
      * @param  mixed $id ID of the conference
-     * @return Conference Conference or null if not found
+     * @return mixed ViewModel with info about conference reservations and statistics 
      */
-    public static function getWithReservations($id) {
-        // add owner and lectures info now for less database requests
-        return Conference::with('reservations.user')
-            ->find($id);
+    public static function getReservations($id) {
+        $conference = Conference::find($id);
+        $reservationsQuery = $conference->reservations();
+
+        $reservations = $reservationsQuery->get();
+        $reservationCount = 0;
+        foreach($reservations as $res)
+            $reservationCount += $res->number_of_people;
+
+        $confirmedReservations = $reservationsQuery->where('is_confirmed', 1)->get();
+        $confirmedReservationCount = 0;
+        foreach($confirmedReservations as $res)
+            $confirmedReservationCount += $res->number_of_people;
+
+        $freeSeats = ConferenceService::capacityLeft($id);
+        $seatCount = $conference->capacity;
+
+        
+
+        $reservationsViewModels = [];
+        foreach ($reservations as $res) {
+            $user = $res->user()->first();
+            array_push($reservationsViewModels, [
+                'reservationId' => $res->id,
+                'userId' => $user->id,
+                'userName' => $user->name.' '.$user->surname,
+                'count' => $res->number_of_people,
+                'confirmed' => $res->is_confirmed,
+            ]);
+            
+        }
+
+        return [
+            'conferenceId' => $id,
+            'reservationsCount' => $reservationCount,
+            'confirmedCount' => $confirmedReservationCount,
+            'freeSeats' => $freeSeats,
+            'seatsCount' => $seatCount,
+            'reservations' => $reservationsViewModels,
+        ];
     }
 
     /**
@@ -314,28 +351,34 @@ class ConferenceService
     }
 
     /**
-     * Edits reservations to be confirmed or unconfirmed based on information in
+     * Confirms reservation
      * $request
      *
-     * @param  Request $request POST request containing form information
+     * @param int $conferenceId - Id of the conference
+     * @param int $reservationId - Id of the reservation
      * @return bool returns true on success
      */
-    public static function editReservationsList(Request $request) {
-        $id = $request->input('id');
-        $conference = Conference::find($id);
+    public static function confirmReservation($conferenceId, $reservationId) {
+        $conference = Conference::find($conferenceId);
+        if (!$conference)
+            return 'Conference does not exist.';
 
-        foreach($conference->reservations as $reservation) {
-            $val = $request->input((string)($reservation->id));
+        $currentUserId = auth()->user()->id;
+        if ($conference->owner_id != $currentUserId)
+            return 'You are not allowed to confirm reservations for this conference!';
 
-            if($reservation->is_confirmed != ($val == 'true')) {
-                $reservation->is_confirmed = ($val == 'true');
-                $reservation->save();
-            }
-        }
+        $reservation = Reservation::find($reservationId);
+        if (!$reservation)
+            return 'Reservation does not exist.';
 
-        $conference->save();
+        if ($reservation->conference_id != $conferenceId)
+            return 'You are not allowed to confirm this reservation!';
 
-        return true;
+        if ($reservation->is_confirmed)
+            return 'Reservation was already confirmed';
+
+        $reservation->update(['is_confirmed' => true]);
+        return null;
     }
 
     /**

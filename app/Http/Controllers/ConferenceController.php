@@ -238,15 +238,10 @@ class ConferenceController extends Controller
 
         // check if user is owner or admin
         if(self::CheckPermissions($user, $id)) {
-            // get conference information
-            $conference = ConferenceService::getWithReservations($id);
+            $responseView = ConferenceService::getReservations($id);
 
             return view('conferences.reservations')
-                ->with('id', $conference->id)
-                ->with('reservations', $conference->reservations)
-                ->with('info', [
-                    'editingAsAdmin' => ($user->id != $conference->owner_id),
-                    ]);
+                ->with('data', $responseView);
         } else {
             return redirect('conferences/dashboard')
                 ->with('notification', ['You do not have permission to access lectures of this conference']);
@@ -259,17 +254,18 @@ class ConferenceController extends Controller
      * @param  Request $request POST request containing form information
      * @return void redirects user to reservations page with notification message
      */
-    public function editReservationsList(Request $request) {
-        $id = $request->input('id');
+    public function confirmReservation(Request $request) {
+        $conferenceId = $request->input('conferenceId');
+        $reservationId = $request->input('reservationId');
 
-        $res = ConferenceService::editReservationsList($request);
+        $res = ConferenceService::confirmReservation($conferenceId, $reservationId);
 
         if($res) {
-            return redirect('/conferences/conference/reservations/' . $id)
-                ->with('notification', ['Your changes were saved']);
+            return redirect('/conferences/conference/reservations/' . $conferenceId)
+                ->with('notification', [$res]);
         } else {
-            return redirect('/conferences/conference/lectures/' . $id)
-                ->with('notification', ['Something went wrong, try it again later']);
+            return redirect('/conferences/conference/reservations/' . $conferenceId)
+                ->with('notification', ['Reservation was confirmed successfully!']);
         }
     }
 

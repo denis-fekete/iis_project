@@ -3,7 +3,7 @@
 @section('content')
 
 @php
-    $url = 'conferences/conference/reservations';
+    $url = 'conferences/conference/confirmReservation';
 @endphp
 
 @isset($info['editingAsAdmin'])
@@ -20,26 +20,52 @@
 </div>
 
 <div class="card">
-<form action="{{ url($url) }}" id="register_form" class="register_form" method="post">
-<input type="number" name="id" value="{{ $id }}" hidden required>
-@csrf
-@foreach ($reservations as $reservation)
-    <p>Username: {{$reservation->user->name}} {{$reservation->user->surname}}</p>
-    <p>Number of people: {{$reservation->number_of_people}}</p>
-    <p>confirmed/not confirmed</p>
-    <input class="form_input" type="radio" name="{{$reservation->id}}" value="true"
-        @if ($reservation->is_confirmed)
-            checked
-        @endif
-        required>
-    <input class="form_input" type="radio" name="{{$reservation->id}}" value="false"
-        @if (!($reservation->is_confirmed))
-            checked
-        @endif
-        required>
+    <h3>Seats count: {{$data['seatsCount']}}</h3>
+    <h3>Reserved seats count: {{$data['reservationsCount']}}</h3>
+    <h3>Confirmed seates count: {{$data['confirmedCount']}}</h3>
+    <h3>Free seats count: {{$data['freeSeats']}}</h3>
     <hr>
-@endforeach
-<button type"submit">Save</button>
-</form>
+
+    @foreach ($data['reservations'] as $reservation)
+        <p>Name: {{$reservation['userName']}}</p>
+        <p>Count: {{$reservation['count']}}</p>
+        @if ($reservation['confirmed'])
+            <p>Reservation was confirmed.</p>
+        @else
+            <p>Reservation has not been confirmed yet!</p>
+            <p>Variable symbol: {{$data['conferenceId']}}{{$reservation['reservationId']}}</p>
+            <button onClick="warning({{$reservation['reservationId']}}, {{$reservation['reservationId']}})">Confirm payment</button> 
+        @endif
+        <hr>
+    @endforeach
 <div>
+
+
+<div id="warning" class="popup" style="display: none;">
+    <div class="card popup-content">
+        <p>Are you sure that reservation was paid?</p>
+        <div>
+            <form action="{{url ($url) }}" method="post">
+                @csrf
+                <input type="hidden" name="conferenceId" value="{{$data['conferenceId']}}"/>
+                <input id="resIdInput" type="hidden" name="reservationId" value=""/>
+                <button id="confirmCancel">Confirm</button>
+            </form>
+            <button onclick="closeWarning()">Cancel</button>
+        </div>
+    </div>
+</div>
 @endsection
+
+<script>
+    function warning(reservationId) {
+        document.getElementById('resIdInput').value = reservationId;
+        const popup = document.getElementById('warning');
+        popup.style.display = 'block';
+    }
+
+    function closeWarning() {
+        const popup = document.getElementById('warning').style.display = 'none';
+    };
+
+</script>

@@ -31,7 +31,7 @@ class ReservationController extends Controller
         $err = ReservationService::create($request, $userId);
 
         if($err == '') {
-            return redirect('/conferences/conference/' . $conferenceId)
+            return redirect('/reservations/dashboard')
                 ->with('notification', ['Reservation was created successfully']);
         } else {
             return redirect()->back()

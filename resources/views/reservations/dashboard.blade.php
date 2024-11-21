@@ -17,7 +17,8 @@
             <p>Reservation was paid and confirmed!</p>
         @else
             <p>You need to pay <b>{{ $reservation['toPay'] }}!</b></p>
-            <p>Credentials to pay: <b>{{ $reservation['bankAccount'] }}</b>
+            <p>Credentials to pay: <b>{{ $reservation['bankAccount'] }}</b></p>
+            <p>Variable symbol: {{$reservation['conferenceId']}}{{$reservation['reservationId']}}</p>
         @endif
         <br>
         <div class="grid_horizontal">

@@ -64,7 +64,7 @@ Route::prefix('conferences')->group(function () {
     Route::post('/conference/createRoom', [ConferenceController::class, 'createRoom'])
         ->middleware('auth');
 
-    Route::post('/conference/reservations', [ConferenceController::class, 'editReservationsList'])
+    Route::post('/conference/confirmReservation', [ConferenceController::class, 'confirmReservation'])
         ->middleware('auth');
     Route::post('/create', [ConferenceController::class, 'create']);
     Route::post('/edit', [ConferenceController::class, 'edit']);
