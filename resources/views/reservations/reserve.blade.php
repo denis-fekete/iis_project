@@ -3,7 +3,8 @@
 @section('content')
 
 <div class="card">
-    <form action="{{ url('/reservations/reserve') }}" id="register_form" class="register_form" method="post">
+    <p>There are <b>{{$max}}</b> available places for this conference.</p>
+    <form action="{{ url('/reservations/reserve') }}" id="register_form" class="reservation-form" method="post">
         @csrf
         <input class="form_input" type="hidden" name="conferenceId" id="id" value="{{ $conferenceId }}" required>
         <br>
