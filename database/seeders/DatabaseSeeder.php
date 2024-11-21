@@ -51,6 +51,7 @@ class DatabaseSeeder extends Seeder
             'capacity' => fake()->numberBetween(1, 10000),
             'owner_id' => $admin->id,
             'poster' => 'https://marketplace.canva.com/EAGCxslOSOU/1/0/1131w/canva-blue-and-white-geometric-shapes-conference-poster-WytXZKj8OgA.jpg',
+            'bank_account' => 'CZ1111000000111111111111',
         ]);
 
         for($i = 0; $i < 3; $i++) {

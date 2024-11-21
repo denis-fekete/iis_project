@@ -22,6 +22,7 @@ class Conference extends Model
         'price',
         'capacity',
         'poster',
+        'bank_account',
     ];
 
     // tells laravel to cast time into Carbon instead of string (easier to manipulate)

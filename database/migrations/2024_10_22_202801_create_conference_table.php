@@ -23,6 +23,7 @@ return new class extends Migration
             $table->unsignedInteger('capacity');
             $table->string('poster');
             $table->unsignedBigInteger('owner_id');
+            $table->string('bank_account');
 
             $table->foreign('owner_id')
                 ->references('id')

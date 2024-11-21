@@ -100,6 +100,11 @@
         Kč</label>
         <br>
 
+        <label for="bank_account">Your banc account number:
+            <input type="text" name="bank_account"
+                value="{{old('bank_account', $conference->bank_account)}}" required />
+        <br>
+
         <br>
         @isset($info['type'])
             @if ($info['type'] == 'create')
