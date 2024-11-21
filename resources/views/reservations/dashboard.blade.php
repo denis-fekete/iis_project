@@ -9,24 +9,49 @@
 <div class="grid_vertical">
 @foreach ($reservations as $reservation)
     <div class="card">
-        <p class="title_2" >Conference: {{ $reservation->conference->title }}</p>
-        <p> From: {{ $reservation->conference->start_time }} </p>
-        <p> To: {{ $reservation->conference->end_time }}</p>
-        <p>Number of people: {{ $reservation->number_of_people }}</p>
-        <p>Confirmed:
-            @if($reservation->is_confirmed == 1)
-                Yes
-            @else
-                No
-            @endif
-        </p>
+        <p class="title_2" >Conference: <a href="/conferences/conference/{{ $reservation['conferenceId']}}">{{ $reservation['conferenceName']}}</a></p>
+        <p>From: {{ $reservation['startTime'] }}</p>
+        <p>To: {{ $reservation['endTime'] }}</p>
+        <p>Number of people: {{ $reservation['peopleCount'] }}</p>
+        @if ($reservation['confirmed'])
+            <p>Reservation was paid and confirmed!</p>
+        @else
+            <p>You need to pay <b>{{ $reservation['toPay'] }}!</b></p>
+            <p>Credentials to pay: <b>{{ $reservation['bankAccount'] }}</b>
+        @endif
         <br>
         <div class="grid_horizontal">
-        <button onclick="navigateTo('/reservations/cancel/{{ $reservation->id }}')">Cancel reservation</button>
-        <button onclick="navigateTo('/reservations/schedule/{{ $reservation->id }}')">Show schedule</button>
+        <button onclick="warning('{{ $reservation['reservationId'] }}')">Cancel reservation</button>
+        <button onclick="navigateTo('/reservations/schedule/{{ $reservation['reservationId'] }}')">Show schedule</button>
         </div>
     </div>
 @endforeach
+
+<div id="warning" class="popup" style="display: none;">
+    <div class="card popup-content">
+        <p>If you will cancel reservation, money will not be returned!</p>
+        <div>
+            <button id="confirmCancel">Cancel anyway</button>
+            <button onclick="closeWarning()">Close warning</button>
+        </div>
+    </div>
 </div>
 
 @endsection
+
+<script>
+    function warning(reservationId) {
+        const popup = document.getElementById('warning');
+        popup.style.display = 'block';
+    
+        const confirmButton = document.getElementById('confirmCancel');
+        confirmButton.onclick = function () {
+            window.location.href = `/reservations/cancel/${reservationId}`;
+        };
+    }
+
+    function closeWarning() {
+        const popup = document.getElementById('warning').style.display = 'none';
+    };
+
+</script>
