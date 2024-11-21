@@ -74,7 +74,7 @@
     .body_container {
         display: flex;
         flex-direction: column;
-        background-color: #FFF8F0;
+        background-color: #F4EED5;
         min-height: 100vh;
     }
 

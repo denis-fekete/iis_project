@@ -2,11 +2,7 @@
 
 @section('content')
 
-@if ($user == null)
-    <h3>You are not logged in, please do so or register to continue reservation</h3>
-@endif
-
-<div>
+<div class="card">
     <form action="{{ url('/reservations/reserve') }}" id="register_form" class="register_form" method="post">
         @csrf
         <input class="form_input" type="hidden" name="conferenceId" id="id" value="{{ $conferenceId }}" required>
@@ -23,6 +19,12 @@
     </form>
 </div>
 
+
+@if ($user == null)
+    <br>
+    <p class="title_2">You are not logged in, in order to continue with reservation you must Log in or create a new account, your progress will be saved</p>
+    <br>
+@endif
 @if ($user == null)
     <button type="button" onclick="showLogin()">Log In or Register</button>
 @endif

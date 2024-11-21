@@ -61,7 +61,7 @@
     @if(isset($info['role']) && $info['role'] == 'admin')
         <div class="card">
             <p class="card_title">{{$item->title}}</p>
-            <img class="card_image" src="https://picsum.photos/seed/{{$item->title}}/600/150" alt="Placeholder image">
+            <img class="card_image" src="https://picsum.photos/seed/{{$item->title}}/1000/200" alt="Placeholder image">
             <p class="card_description">{{$item->description}}</p>
             <p class="text_theme">{{$item->theme}}</p>
             <p class="card_price">Price: {{$item->price}}Kč</p>
@@ -113,7 +113,7 @@
     }
 
     .card_image {
-        max-width: 100%;
+        width: 100%;
     }
 </style>
 

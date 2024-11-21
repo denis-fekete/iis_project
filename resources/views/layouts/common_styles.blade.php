@@ -101,6 +101,13 @@
         box-shadow: 2px 2px 5px #3E3C3E;
     }
 
+    button:disabled,input[type="submit"]:disabled {
+        background: #9DD9D2;
+        color: #3E3C3E;
+        font-style: italic;
+    }
+
+
     button:hover, input[type="submit"]:hover {
         background: #E1DDA8;
     }

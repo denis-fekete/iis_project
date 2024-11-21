@@ -52,6 +52,7 @@ class ConferenceController extends Controller
      */
     public function get($id) {
         $conference = ConferenceService::getWithLectures($id);
+        $conference->capacity_left = ConferenceService::capacityLeft($id);
 
         if($conference == null) {
             return view('unknown');

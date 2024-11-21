@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\RoleType;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
@@ -34,5 +35,18 @@ class AdminService
     public static function invalidAccess() {
         return redirect()->back()
             ->withErrors(['auth' => "You do not have permissions for this action"]);
+    }
+
+    public static function setRole($userId, $role) {
+        $user = User::find($userId);
+
+        switch($role) {
+            case RoleType::Admin->value:
+            case RoleType::User->value:
+                $user->role = $role;
+                $user->save();
+                break;
+            default:break;
+        }
     }
 }

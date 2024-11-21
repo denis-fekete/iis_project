@@ -39,6 +39,7 @@
         grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
         height: fit-content;
         margin-bottom: 1em;
+        margin-inline: 1em;
     }
 
     .navigation_button {

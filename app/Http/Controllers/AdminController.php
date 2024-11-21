@@ -82,7 +82,21 @@ class AdminController extends Controller
                 ->with('info', [
                     'default_directions' => $orderDir,
                     'default_search' => $searchString,
+                    'roles' => RoleType::cases(),
                 ]);
+        } else {
+            return AdminService::invalidAccess();
+        }
+    }
+
+    public function setRole() {
+        if(AdminService::amIAdmin()) {
+            $userId = request()->input('id', null);
+            $role = request()->input('role', null);
+
+            AdminService::setRole($userId, $role);
+
+            return redirect()->back();
         } else {
             return AdminService::invalidAccess();
         }
