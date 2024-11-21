@@ -53,11 +53,13 @@ class UserService
 
         $future = Lecture::where('speaker_id', $id)
             ->where('end_time', '>=', Carbon::now())
+            ->where('is_confirmed', true)
             ->orderBy('end_time', 'desc')
             ->get();
 
         $past = Lecture::where('speaker_id', $id)
             ->where('end_time', '<', Carbon::now())
+            ->where('is_confirmed', true)
             ->orderBy('end_time', 'desc')
             ->get();
 
