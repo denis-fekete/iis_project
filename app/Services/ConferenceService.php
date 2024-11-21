@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ConferenceService
 {
-    const MAX_DESCRIPTION_LEN = 160;
+    const MAX_DESCRIPTION_LEN = 250;
 
     private const VALIDATOR_PARAMS = [
         'title' => 'required|min:3|max:100',

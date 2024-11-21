@@ -27,16 +27,16 @@
                 <input name="return_to" value='{{$currentUrl}}' required hidden>
 
                 <label class="form_label" for="email">Email:</label>
-                <input class="form_input" type="email" name="email" id="email"required>
+                <input class="form_input" type="email" name="email" id="email" value="{{old('email')}}" required>
                 <br>
                 <label class="form_label" for="name">Name:</label>
-                <input class="form_input" type="text" name="name" id="name"required>
+                <input class="form_input" type="text" name="name" id="name" value="{{old('name')}}">
                 <br>
                 <label class="form_label" for="surname">Surname:</label>
-                <input class="form_input" type="text" name="surname" id="surname"required>
+                <input class="form_input" type="text" name="surname" id="surname" value="{{old('surname')}}">
                 <br>
                 <label class="form_label" for="password">Password:</label>
-                <input class="form_input" type="password" name="password" id="password"required>
+                <input class="form_input" type="password" name="password" id="password" required>
                 <br>
                 <label class="form_label" for="password_confirmation">Confirm password :</label>
                 <input class="form_input" type="password" name="password_confirmation" id="password_confirmation"required>

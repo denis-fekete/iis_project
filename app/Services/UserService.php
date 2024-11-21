@@ -18,8 +18,8 @@ use Illuminate\Support\Facades\Hash;
 class UserService
 {
     private const VALIDATOR_PARAMS_CREATE = [
-        'name' => 'min:3|max:15',
-        'surname' => 'min:3|max:15',
+        'name' => 'max:15',
+        'surname' => 'max:15',
         'new_password' => 'min:8',
         'title_after' => 'max:10',
         'title_before' => 'max:10',
@@ -29,8 +29,8 @@ class UserService
     ];
 
     private const VALIDATOR_PARAMS_EDIT = [
-        'name' => 'min:3|max:15',
-        'surname' => 'min:3|max:15',
+        'name' => 'max:15',
+        'surname' => 'max:15',
         'password' => 'required|min:8',
         'new_password' => 'min:8',
         'title_after' => 'max:10',
@@ -104,6 +104,7 @@ class UserService
                 break;
         }
 
+        $query->orderBy('name', $orderDir);
 
         $result = $query->get();
 

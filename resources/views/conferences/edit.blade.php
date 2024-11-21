@@ -34,12 +34,22 @@
     </div>
 
     <div class="card">
-        {{-- TODO: insert IMAGE --}}
+        <div class="grid_horizontal">
+            <label for="poster">Poster URL:</label>
+            <input type="url" name="poster" id="poster"
+                value="{{old('poster', $conference->poster)}}" required>
+            <button type="button" onclick="refreshImg()">Refresh Image</button>
+        </div>
+        <img class="lecture-poster" src="" style="width=100%;" id="imgPreview">
+        <br>
+
         <div class="horizontal_grid">
             <button disabled>Make reservation</button>
             <button disabled>Offer a lecture</button>
         </div>
         <br>
+
+        <br><br>
 
         <p>Organizer:
             <a class="text_link">
@@ -57,20 +67,13 @@
             @endforeach
         </select>
 
-        <br><br>
         <label for="description">Description:</label>
         <textarea type="textarea" name="description" id="description" required>
             {{ old('description', $conference->description) }}
         </textarea>
         <br>
         <br>
-        <label class="form_label" for="poster">Poster URL:</label>
-        <input class="form_input" type="url" name="poster" id="poster"
-            value="{{old('poster', $conference->poster)}}" required>
-        <br>
-        <label class="form_label" for="stat_time">Start time:</label>
-        <input class="form_input" type="datetime-local" name="start_time" id="start_time"
-            value="{{old('start_time', $conference->start_time)}}" required>
+
         <label for="start_time">Start time:</label>
         <input name="start_time" type="datetime-local"
             value="{{ old('start_time', $conference->start_time ? $conference->start_time->format('Y-m-d\TH:i') : '') }}"
@@ -130,6 +133,14 @@
             event.preventDefault();
         }
     });
+
+    function refreshImg() {
+        const posterURL = document.getElementById('poster').value;
+        const img = document.getElementById('imgPreview');
+        img.src = posterURL;
+
+    }
+
 </script>
 
 @endsection

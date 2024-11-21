@@ -23,17 +23,22 @@ class AuthController extends Controller
      */
     public function registration(Request $request)
     {
-        UserService::create($request);
+        $res = UserService::create($request);
 
         $returnUrl = $request->input('return_to');
 
-        // log in user and send him to his profile
-        if(auth()->attempt(request()->only(['email', 'password']))) {
-            if($returnUrl !== null) {
-                return redirect($returnUrl);
-            } else {
-                return redirect('/home');
+        if($res == '') {
+            if(auth()->attempt(request()->only(['email', 'password']))) {
+                if($returnUrl !== null) {
+                    return redirect($returnUrl);
+                } else {
+                    return redirect('/home');
+                }
             }
+        } else {
+            return redirect()->back()
+                ->withErrors(['auth' => $res])
+                ->withInput();
         }
     }
 
@@ -79,5 +84,9 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->back();
+    }
+
+    public function authGET() {
+        return view('auth.auth');
     }
 }

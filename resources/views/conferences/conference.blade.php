@@ -31,7 +31,8 @@
     <p>End date: {{$conferences->end_time}}</p>
     <br>
     <p>Address: {{$conferences->place_address}}</p>
-    <p>Capacity: {{$conferences->capacity}}</p>
+    <p>Maximum capacity: {{$conferences->capacity}}</p>
+    <p>Capacity left: {{$conferences->capacity_left}}</p>
     <p>Price per person: {{$conferences->price}}Kč</p>
     <br>
 </div>

@@ -121,15 +121,10 @@ Route::prefix('users')->group(function () {
 // --------------------------------------------------------
 
 Route::prefix('auth')->group(function () {
-    Route::post('/register', [AuthController::class, 'registration']);
-    Route::get('/register', function () {
-        return view('auth.auth');
-    });
+    Route::get('/', [AuthController::class, 'authGET'])->name('login');
 
+    Route::post('/register', [AuthController::class, 'registration']);
     Route::post('/login', [AuthController::class, 'login']);
-    Route::get('/login', function () {
-        return view('auth.auth');
-    })->name('login');
 
     Route::get('/logout', [AuthController::class, 'logout']);
 });
@@ -159,6 +154,8 @@ Route::prefix('admin')->group(function () {
         Route::get('/search', [AdminController::class, 'usersSearch'])
             ->middleware('auth');
         Route::get('/edit/{$id}', [AdminController::class, 'usersEdit'])
+            ->middleware('auth');
+        Route::get('/setRole', [AdminController::class, 'setRole'])
             ->middleware('auth');
     });
 
