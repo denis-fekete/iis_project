@@ -6,6 +6,15 @@
     $url = 'conferences/conference/rooms';
 @endphp
 
+@isset($info['editingAsAdmin'])
+    @if($info['editingAsAdmin'] == true)
+        <div class="title_block">
+        <p class="title">Editing as administrator</p>
+        </div>
+    @endif
+@endisset
+
+
 <div class="card">
     @if ($rooms && count($rooms) > 0)
         <table class="table">

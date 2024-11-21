@@ -11,7 +11,7 @@
 <div class="grid_vertical">
 @foreach ($conferences as $item)
     <div class="card">
-        <p class="card_title">{{$item->title}}</p>
+        <p class="title_2">{{$item->title}}</p>
         <div class="grid_horizontal">
             <button onclick="navigateTo( '/conferences/edit/{{ $item->id }}' )"                     >Edit</button>
             <button onclick="navigateTo( '/conferences/conference/{{ $item->id }}')"                 >Preview</button>

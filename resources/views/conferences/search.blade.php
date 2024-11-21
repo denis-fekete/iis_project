@@ -69,7 +69,9 @@
             <button onclick="navigateTo( '/admin/conferences/edit/{{ $item->id }}' )"                   >Edit</button>
             <button onclick="navigateTo( '/admin/conferences/conference/lectures/{{ $item->id }}')"     >Lectures</button>
             <button onclick="navigateTo( '/admin/conferences/conference/reservations/{{ $item->id }}')" >Reservations</button>
+            <button onclick="navigateTo( '/admin/conferences/conference/rooms/{{ $item->id }}')"        >Rooms</button>
             <button onclick="navigateTo('/conferences/conference/{{ $item->id }}')"                     >Details</button>
+
         </div>
     @else
         <div class="card" onclick="navigateTo('/conferences/conference/{{ $item->id }}')">

@@ -151,6 +151,8 @@ Route::prefix('admin')->group(function () {
             ->middleware('auth');
         Route::post('/conference/reservations', [ConferenceController::class, 'editReservationsList'])
             ->middleware('auth');
+        Route::get('/conference/rooms/{id}', [ConferenceController::class, 'listConferenceRooms'])
+            ->middleware('auth');
     });
 
     Route::prefix('users')->group(function () {

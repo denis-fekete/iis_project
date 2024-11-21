@@ -115,7 +115,7 @@ class ConferenceController extends Controller
                     'themes' => Themes::cases(),
                     'type' => 'edit',
                     'id' => $id,
-                    'role' => $user->role,
+                    'editingAsAdmin' => ($user->id != $conference->owner_id),
                     ]);
         } else {
             return redirect('conferences/dashboard')
@@ -193,7 +193,9 @@ class ConferenceController extends Controller
                 ->with('conference', $conference)
                 ->with('lectures', $conference->lectures)
                 ->with('rooms', $conference->rooms)
-                ->with('info', ['role' => $user->role]);
+                ->with('info', [
+                    'editingAsAdmin' => ($user->id != $conference->owner_id),
+                    ]);
         } else {
             return redirect('conferences/dashboard')
                 ->with('notification', ['You do not have permission to access lectures of this conference']);
@@ -241,7 +243,9 @@ class ConferenceController extends Controller
             return view('conferences.reservations')
                 ->with('id', $conference->id)
                 ->with('reservations', $conference->reservations)
-                ->with('info', ['role' => $user->role]);
+                ->with('info', [
+                    'editingAsAdmin' => ($user->id != $conference->owner_id),
+                    ]);
         } else {
             return redirect('conferences/dashboard')
                 ->with('notification', ['You do not have permission to access lectures of this conference']);
@@ -285,7 +289,10 @@ class ConferenceController extends Controller
 
             return view('conferences.rooms')
                 ->with('id', $id)
-                ->with('rooms', $rooms);
+                ->with('rooms', $rooms)
+                ->with('info', [
+                    'editingAsAdmin' => ($user->id != ConferenceService::getOwner($id)),
+                    ]);
         } else {
             return redirect('conferences/dashboard')
                 ->with('notification', ['You do not have permission to access lectures of this conference']);

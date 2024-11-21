@@ -11,8 +11,8 @@
 
 @endphp
 
-@isset($info['role'])
-    @if($info['role'] == 'admin')
+@isset($info['editingAsAdmin'])
+    @if($info['editingAsAdmin'] == true)
         <div class="title_block">
         <p class="title">Editing as administrator</p>
         </div>
