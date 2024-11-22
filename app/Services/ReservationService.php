@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ReservationService
 {
@@ -19,25 +20,36 @@ class ReservationService
      * @return string On error returns error message, on success returns empty string
      */
     public static function create(Request $request, $userId) : string {
-        $conferenceId = $request->input('conferenceId');
-        $people = $request->input('number_of_people');
-        
-        $capacityLeft = ConferenceService::capacityLeft($conferenceId);
+        $validator = Validator::make($request->all(), [
+            'conference_id' => 'required|int',
+            'number_of_people' => 'required|int|min:1',
+        ]);
+
+        if($validator->fails()) {
+            $errorMessages = collect($validator->errors()->toArray())
+                ->flatten()
+                ->implode("\n");
+
+
+            return $errorMessages;
+        }
+        $validated = $validator->validated();
+
+        $capacityLeft = ConferenceService::capacityLeft($validated['conference_id']);
+
         if($capacityLeft < 0) {
             return "Conference was not found";
-        }
-
-        if($capacityLeft < $people) {
+        } else if($capacityLeft < $validated['number_of_people']) {
             return 'Not enough seats are available';
         }
 
         $res = Reservation::create([
-            'conference_id' => $conferenceId,
+            'conference_id' => $validated['conference_id'],
+            'number_of_people' => $validated['number_of_people'],
             'user_id' => $userId,
-            'number_of_people' => $people,
         ]);
 
-        if($res == null) {
+        if($res === null) {
             return 'Internal error: Creation of Reservation failed';
         }
 

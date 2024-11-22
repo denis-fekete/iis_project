@@ -6,6 +6,7 @@ use App\Models\Conference;
 use App\Services\ConferenceService;
 use App\Services\LectureScheduleService;
 use App\Services\ReservationService;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -31,25 +32,37 @@ class ReservationController extends Controller
     /**
      * Creates new reservation
      * @param Request $request data of new reservation (conferenceId, number_of_people)
-     * @return redirect refirects user to reservations dashboard
+     * @return redirect redirects user to reservations dashboard
      */
     public function create(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'conferenceId' => 'required|int',
-            'number_of_people' => 'required|int|min:1',
-        ]);
+        $user = auth()->user();
 
-        if ($validator->fails())
-            return redirect()->back()->withErrors($validator)->withInput();
+        // if user doesn't have account, create one
+        if($user === null) {
+            $res = UserService::create($request);
 
-        $userId = auth()->user()->id;
-        $err = ReservationService::create($request, $userId);
+            if($res != '') {
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors($res);
+            }
+
+            if(!auth()->attempt(request()->only(['email', 'password']))) {
+                return redirect()->back()
+                    ->withErrors(["err" => "Something went wrong, try again later"]);
+            }
+
+            $user = auth()->user();
+        }
+
+        $err = ReservationService::create($request, $user->id);
 
         if($err == '') {
             return redirect('/reservations/dashboard')
                 ->with('notification', ['Reservation was created successfully']);
         } else {
             return redirect()->back()
+                ->withInput()
                 ->withErrors($err);
         }
     }

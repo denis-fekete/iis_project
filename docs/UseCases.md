@@ -7,7 +7,7 @@ Legend:
 - ✅ list all conferences
     - ✅ filter conferences based on some filters
     - ✅ order conferences
-    - ❌❓ search for conference
+    - ✅ search for conference
     - ✅ see details about conference
         - ✅ list lecturers of conference
             - ✅ see details about lecturer (list of lectures, own bio, etc...)
@@ -27,7 +27,6 @@ Legend:
         - ✅ can offer my own lecture to any future conference and become a potential speaker
 - ✅ list all reservations
     - ✅ become visitor without doing anything
-    - ❌ pay for a ticket
     - ✅ see if I am potential visitor or confirmed
     - ✅ cancel any of my reservation (potential and confirmed) 
     - ✅ see my schedule
@@ -58,12 +57,11 @@ Legend:
 ### Administrator
 - ✅ list users
     - ✅ set user roles
-    - ❌ create new users
     - ✅ delete users
 - ✅ list conferences
     - ✅ delete conference
     - ✅ edit conference
-    - ❌ list and edit lectures
+    - ✅ list and edit lectures
     - ✅ list and edit reservations
 - ✅ logout
 - ✅ do everything that users and guest can do
