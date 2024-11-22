@@ -40,12 +40,15 @@ class DatabaseSeeder extends Seeder
             'role' => RoleType::Admin->value
         ]);
 
+        $start_time = fake()->dateTimeBetween('+2 months', '+12 months');
+        $end_time = fake()->dateTimeBetween($start_time, (clone $start_time)->modify('+2 days'));
+
         $adminConference = Conference::create([
             'title' => fake()->words(5, true),
             'description' => fake()->words(300, true),
             'theme' => fake()->words(10, true),
-            'start_time' => fake()->date(),
-            'end_time' => fake()->date(),
+            'start_time' => $start_time,
+            'end_time' => $end_time,
             'place_address' => fake()->address(),
             'price' => fake()->randomFloat(2, 0, 10000),
             'capacity' => fake()->numberBetween(1, 10000),
@@ -62,13 +65,16 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        for($i = 0; $i < 6; $i++) {
+        for($i = 0; $i < 2; $i++) {
+            $start_time = fake()->dateTimeBetween($adminConference->start_time, $adminConference->end_time);
+            $end_time = fake()->dateTimeBetween($start_time, (clone $start_time)->modify('+2 days'));
+
             Lecture::create([
                 'title' => fake()->words(4, true),
                 'poster' => fake()->words(10, true),
                 'is_confirmed' => fake()->boolean(),
-                'start_time' => fake()->date(),
-                'end_time' => fake()->date(),
+                'start_time' => $start_time,
+                'end_time' => $end_time,
                 'speaker_id' => $admin->id,
                 'conference_id' => $adminConference->id,
                 'room_id' => Room::all()->random()->id,

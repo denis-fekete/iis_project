@@ -22,7 +22,7 @@ class ConferenceFactory extends Factory
         $allThemes = Themes::cases();
         $count = count($allThemes);
         $theme = $allThemes[fake()->numberBetween(0, $count - 1)];
-        $start_time = fake()->dateTimeBetween('+1 week', '+4 weeks');
+        $start_time = fake()->dateTimeBetween('+2 months', '+12 months');
         $end_time = fake()->dateTimeBetween($start_time, (clone $start_time)->modify('+2 days'));
 
         return [
