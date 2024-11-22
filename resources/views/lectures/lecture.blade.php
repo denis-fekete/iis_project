@@ -31,36 +31,14 @@
     @if (!$data['canEdit'])
         <div class="lecture-control">
             <button onclick="navigateTo( '/lectures/edit/{{ $data['id'] }}' )">Edit</button>
-            @if (!$data['isConfirmed'])
-                <button onclick="cancelLecture({{$data['id']}})">Cancel</button>
-            @endif
+            <form action="{{ url('/lectures/cancel') }}" method="POST">
+            @csrf
+                <input type="hidden" name="id" value="{{ $data['id'] }}" />
+                @if (!$data['isConfirmed'])
+                    <button type="submit">Cancel</button>
+                @endif
+            </form>
         </div>
     @endif
 </div>
 @endsection
-
-<script>
-
-function cancelLecture(id) {
-    const baseUrl = document.querySelector('meta[name="app-base-url"]').getAttribute('content');
-    const url = `${baseUrl}/lectures/cancel`;
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken
-        },
-        body: JSON.stringify({ id: id }) // Send the ID as payload
-    })
-    .then(response => {
-        if (response.ok)
-            window.location = "/lectures/dashboard";
-    })
-    .catch(error => {
-        alert(error);
-    });
-}
-
-</script>
