@@ -22,7 +22,6 @@ class ConferenceController extends Controller
      *
      * @return void search view with all conferences
      */
-    // public function search($themes, $orderBy, $orderDir, $searchString = null) {
     public function search() {
         $themes = request()->input('themes', null);
         $orderBy = request()->input('orderBy', 'Name');
@@ -222,7 +221,7 @@ class ConferenceController extends Controller
                     ->with('notification', ['Your changes were saved']);
             } else {
                 return redirect('/conferences/conference/lectures/' . $id)
-                    ->with('notification', ['Something went wrong, try it again later']); // TODO: change to ERROR
+                    ->with('notification', ['Something went wrong, try it again later']);
             }
         }
     }
