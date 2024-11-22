@@ -95,8 +95,7 @@ Route::prefix('reservations')->group(function () {
 
     Route::post('/saveSchedule', [ReservationController::class, 'saveSchedule'])
         ->middleware('auth');
-    Route::post('/reserve', [ReservationController::class, 'create'])
-        ->middleware('auth');
+    Route::post('/reserve', [ReservationController::class, 'create']);
 });
 
 
