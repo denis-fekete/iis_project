@@ -165,14 +165,16 @@ class ConferenceController extends Controller
             $res = "Error: You do not have permission for this";
         }
 
-        if($res == '') {
-            return redirect()->back()
-                ->with("notification", ['Conference changes were successfully saved']);
+        $notifications = [];
+        if($res != '') {
+            $notifications = [$res];
         } else {
-            return redirect('conferences/edit/' . ((string)$id))
-                ->withInput() // returns old input so user doesn't have to type it again
-                ->withErrors($res);
+            $notifications = ['Conference changes were successfully saved'];
         }
+
+        return redirect()->back()
+            ->with("notification", $notifications)
+            ->withInput();
     }
 
     /**
@@ -369,9 +371,10 @@ class ConferenceController extends Controller
     public function delete($id) {
         error_log('deleted' . $id);
         $user = auth()->user();
-        if($user != null && ($user->id == $id || AdminService::amIAdmin())) {
-            ConferenceService::delete($id);
-            return redirect()->back();
+        if($user !== null && ($user->id == $id || AdminService::amIAdmin())) {
+            $res = ConferenceService::delete($id);
+            return redirect()->back()
+                ->with('notification', [$res]);
         } else {
             return redirect()->back()
                 ->withErrors('privileges', "You do not have privileges to do this action");

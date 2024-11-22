@@ -48,7 +48,12 @@
             <input type="submit" value="Submit">
         </form>
         <button onclick="exitEdit()">Exit editing</button>
-        <button class="delete_btn" onclick="navigateTo('/users/delete/{{$person->id}}')">Delete account</button>
+
+        <form action="{{ url('/users/delete') }}" method="post">
+            @csrf
+            <input type="text" name="user_id" value="{{$person->id}}" hidden>
+            <input type="submit" class="delete_btn" value="Delete account">
+        </form>
     </div>
 @endif
 

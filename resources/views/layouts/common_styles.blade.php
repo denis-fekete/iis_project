@@ -20,6 +20,10 @@
         color: #3E3C3E;
     }
 
+    .text_bold {
+        font-weight: bold;
+    }
+
     .text_link {
         text-decoration: underline;
         color: #885E97;

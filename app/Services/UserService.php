@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\OrderDirection;
+use App\Models\Conference;
 use App\Models\Lecture;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -88,7 +89,7 @@ class UserService
     public static function search($orderDir = null, $searchString = null) : Collection {
         $query = User::query();
 
-        if($searchString != null && $searchString != '%') {
+        if($searchString !== null && $searchString != '%') {
             $query->where('name', 'LIKE', '%' . $searchString . '%')
                 ->orWhere('surname', 'LIKE', '%' . $searchString . '%')
                 ->orWhere('title_before', 'LIKE', '%' . $searchString . '%')
@@ -202,10 +203,30 @@ class UserService
     }
 
     public static function delete($id) {
-        $userObj = User::find($id);
+        $user = User::find($id);
 
-        if($userObj != null) {
-            $userObj->delete();
+        $conferences = Conference::where('owner_id', $id)
+            ->where('end_time', '>', Carbon::now())
+            ->get();
+
+        if($conferences->count() !== 0) {
+            return "User account cannot be deleted: User has planned conferences for the future";
         }
+
+        $lectures = Lecture::where('speaker_id', $id)
+            ->where('is_confirmed', true)
+            ->where('end_time', '>', Carbon::now())
+            ->get();
+
+        if($lectures->count() !== 0) {
+            return "User account cannot be deleted: User has planned lectures for the future";
+        }
+
+
+        if($user !== null) {
+            $user->delete();
+        }
+
+        return "User successfully deleted";
     }
 }

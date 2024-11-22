@@ -35,7 +35,7 @@ class LectureController extends Controller
 
         $user = auth()->user();
 
-        if($user != null) {
+        if($user !== null) {
             $userId = $user->id;
         }
         $userId = null;

@@ -8,6 +8,7 @@ use App\Enums\OrderDirection;
 use App\Models\Conference;
 use App\Models\Reservation;
 use App\Models\Room;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
@@ -44,12 +45,12 @@ class ConferenceService
     public static function getAll($themes = null, $orderBy = null, $orderDir = null, $searchString = null): Collection {
         $query = Conference::query();
 
-        if($searchString != null) {
+        if($searchString !== null) {
             $query->where('title', 'LIKE', '%' . $searchString . '%');
         }
 
 
-        if($themes != null) {
+        if($themes !== null) {
             $query->where('theme', $themes);
         }
 
@@ -138,7 +139,7 @@ class ConferenceService
      * Returns a conference by id and puts owner id and name into it
      *
      * @param  mixed $id ID of the conference
-     * @return mixed ViewModel with info about conference reservations and statistics 
+     * @return mixed ViewModel with info about conference reservations and statistics
      */
     public static function getReservations($id) {
         $conference = Conference::find($id);
@@ -157,7 +158,7 @@ class ConferenceService
         $freeSeats = ConferenceService::capacityLeft($id);
         $seatCount = $conference->capacity;
 
-        
+
 
         $reservationsViewModels = [];
         foreach ($reservations as $res) {
@@ -169,7 +170,7 @@ class ConferenceService
                 'count' => $res->number_of_people,
                 'confirmed' => $res->is_confirmed,
             ]);
-            
+
         }
 
         return [
@@ -190,7 +191,7 @@ class ConferenceService
      */
     public static function getWithFormattedDate($id) {
         $conference = Conference::find($id);
-        if($conference != null) {
+        if($conference !== null) {
             $conference->start_time= $conference->start_time->format('Y-m-d\TH:i');
             $conference->end_time = $conference->end_time->format('Y-m-d\TH:i');
         }
@@ -276,16 +277,24 @@ class ConferenceService
         $conference->title = $validated['title'];
         $conference->description = $validated['description'];
         $conference->theme = $validated['theme'];
-        $conference->start_time = $validated['start_time'];
-        $conference->end_time = $validated['end_time'];
         $conference->place_address = $validated['place_address'];
         $conference->price = $validated['price'];
         $conference->capacity = $validated['capacity'];
         $conference->poster = $validated['poster'];
         $conference->bank_account = $validated['bank_account'];
 
-        $conference->save();
+        if(self::canBeModified($id) === false) {
+            if( $conference->start_time != $validated['start_time'] ||
+                $conference->end_time == $validated['end_time']) {
 
+                $conference->save();
+                return 'Changes were changed expect for time: Conference has confirmed reservations'; // everything was alright, return no error message
+            }
+        }
+
+        $conference->start_time = $validated['start_time'];
+        $conference->end_time = $validated['end_time'];
+        $conference->save();
         return ''; // everything was alright, return no error message
     }
 
@@ -411,11 +420,29 @@ class ConferenceService
     }
 
     public static function delete($id) {
-        $conferenceObj = Conference::find($id);
+        $conference = Conference::find($id);
 
-        if($conferenceObj != null) {
-            $conferenceObj->delete();
+        if($conference === null) {
+            return "Conference was not found";
         }
+
+        if(self::canBeModified($id) === false) {
+            return "Conference cannot be deleted: Conferences has confirmed reservations";
+        }
+
+        if(Carbon::parse($conference->end_time)->isFuture()) {
+            $reservations = Reservation::where('conference_id', $id)
+                ->where('is_confirmed', true)
+                ->get();
+
+            if($reservations->count() !== 0) {
+                return "Conference cannot be deleted: Conferences has confirmed reservations";
+            }
+        }
+
+        // $conference->delete();
+
+        return "Conference was delete successfully";
     }
 
     /**
@@ -465,6 +492,21 @@ class ConferenceService
         $room->update([
             'name' => $newName,
         ]);
+        return true;
+    }
+
+    private static function canBeModified($id) {
+        $conference = Conference::find($id);
+        if(Carbon::parse($conference->end_time)->isFuture()) {
+            $reservations = Reservation::where('conference_id', $id)
+                ->where('is_confirmed', true)
+                ->get();
+
+            if($reservations->count() !== 0) {
+                return false;
+            }
+        }
+
         return true;
     }
 }
