@@ -7,32 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-// DEBUG: debug only class
-Class TmpLecture {
-    public int $id;
-    public string $title;
-    public string $poster;
-    public bool $is_confirmed;
-    public string $start_time;
-    public string $end_time;
-
-    public int $conference_id;
-    public int $speaker_id;
-    public int $room_id;
-
-    public function __construct(int $id) {
-        $this->id = fake()->numberBetween(0, 10000);
-        $this->title = fake()->words(2, true);
-        $this->poster = "placeholder poster";
-        $this->is_confirmed = fake()->boolean();
-        $this->start_time = fake()->date();
-        $this->end_time = $this->start_time;
-        $this->conference_id = $id;
-        $this->speaker_id = fake()->numberBetween(0, DB::table('user')->count());
-        $this->room_id = fake()->numberBetween(0, 10000);
-    }
-}
-
 class LectureController extends Controller
 {
     private array $emptyInfo = [
@@ -58,9 +32,15 @@ class LectureController extends Controller
     *   Shows info about lecture
     */
     public function get($id) {
-        $userId = auth()->user()->id;
-        $data = LectureService::getLectureDetailView($id, $userId);
 
+        $user = auth()->user();
+
+        if($user !== null) {
+            $userId = $user->id;
+        }
+        $userId = null;
+
+        $data = LectureService::getLectureDetailView($id, $userId);
         if($data == null) {
             return view('unknown');
         }

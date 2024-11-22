@@ -53,18 +53,6 @@ class AdminController extends Controller
 
     }
 
-    /**
-     * Redirects admin to default search for conferences
-     *
-     * @return void search view with all conferences
-     */
-    public function conferencesSearchDefault() {
-        if(AdminService::amIAdmin()) {
-            return redirect('/admin/conferences/search');
-        } else {
-            return AdminService::invalidAccess();
-        }
-    }
 
     /**
      * Returns view with all users and allows some basic operation on them
@@ -89,14 +77,22 @@ class AdminController extends Controller
         }
     }
 
-    public function setRole() {
+    /**
+     * Changes user role
+     *
+     * @return void
+     */
+    public function setRole(Request $request) {
         if(AdminService::amIAdmin()) {
-            $userId = request()->input('id', null);
-            $role = request()->input('role', null);
+            $userId = $request->input('user_id', null);
+            $role = $request->input('role', null);
+            error_log($userId);
+            error_log($role);
+            $res = AdminService::setRole($userId, $role);
+            error_log($res);
 
-            AdminService::setRole($userId, $role);
-
-            return redirect()->back();
+            return redirect()->back()
+                ->with('notification', [$res]);
         } else {
             return AdminService::invalidAccess();
         }

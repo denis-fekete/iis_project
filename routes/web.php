@@ -39,9 +39,7 @@ Route::get('/home1', function () {
 // --------------------------------------------------------
 
 Route::prefix('conferences')->group(function () {
-    // Route::get('/search/{themes};{orderBy};{orderDir};{searchString?}', [ConferenceController::class, 'search']);
     Route::get('/search', [ConferenceController::class, 'search']);
-    Route::get('/conference/{id}', [ConferenceController::class, 'get']);
     Route::get('/dashboard', [ConferenceController::class, 'dashboard'])
         ->middleware('auth'); // protect website => user must be logged in
     Route::get('/create', [ConferenceController::class, 'creationForm'])
@@ -50,24 +48,29 @@ Route::prefix('conferences')->group(function () {
         ->middleware('auth');
     Route::get('/delete/{id}', [ConferenceController::class, 'delete'])
         ->middleware('auth');
-    Route::get('/conference/lectures/{id}', [ConferenceController::class, 'listConferenceLectures'])
-        ->middleware('auth');
-    Route::get('/conference/reservations/{id}', [ConferenceController::class, 'listConferenceReservations'])
-        ->middleware('auth');
 
-    Route::get('/conference/rooms/{id}', [ConferenceController::class, 'listConferenceRooms'])
-        ->middleware('auth');
-    Route::post('/conference/updateRoom', [ConferenceController::class, 'updateRoom'])
-        ->middleware('auth');
-    Route::post('/conference/deleteRoom', [ConferenceController::class, 'deleteRoom'])
-        ->middleware('auth');
-    Route::post('/conference/createRoom', [ConferenceController::class, 'createRoom'])
-        ->middleware('auth');
-
-    Route::post('/conference/confirmReservation', [ConferenceController::class, 'confirmReservation'])
-        ->middleware('auth');
     Route::post('/create', [ConferenceController::class, 'create']);
     Route::post('/edit', [ConferenceController::class, 'edit']);
+
+    Route::prefix('conference')->group(function () {
+        Route::get('/lectures/{id}', [ConferenceController::class, 'listConferenceLectures'])
+            ->middleware('auth');
+        Route::get('/reservations/{id}', [ConferenceController::class, 'listConferenceReservations'])
+            ->middleware('auth');
+        Route::get('/{id}', [ConferenceController::class, 'get']);
+        Route::get('/rooms/{id}', [ConferenceController::class, 'listConferenceRooms'])
+            ->middleware('auth');
+
+        Route::post('/updateRoom', [ConferenceController::class, 'updateRoom'])
+            ->middleware('auth');
+        Route::post('/deleteRoom', [ConferenceController::class, 'deleteRoom'])
+            ->middleware('auth');
+        Route::post('/createRoom', [ConferenceController::class, 'createRoom'])
+            ->middleware('auth');
+        Route::post('/confirmReservation', [ConferenceController::class, 'confirmReservation'])
+            ->middleware('auth');
+});
+
 });
 
 Route::prefix('lectures')->group(function () {
@@ -98,6 +101,42 @@ Route::prefix('reservations')->group(function () {
         ->middleware('auth');
 });
 
+
+// --------------------------------------------------------
+//
+// --------------------------------------------------------
+
+Route::prefix('admin')->group(function () {
+    Route::prefix('conferences')->group(function () {
+        Route::get('/search', [AdminController::class, 'conferencesSearch'])
+            ->middleware('auth');
+        Route::get('/edit/{id}', [ConferenceController::class, 'editForm'])
+            ->middleware('auth');
+        Route::get('/conference/lectures/{id}', [ConferenceController::class, 'listConferenceLectures'])
+            ->middleware('auth');
+        Route::get('/conference/reservations/{id}', [ConferenceController::class, 'listConferenceReservations'])
+            ->middleware('auth');
+        Route::get('/conference/rooms/{id}', [ConferenceController::class, 'listConferenceRooms'])
+            ->middleware('auth');
+
+        Route::post('/conference/reservations', [ConferenceController::class, 'editReservationsList'])
+            ->middleware('auth');
+    });
+
+    Route::prefix('users')->group(function () {
+        Route::get('/search', [AdminController::class, 'usersSearch'])
+            ->middleware('auth');
+        Route::get('/edit/{$id}', [AdminController::class, 'usersEdit'])
+            ->middleware('auth');
+
+        Route::post('/setRole', [AdminController::class, 'setRole'])
+            ->middleware('auth');
+    });
+
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])
+        ->middleware('auth');
+});
+
 // --------------------------------------------------------
 //
 // --------------------------------------------------------
@@ -108,9 +147,10 @@ Route::prefix('users')->group(function () {
     Route::get('/search/{id}', [UserController::class, 'getPerson']);
     Route::get('/profile', [UserController::class, 'profile'])
         ->middleware('auth');
-    Route::post('/profile/edit', [UserController::class, 'editUser'])
+
+    Route::post('/delete', [UserController::class, 'delete'])
         ->middleware('auth');
-    Route::get('/delete/{id}', [UserController::class, 'delete'])
+    Route::post('/profile/edit', [UserController::class, 'editUser'])
         ->middleware('auth');
 });
 
@@ -127,38 +167,4 @@ Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 
     Route::get('/logout', [AuthController::class, 'logout']);
-});
-
-
-// --------------------------------------------------------
-//
-// --------------------------------------------------------
-
-Route::prefix('admin')->group(function () {
-    Route::prefix('conferences')->group(function () {
-        Route::get('/search', [AdminController::class, 'conferencesSearch'])
-            ->middleware('auth');
-        Route::get('/edit/{id}', [ConferenceController::class, 'editForm'])
-            ->middleware('auth');
-        Route::get('/conference/lectures/{id}', [ConferenceController::class, 'listConferenceLectures'])
-            ->middleware('auth');
-        Route::get('/conference/reservations/{id}', [ConferenceController::class, 'listConferenceReservations'])
-            ->middleware('auth');
-        Route::post('/conference/reservations', [ConferenceController::class, 'editReservationsList'])
-            ->middleware('auth');
-        Route::get('/conference/rooms/{id}', [ConferenceController::class, 'listConferenceRooms'])
-            ->middleware('auth');
-    });
-
-    Route::prefix('users')->group(function () {
-        Route::get('/search', [AdminController::class, 'usersSearch'])
-            ->middleware('auth');
-        Route::get('/edit/{$id}', [AdminController::class, 'usersEdit'])
-            ->middleware('auth');
-        Route::get('/setRole', [AdminController::class, 'setRole'])
-            ->middleware('auth');
-    });
-
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])
-        ->middleware('auth');
 });

@@ -20,6 +20,10 @@
         color: #3E3C3E;
     }
 
+    .text_bold {
+        font-weight: bold;
+    }
+
     .text_link {
         text-decoration: underline;
         color: #885E97;
@@ -82,6 +86,41 @@
     /* Inputs */
     /* --------------------------------------------------------------------- */
 
+    input {
+        font-size: 0.9em;
+        background: #EEEBCC;
+        color: #3E3C3E;
+
+        margin-top: 0.1em;
+        padding-inline: 0.6em;
+        padding-top: 0.1em;
+        padding-bottom: 0.1em;
+
+        height: auto;
+        width: auto;
+    }
+
+    .title_input {
+        width: 100%;
+        text-align: center;
+        background-color: transparent;
+    }
+
+    textarea {
+        resize: vertical;
+        width: 100%;
+        max-width: 100%;
+        min-width: 100%;
+        background-color: transparent;
+        border: solid 2px #3E3C3E;
+        box-shadow: none;
+    }
+
+    select {
+        background-color: transparent;
+        padding: 0.2em;
+    }
+
     button,input[type="submit"] {
         font-size: 1.1em;
 
@@ -112,43 +151,16 @@
         background: #E1DDA8;
     }
 
-    input {
-        font-size: 0.9em;
-        background: #EEEBCC;
-        color: #3E3C3E;
-        margin-bottom: 0.2em;
-    }
-
-    .title_input {
-        width: 100%;
-        text-align: center;
-        background-color: transparent;
-    }
-
-    textarea {
-        resize: vertical;
-        width: 100%;
-        max-width: 100%;
-        min-width: 100%;
-        background-color: transparent;
-        border: solid 2px #3E3C3E;
-        box-shadow: none;
-    }
-
-    select {
-        background-color: transparent;
-        padding: 0.2em;
-    }
-
     input:disabled {
         background: #9DD9D2;
         color: #3E3C3E;
         font-style: italic;
     }
 
-    .delete_btn {
-        background-color: #FD5620;
+    .delete_btn, input[type="submit"].delete_btn {
+        background: #FD5620;
     }
+
 
 
     /* --------------------------------------------------------------------- */

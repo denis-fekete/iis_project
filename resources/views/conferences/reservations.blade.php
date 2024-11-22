@@ -20,11 +20,12 @@
 </div>
 
 <div class="card">
-    <h3>Seats count: {{$data['seatsCount']}}</h3>
-    <h3>Reserved seats count: {{$data['reservationsCount']}}</h3>
-    <h3>Confirmed seates count: {{$data['confirmedCount']}}</h3>
-    <h3>Free seats count: {{$data['freeSeats']}}</h3>
-    <hr>
+    <p class="title_2">Seats count: {{$data['seatsCount']}}</p>
+    <p class="title_2">Reserved seats count: {{$data['reservationsCount']}}</p>
+    <p class="title_2">Confirmed seates count: {{$data['confirmedCount']}}</p>
+    <p class="title_2">Free seats count: {{$data['freeSeats']}}</p>
+</div>
+<br>
 
     @foreach ($data['reservations'] as $reservation)
         <p>Name: <a href="/users/search/{{$reservation['userId']}}">{{$reservation['userName']}}</a></p>
@@ -34,12 +35,13 @@
         @else
             <p>Reservation has not been confirmed yet!</p>
             <p>To be paid: {{$reservation['sum']}}</p>
+            <p class="text_bold">Reservation has not been confirmed yet!</p>
             <p>Variable symbol: {{$data['conferenceId']}}{{$reservation['reservationId']}}</p>
-            <button onClick="warning({{$reservation['reservationId']}}, {{$reservation['reservationId']}})">Confirm payment</button> 
+            <button onClick="warning({{$reservation['reservationId']}}, {{$reservation['reservationId']}})">Confirm payment</button>
         @endif
-        <hr>
-    @endforeach
-<div>
+    </div>
+    <br>
+@endforeach
 
 
 <div id="warning" class="popup" style="display: none;">

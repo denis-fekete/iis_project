@@ -21,7 +21,7 @@ class AdminService
     public static function amIAdmin() {
         $user = auth()->user();
 
-        if($user != null) {
+        if($user !== null) {
             return ($user->role == RoleType::Admin->value);
         } else {
             return false;
@@ -39,6 +39,9 @@ class AdminService
 
     public static function setRole($userId, $role) {
         $user = User::find($userId);
+        if($user === null) {
+            return "User was not found";
+        }
 
         switch($role) {
             case RoleType::Admin->value:
@@ -46,7 +49,11 @@ class AdminService
                 $user->role = $role;
                 $user->save();
                 break;
-            default:break;
+            default:
+                return "Unknown role, no changes will be made";
+            break;
         }
+
+        return "Changes were saved";
     }
 }

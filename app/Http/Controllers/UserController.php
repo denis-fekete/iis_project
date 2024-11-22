@@ -20,7 +20,7 @@ class UserController extends Controller
         $data = UserService::getWithLectures($id);
 
         $user = auth()->user();
-        if($user != null) {
+        if($user !== null) {
             $canEdit = ($user->id == $id || AdminService::amIAdmin());
         } else {
             $canEdit = false;
@@ -47,7 +47,7 @@ class UserController extends Controller
      */
     public function profile() {
         $id = auth()->user()->id;
-        if($id != null) {
+        if($id !== null) {
             return redirect('/users/search/' . (string)$id);
         }
     }
@@ -62,7 +62,7 @@ class UserController extends Controller
         $currentUser = auth()->user();
         $editingUserId = $request->input('user_id');
 
-        if($currentUser != null) {
+        if($currentUser !== null) {
             $isMyProfile = ($currentUser->id == $editingUserId);
         } else {
             $isMyProfile = false;
@@ -96,11 +96,14 @@ class UserController extends Controller
      * @param  string $id Id of user to be deleted
      * @return void
      */
-    public function delete($id) {
+    public function delete(Request $request) {
+        $userToDelete = $request->input('user_id');
         $user = auth()->user();
-        if($user != null && ($user->id == $id || AdminService::amIAdmin())) {
-            UserService::delete($id);
-            return redirect()->back();
+
+        if($user !== null && ($user->id == $userToDelete || AdminService::amIAdmin())) {
+            $res = UserService::delete($userToDelete);
+            return redirect()->back()
+                ->with('notification', [$res]);
         } else {
             return redirect()->back()
                 ->withErrors('privileges', "You do not have privileges to do this action");
