@@ -52,7 +52,7 @@
         <p>Room: {{ $rooms->firstWhere('id', $item->room_id)->name ?? 'default' }}</p>
         <p>Start time: {{ $item->start_time }} </p>
         <p>End time: {{ $item->end_time }} </p>
-        <form action="{{ url("/lectures/unconfirm") }}" method="POST">
+        <form action="{{ url("lectures/unconfirm") }}" method="POST">
             @csrf
             <input type="hidden" name="id" value="{{ $item->id }}" required />
             <input type="hidden" name="conferenceId" value="{{ $item->conference_id }}" required/>
