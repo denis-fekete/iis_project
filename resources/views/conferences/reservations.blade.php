@@ -27,12 +27,13 @@
     <hr>
 
     @foreach ($data['reservations'] as $reservation)
-        <p>Name: {{$reservation['userName']}}</p>
+        <p>Name: <a href="/users/search/{{$reservation['userId']}}">{{$reservation['userName']}}</a></p>
         <p>Count: {{$reservation['count']}}</p>
         @if ($reservation['confirmed'])
             <p>Reservation was confirmed.</p>
         @else
             <p>Reservation has not been confirmed yet!</p>
+            <p>To be paid: {{$reservation['sum']}}</p>
             <p>Variable symbol: {{$data['conferenceId']}}{{$reservation['reservationId']}}</p>
             <button onClick="warning({{$reservation['reservationId']}}, {{$reservation['reservationId']}})">Confirm payment</button> 
         @endif
