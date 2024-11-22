@@ -27,7 +27,7 @@
 	</dd>
 	<dd>Nikita Kotvitskiy <!-- Nahraďte skutečným jménem a e-mailem autora a popisem činnosti -->
 	    <a href="mailto:xkotvi01@stud.fit.vutbr.cz">xkotvi01@stud.fit.vutbr.cz</a> -
-		popis činnosti v týmu
+		databázové migrace a modely, správa přednášek, místností a rezervací.
 	</dd>
 	<dt>URL aplikace</dt>
 	<dd><a href="http://www.stud.fit.vutbr.cz/~xfeket01/IIS/">http://www.stud.fit.vutbr.cz/~xfeket01/IIS/</a></dd>
@@ -130,17 +130,43 @@
 <br>
 
 <h2>Instalace</h2>
-
-Stručně popište:
+<p>Instalace na server (na příkladu školního serveru EVA):</p>
 <ul>
-<li>postup instalace na server,</li>
-<li>softwarové požadavky (verze PHP apod.),</li>
-<li>jak rozbalit, konfigurovat, inicializovat databázi, ...</li>
+	<li>Umístěte adresář s Laravel projektem do adresáře WWW/IIS, (kde WWW slouží jako vstupní bod pro Apache).</li>
+	<li>
+		Spusťte příkazy:
+		<ul>
+			<li><code>composer install</code></li>
+			<li><code>npm install</code></li>
+			<li><code>php artisan key:generate</code></li>
+		</ul>
+	</li>
+	<li>V souboru .env nastavte přístupové údaje k MySQL databázi (DB_DATABASE, DB_USERNAME, DB_PASSWORD) a hodnotu APP_BASE_URL.</li>
+	<li>
+		Pro inicializaci databáze spusťte:<br>
+		<code>php artisan migrate</code>
+	</li>
+	<li>
+		Pro naplnění databáze vzorovými daty spusťte:<br>
+		<code>php artisan db:seed</code>
+	</li>
+	<li>
+		V adresáři WWW/IIS vytvořte soubor index.php s následujícím obsahem:<br>
+		<code>
+			&lt;?php<br>
+			&nbsp;header("Location: [domena_serveru]/IIS/iis_project/public/index.php");<br>
+			&nbsp;header("Connection: close");<br>
+			&nbsp;exit();<br>
+			?>
+		</code>
+	</li>
 </ul>
+<p>
+	Od tohoto okamžiku by měla být informační aplikace dostupná na adrese:<br>
+	<code>[domena_serveru]/IIS</code>
+</p>
 
 <h2>Známé problémy</h2>
-<p>Zde popište, které body zadání nejsou implementovány a z jakého důvodu. Např. &bdquo;Z časových
-    důvodů nebyla implementována správa uživatelů.&rdquo; Pomůžete tím zrychlit hodnocení, když neimplementované funkce nebudeme muset dlouze hledat.</p>
-
+Z časových důvodů nebyla implementována možnost stahovat vstupenky pro zaplacené rezervace.</p>
 </body>
 </html>
