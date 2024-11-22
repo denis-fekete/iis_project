@@ -52,21 +52,30 @@
 <div class="card">
     <p>{{$user->title_before}} {{$user->name}} {{$user->surname}} {{$user->title_after}}</p>
     <div class="grid_horizontal">
-        <select name="roles" id="user{{$user->id}}">
-            @foreach ($info['roles'] as $role)
-                <option value="{{$role->value}}"
-                    @if ($role->value == $user->role)
-                        selected
-                    @endif
-                    >{{$role->name}}
-                </option>
-            @endforeach
-        </select>
-        <button onclick="setUserRole({{$user->id}})">Set role</button>
+        <form action="{{ url('/admin/users/setRole') }}" method="post">
+            @csrf
+            <input type="text" name="user_id" value="{{$user->id}}" hidden>
+            <select name="role">
+                @foreach ($info['roles'] as $role)
+                    <option value="{{$role->value}}"
+                        @if ($role->value == $user->role)
+                            selected
+                        @endif
+                        >{{$role->name}}
+                    </option>
+                @endforeach
+            </select>
+            <input type="submit" value="Set role">
+        </form>
     </div>
     <div class="grid_horizontal">
         <button onclick="navigateTo('/users/search/{{ $user->id }}')">View</button>
-        <button class="delete_btn" onclick="navigateTo('/users/delete/{{ $user->id }}')">Delete</button>
+
+        <form action="{{ url('/users/delete') }}" method="post">
+            @csrf
+            <input type="text" name="user_id" value="{{$user->id}}" hidden>
+            <input type="submit" class="delete_btn" value="Delete">
+        </form>
     </div>
 </div>
 
