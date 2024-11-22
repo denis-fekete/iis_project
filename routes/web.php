@@ -86,11 +86,15 @@ Route::prefix('lectures')->group(function () {
 
 Route::prefix('reservations')->group(function () {
     Route::get('/reserve/{id}', [ReservationController::class, 'getForm']);
-    Route::get('/dashboard', [ReservationController::class, 'getAll']);
-    Route::get('/cancel/{id}', [ReservationController::class, 'cancel']);
-    Route::get('/schedule/{id}', [ReservationController::class, 'showSchedule']);
-    Route::post('/saveSchedule', [ReservationController::class, 'saveSchedule']);
+    Route::get('/dashboard', [ReservationController::class, 'getAll'])
+        ->middleware('auth');
+    Route::get('/cancel/{id}', [ReservationController::class, 'cancel'])
+        ->middleware('auth');
+    Route::get('/schedule/{id}', [ReservationController::class, 'showSchedule'])
+        ->middleware('auth');
 
+    Route::post('/saveSchedule', [ReservationController::class, 'saveSchedule'])
+        ->middleware('auth');
     Route::post('/reserve', [ReservationController::class, 'create'])
         ->middleware('auth');
 });

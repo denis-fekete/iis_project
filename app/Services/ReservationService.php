@@ -21,9 +21,7 @@ class ReservationService
     public static function create(Request $request, $userId) : string {
         $conferenceId = $request->input('conferenceId');
         $people = $request->input('number_of_people');
-        if ($people < 1)
-            return "Number of people cannot be negative!";
-
+        
         $capacityLeft = ConferenceService::capacityLeft($conferenceId);
         if($capacityLeft < 0) {
             return "Conference was not found";
