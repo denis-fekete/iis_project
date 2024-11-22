@@ -442,7 +442,7 @@ class ConferenceService
             }
         }
 
-        // $conference->delete();
+        $conference->delete();
 
         return "Conference was delete successfully";
     }
