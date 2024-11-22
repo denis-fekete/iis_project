@@ -284,8 +284,8 @@ class ConferenceController extends Controller
      */
     public function createRoom(Request $request) {
         $validator = Validator::make($request->all(), [
-            'conferenceId' => 'required|int',
-            'roomName' => 'required|string',
+            'conference_id' => 'required|int',
+            'name' => 'required|string',
         ]);
 
         if ($validator->fails())

@@ -33,7 +33,7 @@ class UserService
         'name' => 'max:15',
         'surname' => 'max:15',
         'password' => 'required|min:8',
-        'new_password' => 'min:8',
+        'new_password' => 'nullable|min:8',
         'title_after' => 'max:10',
         'title_before' => 'max:10',
         'description' => 'max:2000',
