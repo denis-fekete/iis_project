@@ -33,7 +33,7 @@ class LectureFactory extends Factory
             'speaker_id' => User::all()->random()->id,
             'conference_id' => $conference->id,
             'room_id' => Room::all()->random()->id,
-            'poster' => 'https://i.pinimg.com/236x/fb/2f/71/fb2f71ab6666351681955a5e518a70b1.jpg',
+            'poster' => 'https://i.ibb.co/fQwgJqW/fb3acb40-b79c-44ee-a6ef-7573ad349d36.webp',
         ];
     }
 }
