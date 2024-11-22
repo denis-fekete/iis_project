@@ -77,7 +77,7 @@ class LectureService
      * Returns lecture detail view
      * @param int $id id of the lecture
      * @param int $userId id of the user
-     * @return array lecture data 
+     * @return array lecture data
      */
     public static function getLectureDetailView($id, $userId) {
         $lecture = Lecture::find($id);
@@ -149,7 +149,7 @@ class LectureService
                 $query->whereBetween('start_time', [$startTime, $endTime])
                       ->orWhereBetween('end_time', [$startTime, $endTime]);
             })->exists();
-        
+
         if ($collidingLectures)
             return 'Collision with another lecture';
 
@@ -191,8 +191,9 @@ class LectureService
         $lecture = Lecture::find($lectureId);
         if (!$lecture)
             return 'Lecture does not exist';
-        if ($lecture->speaker_id != $userId)
+        if ($lecture->speaker_id != $userId && AdminService::amIAdmin() == false) {
             return 'Restricted';
+        }
         return null;
     }
 
@@ -213,7 +214,7 @@ class LectureService
 
         if ($conference->owner_id != $userId)
             return 'Restricted';
-        
+
         return null;
     }
 }
