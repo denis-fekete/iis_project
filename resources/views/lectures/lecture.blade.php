@@ -41,7 +41,7 @@
 <script>
 
 function cancelLecture(id) {
-    const url = '/lectures/cancel';
+    const url = 'lectures/cancel';
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     fetch(url, {

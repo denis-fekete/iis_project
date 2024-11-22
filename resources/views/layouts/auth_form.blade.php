@@ -4,7 +4,7 @@
 
 <div>
     <h2>Login</h2>
-    <form action="{{ url('auth/login') }}" id="register_form" class="register_form" method="post">
+    <form action="{{ url('/auth/login') }}" id="register_form" class="register_form" method="post">
         @csrf
         <input name="return_to" value='{{$currentUrl}}' required hidden>
 
@@ -20,7 +20,7 @@
 <br>
 <div>
     <h2>Register</h2>
-    <form action="{{ url('auth/register') }}" id="register_form" class="register_form" method="post">
+    <form action="{{ url('/auth/register') }}" id="register_form" class="register_form" method="post">
         @csrf
         <input name="return_to" value='{{$currentUrl}}' required hidden>
 

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="card">
-    <form action="{{ url("lectures/editSave") }}" id="register_form" class="register_form" method="post">
+    <form action="{{ url("/lectures/editSave") }}" id="register_form" class="register_form" method="post">
         @csrf
         <input type="hidden" name="id" value="{{ $info['id'] }}">
         <label class="form_label" for="title">Tiltle:</label>
