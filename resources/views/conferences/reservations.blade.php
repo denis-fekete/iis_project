@@ -27,8 +27,9 @@
 </div>
 <br>
 
-    @foreach ($data['reservations'] as $reservation)
-        <p>Name: <a href="/users/search/{{$reservation['userId']}}">{{$reservation['userName']}}</a></p>
+@foreach ($data['reservations'] as $reservation)
+    <div class="card">
+        <p>Name: <a class="text_link"  href="{{ config('app.url') }}/users/search/{{$reservation['userId']}}">{{$reservation['userName']}}</a></p>
         <p>Count: {{$reservation['count']}}</p>
         @if ($reservation['confirmed'])
             <p>Reservation was confirmed.</p>

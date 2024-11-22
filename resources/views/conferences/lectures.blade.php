@@ -22,7 +22,7 @@
 <br>
 @foreach ($lectures as $item)
     <div class="card">
-    <p>Lecture: <a class="text_link" onclick="navigateTo('/lectures/lecture/{{$item->id}}')">{{$item->title}}</a></p>
+    <p>Lecture: <a class="text_link"  href="{{ config('app.url') }}/lectures/lecture/{{$item->id}}">{{$item->title}}</a></p>
     @if (!$item->is_confirmed)
         <form action="{{ url("/lectures/confirm") }}" method="post">
             @csrf

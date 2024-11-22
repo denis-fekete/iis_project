@@ -17,8 +17,7 @@
     <br>
     <div class="horizontal_grid">
         <p>Organizer:
-            <a class="text_link"
-                onclick="navigateTo('/users/search/{{$conferences->owner->id}}')">
+            <a class="text_link" href="{{ config('app.url') }}/users/search/{{$conferences->owner->id}}">
                 {{$conferences->owner->name}} {{$conferences->owner->surname}}
                 </a></p>
 
@@ -43,15 +42,14 @@
 @foreach ($conferences->lectures as $item)
     @if($item->is_confirmed == true)
         <div class="card">
-            <p class="title_2" ><a href="/lectures/lecture/{{$item->id}}">{{$item->title}}</a></p>
+            <p class="title_2" ><a class="text_link" href="{{ config('app.url') }}/lectures/lecture/{{$item->id}}">{{$item->title}}</a></p>
             <br>
             @if ($item->poster)
                 <img class="lecture-poster" src="{{$item->poster}}" alt="Placeholder image">
             @endif
             <br><br>
             <p>Speaker:
-                <a class="text_link"
-                    onclick="navigateTo('/users/search/{{$item->lecturer->id}}')">
+                <a class="text_link"  href="{{ config('app.url') }}/users/search/{{$item->lecturer->id}}">
                     {{$item->lecturer->name}} {{$item->lecturer->surname}}
                     </a></p>
         <p class="lecture_time">Time from {{ $item->start_time }} to {{ $item->end_time }}</p>
