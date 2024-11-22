@@ -6,14 +6,10 @@ use App\Enums\OrderBy;
 use App\Enums\OrderDirection;
 use App\Enums\RoleType;
 use App\Enums\Themes;
-use App\Models\Conference;
 use App\Services\AdminService;
 use App\Services\ConferenceService;
-use Dotenv\Exception\ValidationException;
-use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Validator;
 
 class ConferenceController extends Controller
 {
@@ -179,7 +175,7 @@ class ConferenceController extends Controller
     /**
      * Show lecture edit for a current conference
      *
-     * @param  mixed $id Id of the conference
+     * @param mixed $id Id of the conference
      * @return void View to lectures editing or redirects user to dashboard if
      * user doesn't have permissions
      */
@@ -187,7 +183,6 @@ class ConferenceController extends Controller
         $user = auth()->user();
 
         if(self::CheckPermissions($user, $id)) {
-            // get conference information
             $conference = ConferenceService::get($id);
 
             return view('conferences.lectures')
@@ -204,29 +199,6 @@ class ConferenceController extends Controller
     }
 
     /**
-     * Changes values of confirmed lectures
-     *
-     * @param  Request $request POST request containing form information
-     * @return void redirects user to lectures page with notification message
-     */
-    public function editLecturesList(Request $request) {
-        $id = $request->input('id');
-        $user = auth()->user();
-
-        if(self::CheckPermissions($user, $id)) {
-            $res = ConferenceService::editLecturesList($request);
-
-            if($res) {
-                return redirect('/conferences/conference/lectures/' . $id)
-                    ->with('notification', ['Your changes were saved']);
-            } else {
-                return redirect('/conferences/conference/lectures/' . $id)
-                    ->with('notification', ['Something went wrong, try it again later']);
-            }
-        }
-    }
-
-    /**
      * Show reservations and allow editing for a current conference
      *
      * @param  mixed $id Id of the conference
@@ -236,7 +208,6 @@ class ConferenceController extends Controller
     public function listConferenceReservations($id) {
         $user = auth()->user();
 
-        // check if user is owner or admin
         if(self::CheckPermissions($user, $id)) {
             $responseView = ConferenceService::getReservations($id);
 
@@ -249,12 +220,20 @@ class ConferenceController extends Controller
     }
 
     /**
-     * Changes values of confirmed reservations
+     * Confirmes reservations
      *
      * @param  Request $request POST request containing form information
      * @return void redirects user to reservations page with notification message
      */
     public function confirmReservation(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'conferenceId' => 'required|int',
+            'reservationId' => 'required|int',
+        ]);
+
+        if ($validator->fails())
+            return redirect()->back()->withErrors($validator)->withInput();
+
         $conferenceId = $request->input('conferenceId');
         $reservationId = $request->input('reservationId');
 
@@ -303,6 +282,14 @@ class ConferenceController extends Controller
      * @return Object redirects user to current conference room list
      */
     public function createRoom(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'conference_id' => 'required|int',
+            'name' => 'required|string',
+        ]);
+
+        if ($validator->fails())
+            return redirect()->back()->withErrors($validator)->withInput();
+
         $conferenceId = $request->input('conference_id');
         $roomName = $request->input('name');
         $user = auth()->user();
@@ -323,6 +310,15 @@ class ConferenceController extends Controller
      * @return Object redirects user to current conference room list
      */
     public function updateRoom(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'conference_id' => 'required|int',
+            'room_id' => 'required|int',
+            'name' => 'required|string',
+        ]);
+
+        if ($validator->fails())
+            return redirect()->back()->withErrors($validator)->withInput();
+
         $conferenceId = $request->input('conference_id');
         $roomId = $request->input('room_id');
         $newName = $request->input('name');
@@ -346,6 +342,14 @@ class ConferenceController extends Controller
      * @return Object redirects user to current conference room list
      */
     public function deleteRoom(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'conference_id' => 'required|int',
+            'room_id' => 'required|int',
+        ]);
+
+        if ($validator->fails())
+            return redirect()->back()->withErrors($validator)->withInput();
+
         $conferenceId = $request->input('conference_id');
         $roomId = $request->input('room_id');
         $user = auth()->user();

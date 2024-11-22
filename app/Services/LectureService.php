@@ -7,13 +7,14 @@ use App\Models\Lecture;
 use App\Models\Room;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Log;
 
 class LectureService
 {
+    /**
+     * Returns lecture list view models of lectures assigned to user
+     * @param int $id id of the user
+     * @return array array of lectures list view models
+     */
     public static function getLecturesAssignedToUser($id) {
         $usersLectures = Lecture::where('speaker_id', '=', $id)->get();
         $dashBoardLectureViewModels = [];
@@ -31,10 +32,21 @@ class LectureService
         return $dashBoardLectureViewModels;
     }
 
+    /**
+     * Returns model of specified lecture
+     * @param int $id id of the lecture
+     * @return object lecture object
+     */
     public static function getLectureById($id) {
         return Lecture::find($id);
     }
 
+    /**
+     * Stores lecture changes
+     * @param int $id id of the lecture
+     * @param Request $data verified changed data (title, poster, description)
+     * @return void
+     */
     public static function updateLectureInfo($id, $data) {
         $lecture = Lecture::find($id);
 
@@ -44,6 +56,12 @@ class LectureService
         $lecture->save();
     }
 
+    /**
+     * Creates new lecture
+     * @param int $userId id of the user
+     * @param Request $data verified request data of new lecture
+     * @return void
+     */
     public static function createLecture($userId, $data) {
         Lecture::create([
             'conference_id' => $data->input('conference_id'),
@@ -55,6 +73,12 @@ class LectureService
         ]);
     }
 
+    /**
+     * Returns lecture detail view
+     * @param int $id id of the lecture
+     * @param int $userId id of the user
+     * @return array lecture data 
+     */
     public static function getLectureDetailView($id, $userId) {
         $lecture = Lecture::find($id);
         $owner = User::find($lecture->speaker_id);
@@ -82,18 +106,25 @@ class LectureService
         return $data;
     }
 
-    public static function cancelLecture($speakerId, $lectureId) {
+    /**
+     * Cancels lecture
+     * @param int $lectureId id of the lecture
+     * @return string|null result of cancelation
+     */
+    public static function cancelLecture($lectureId) {
         $lecture = Lecture::find($lectureId);
-        if (!$lecture)
-            return 'lecture-does-not-exist';
-
         if ($lecture->is_confirmed)
-            return 'confirmed-lecture-cannot-be-cancelled';
+            return 'Confirmed lecture cannot be cancelled';
 
         $lecture->delete();
         return null;
     }
 
+    /**
+     * Confirms lecture and stores confirmation data
+     * @param Request $data confirmation data
+     * @return string|null confirmation result
+     */
     public static function confirm($data) {
         $lecture = Lecture::find($data->input('id'));
         if (!$lecture)
@@ -131,6 +162,11 @@ class LectureService
         return null;
     }
 
+    /**
+     * Unconfirms
+     * @param int $lectureId id of the lecture
+     * @return string|null unconfirmation result
+     */
     public static function unconfirm($lectureId) {
         $lecture = Lecture::find($lectureId);
         if (!$lecture->is_confirmed)
@@ -145,24 +181,39 @@ class LectureService
         return null;
     }
 
+    /**
+     * Checks if user is authorized to edit lecture's data (title, poster, description)
+     * @param int $lectureId id of the lecture
+     * @param int $userId id of the user to check
+     * @return string|null Check result
+     */
     public static function checkEditPolicy($lectureId, $userId) {
         $lecture = Lecture::find($lectureId);
         if (!$lecture)
-            return 'lecture-does-not-exist';
+            return 'Lecture does not exist';
         if ($lecture->speaker_id != $userId)
-            return 'restricted';
+            return 'Restricted';
         return null;
     }
 
+    /**
+     * Checks if user is authorized to schedule lecture (set start time, end time and room)
+     * @param int $lectureId id of the lecture
+     * @param int $userId id of the user to check
+     * @return string|null Check result
+     */
     public static function checkSchedulePolicy($lectureId, $userId) {
         $lecture = Lecture::find($lectureId);
         if (!$lecture)
             return 'Cannot find lecture';
+
         $conference = Conference::find($lecture->conference_id);
         if (!$conference)
             return 'Server error';
+
         if ($conference->owner_id != $userId)
             return 'Restricted';
+        
         return null;
     }
 }

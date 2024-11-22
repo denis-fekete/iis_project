@@ -43,7 +43,7 @@
 @foreach ($conferences->lectures as $item)
     @if($item->is_confirmed == true)
         <div class="card">
-            <p class="title_2" >{{$item->title}}</p>
+            <p class="title_2" ><a href="/lectures/lecture/{{$item->id}}">{{$item->title}}</a></p>
             <br>
             @if ($item->poster)
                 <img class="lecture-poster" src="{{$item->poster}}" alt="Placeholder image">

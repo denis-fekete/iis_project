@@ -22,16 +22,7 @@ Route::get('/', function () {
 });
 
 Route::get('/home', function () {
-    return view('home', ['user' => auth()->user()])
-        ->with('notification', [
-            'test notification',
-            'second notification test',
-            ]);
-});
-
-Route::get('/home1', function () {
-    return redirect('/home')
-        ->withErrors(['test' => 'Test error message']);
+    return view('home', ['user' => auth()->user()]);
 });
 
 // --------------------------------------------------------
@@ -41,7 +32,7 @@ Route::get('/home1', function () {
 Route::prefix('conferences')->group(function () {
     Route::get('/search', [ConferenceController::class, 'search']);
     Route::get('/dashboard', [ConferenceController::class, 'dashboard'])
-        ->middleware('auth'); // protect website => user must be logged in
+        ->middleware('auth');
     Route::get('/create', [ConferenceController::class, 'creationForm'])
         ->middleware('auth');
     Route::get('/edit/{id}', [ConferenceController::class, 'editForm'])
@@ -69,8 +60,7 @@ Route::prefix('conferences')->group(function () {
             ->middleware('auth');
         Route::post('/confirmReservation', [ConferenceController::class, 'confirmReservation'])
             ->middleware('auth');
-});
-
+    });
 });
 
 Route::prefix('lectures')->group(function () {
@@ -82,21 +72,29 @@ Route::prefix('lectures')->group(function () {
         ->middleware('auth');
     Route::get('/lecture/{id}', [LectureController::class, 'get']);
 
-    Route::post('/create', [LectureController::class, 'createPOST']);
-    Route::post('/editSave', [LectureController::class, 'editPOST']);
-    Route::post('/cancel', [LectureController::class, 'cancel']);
-
-    Route::post('/confirm', [LectureController::class, 'confirm']);
-    Route::post('/unconfirm', [LectureController::class, 'unconfirm']);
+    Route::post('/create', [LectureController::class, 'createPOST'])
+        ->middleware('auth');
+    Route::post('/editSave', [LectureController::class, 'editPOST'])
+        ->middleware('auth');
+    Route::post('/cancel', [LectureController::class, 'cancel'])
+        ->middleware('auth');
+    Route::post('/confirm', [LectureController::class, 'confirm'])
+        ->middleware('auth');
+    Route::post('/unconfirm', [LectureController::class, 'unconfirm'])
+        ->middleware('auth');
 });
 
 Route::prefix('reservations')->group(function () {
     Route::get('/reserve/{id}', [ReservationController::class, 'getForm']);
-    Route::get('/dashboard', [ReservationController::class, 'getAll']);
-    Route::get('/cancel/{id}', [ReservationController::class, 'cancel']);
-    Route::get('/schedule/{id}', [ReservationController::class, 'showSchedule']);
-    Route::post('/saveSchedule', [ReservationController::class, 'saveSchedule']);
+    Route::get('/dashboard', [ReservationController::class, 'getAll'])
+        ->middleware('auth');
+    Route::get('/cancel/{id}', [ReservationController::class, 'cancel'])
+        ->middleware('auth');
+    Route::get('/schedule/{id}', [ReservationController::class, 'showSchedule'])
+        ->middleware('auth');
 
+    Route::post('/saveSchedule', [ReservationController::class, 'saveSchedule'])
+        ->middleware('auth');
     Route::post('/reserve', [ReservationController::class, 'create'])
         ->middleware('auth');
 });

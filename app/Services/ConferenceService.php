@@ -163,12 +163,14 @@ class ConferenceService
         $reservationsViewModels = [];
         foreach ($reservations as $res) {
             $user = $res->user()->first();
+            $sum = $res->number_of_people * $conference->price;
             array_push($reservationsViewModels, [
                 'reservationId' => $res->id,
                 'userId' => $user->id,
                 'userName' => $user->name.' '.$user->surname,
                 'count' => $res->number_of_people,
                 'confirmed' => $res->is_confirmed,
+                'sum' => $sum,
             ]);
 
         }
