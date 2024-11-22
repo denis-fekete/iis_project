@@ -12,7 +12,9 @@
         <input class="form_input" type="url" name="poster" id="poster" value="{{$info["poster"]}}">
         <br>
         <label class="form_label" for="description">Description:</label>
-        <input class="form_input" type="text" name="description" id="description" value="{{$info["description"]}}" required>
+        <textarea class="form_input" type="textarea" name="description" id="description" required>
+            {{$info["description"]}}
+        </textarea>
         <br>
         <button type="submit">Save</button>
         <br>
