@@ -24,7 +24,7 @@
                 <tbody>
                     @foreach ($schedule as $lecture)
                         <tr>
-                            <td><a class="text_link" onclick="navigateTo('/lectures/lecture/{{ $lecture['id'] }}')">{{ $lecture['title'] }}</a></td>
+                            <td><a class="text_link" href="{{ config('app.url') }}/lectures/lecture/{{ $lecture['id'] }}">{{ $lecture['title'] }}</a></td>
                             <td>{{ $lecture['startTime'] }}</td>
                             <td>{{ $lecture['endTime'] }}</td>
                             <td>{{ $lecture['room'] }}</td>

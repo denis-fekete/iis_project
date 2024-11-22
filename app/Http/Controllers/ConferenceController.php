@@ -18,7 +18,6 @@ class ConferenceController extends Controller
      *
      * @return void search view with all conferences
      */
-    // public function search($themes, $orderBy, $orderDir, $searchString = null) {
     public function search() {
         $themes = request()->input('themes', null);
         $orderBy = request()->input('orderBy', 'Name');

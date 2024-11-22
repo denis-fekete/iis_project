@@ -65,7 +65,7 @@
     <div class="card">
         <p>Title: {{$item->title}} </p>
         <p>Time: {{$item->start_time}} </p>
-        <p>Conference: <a class="text_link" onclick="navigateTo('/conferences/conference/{{$item->conference->id}}')">{{$item->conference->title}}</a> </p>
+        <p>Conference: <a class="text_link"  href="{{ config('app.url') }}/conferences/conference/{{$item->conference->id}}">{{$item->conference->title}}</a> </p>
     </div>
     <br>
 @endforeach
@@ -79,7 +79,7 @@
     <div class="card">
         <p>Title: {{$item->title}} </p>
         <p>Time: {{$item->start_time}} </p>
-        <p>Conference: <a class="text_link" onclick="navigateTo('/conferences/conference/{{$item->conference->id}}')">{{$item->conference->title}}</a> </p>
+        <p>Conference: <a class="text_link"  href="{{ config('app.url') }}/conferences/conference/{{$item->conference->id}}">{{$item->conference->title}}</a> </p>
     </div>
     <br>
 @endforeach

@@ -9,7 +9,7 @@
 <div class="grid_vertical">
 @foreach ($reservations as $reservation)
     <div class="card">
-        <p class="title_2" >Conference: <a href="/conferences/conference/{{ $reservation['conferenceId']}}">{{ $reservation['conferenceName']}}</a></p>
+        <p class="title_2" >Conference: <a class="text_link"  href="{{ config('app.url') }}/conferences/conference/{{ $reservation['conferenceId']}}">{{ $reservation['conferenceName']}}</a></p>
         <p>From: {{ $reservation['startTime'] }}</p>
         <p>To: {{ $reservation['endTime'] }}</p>
         <p>Number of people: {{ $reservation['peopleCount'] }}</p>
@@ -44,10 +44,10 @@
     function warning(reservationId) {
         const popup = document.getElementById('warning');
         popup.style.display = 'block';
-    
+
         const confirmButton = document.getElementById('confirmCancel');
         confirmButton.onclick = function () {
-            window.location.href = `/reservations/cancel/${reservationId}`;
+            window.location.href = `{{ config('app.url') }}/reservations/cancel/${reservationId}`;
         };
     }
 

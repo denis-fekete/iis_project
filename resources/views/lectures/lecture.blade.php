@@ -15,7 +15,7 @@
     <div class="lecture-attributes">
 
 
-        <p>Conference: <a class="text_link" onclick="navigateTo('/conferences/conference/{{$data['conferenceId']}}')">{{ $data['conferenceName'] }}</a></p>
+        <p>Conference: <a class="text_link"  href="{{ config('app.url') }}/conferences/conference/{{$data['conferenceId']}}">{{ $data['conferenceName'] }}</a></p>
         @if ($data['startTime'] && $data['endTime'])
             <p>Start time: {{$data['startTime']}}</p>
             <p>End time: {{$data['endTime']}}</p>
@@ -23,7 +23,7 @@
         @if ($data['room'])
             <p>Room: {{ $data['room'] }}</p>
         @endif
-        <p>Speaker: <a class="text_link" onclick="navigateTo('/users/search/{{$data['ownerId']}}')">{{ $data['ownerName'] }}</a></p>
+        <p>Speaker: <a class="text_link"  href="{{ config('app.url') }}/users/search/{{$data['ownerId']}}">{{ $data['ownerName'] }}</a></p>
         <p>Confirmed: {{$data['isConfirmed'] ? 'yes' : 'no'}}</p>
     </div>
 

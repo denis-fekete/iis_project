@@ -44,8 +44,10 @@
 
     .navigation_button {
         align-content: center;
-        height: 2em ;
+        height: auto ;
         background-color: #FAAC40;
+
+        padding-block: 0.5em;
 
         color: #3E3C3E;
         font-size: 1.2em;

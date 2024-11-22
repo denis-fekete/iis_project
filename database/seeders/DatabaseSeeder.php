@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
         User::factory(10)->create();
         Conference::factory(10)->create();
         Room::factory(5)->create();
-        Lecture::factory(10)->create();
+        Lecture::factory(50)->create();
         Reservation::factory(30)->create();
         LectureSchedule::factory(30)->create();
 

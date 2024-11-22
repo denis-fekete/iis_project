@@ -58,7 +58,7 @@ Legend:
 ### Administrator
 - ✅ list users
     - ✅ set user roles
-    - ✅ create new users
+    - ❌ create new users
     - ✅ delete users
 - ✅ list conferences
     - ✅ delete conference
@@ -67,3 +67,65 @@ Legend:
     - ✅ list and edit reservations
 - ✅ logout
 - ✅ do everything that users and guest can do
+
+
+
+# -------------------------------------------------------------------
+
+
+### Conferences
+- list all conferences
+- search or filter conferences
+- see details about conference
+- list lectures of conference
+- ❌ see details about lecturer (list of lectures, own bio, etc...)
+- ❌ start reservation process without signing in or registering
+- list my conferences
+- create conference
+- enter conference edit mode
+- add lecture to my conference
+- add new rooms to my conference
+- list all offered lectures for my conferences
+- approve offered lectures, set time and place
+- list all potential and confirmed viewers
+- change state of viewers from potential to confirmed
+- see details about conference
+- list lecturers of conference
+- see details about lecturer (list of lectures, own bio, etc...)
+
+### Reservations
+- see all my reservations
+- cancel reservation
+- see all my reservations (store in cookies)
+- become visitor without doing anything
+- ❌ pay for a ticket
+- see if I am potential visitor or confirmed
+- cancel any of my reservation (potential and confirmed) 
+- see my schedule
+
+### Lectures
+- see details about lectures
+- add new presentation (plain text)
+- edit details
+- cancel lecture
+- see statistics (number of user that are planning to attend lecture)
+- list my lectures
+- do nothing and because confirmed speaker
+- see state (accepted/pending)
+
+### Users
+- register
+- sign in
+- logout
+
+
+### Administrator
+- list all users
+- search users
+- edit/delete users
+- change roles of users
+- search all conferences
+- edit/delete all conferences
+- manage lectures of conference
+- manage rooms of conference
+- manage reservations of conference

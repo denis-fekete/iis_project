@@ -54,14 +54,75 @@
 <h2>Implementace</h2>
 <p>Stručná dokumentace k implementaci, která popisuje, které části projektu (např. PHP skripty) implementují jednotlivé případy použití.</p>
 
-<h3></h3>
-<h4>AdminController.php</h4>
-<h4>AuthController.php</h4>
-<h4>ConferenceController.php</h4>
-<h4>LectureController.php</h4>
-<h4>ReservationController.php</h4>
-<h4>UserController.php</h4>
+<h4>Konferencie - ConferenceController.php</h4>
+<ul>
+<li>Zobraziť všetky konferencie</li>
+<li>Vyhľadávať a filtrovať konferencie</li>
+<li>Zobraziť detaily konferencie</li>
+<li>Zobraziť prednášky danej prezentácie</li>
+<li>❌ see details about lecturer (list of lectures, own bio, etc...)</li>
+<li>❌ start reservation process without signing in or registering</li>
+<br>
+<li>Vytvoriť novú konferenciu</li>
+<li>Zobraziť moje konferencie</li>
+<li>Upraviť moje konferencie</li>
+<li>Pridať miestnosti ku mojim konferenciám</li>
+<li>Zobraziť ponúknuté prenášky</li>
+<li>Potvrdiť ponúknuté prednášky a nastaviť im čas a miestnosť </li>
+<li>Zobraziť všetky rezervácie</li>
+<li>Potvrdiť rezervácie</li>
+<li>Zobraziť detaily prednášok ktoré boli ponúknuté k danej prednáške</li>
+<li>Zobraziť informácie o osobe ktoré prednášku ponukla</li>
+</ul>
 
+<h4>Rezervácie konferencií - ReservationController.php</h4>
+<ul>
+<li>Zobraziť moje rezervácie</li>
+<li>Zobraziť rezerváciu</li>
+<li>Zobrazenie stavu rezervácie (potvrdená, nepotvrdená)</li>
+<li>Zrušenie mojich rezervácií</li>
+<li>Zobraziť rozvrh prednášok pre konferenciu ktorej sa chcem účastniť</li>
+<li>Upraviť rozvrh prednášok pre konferenciu ktorej sa chcem účastniť</li>
+</ul>
+
+<h4>Prednášky - LectureController.php</h4>
+<ul>
+<li>Zobrazenie detailov o prednáške</li>
+<li>Správa detailov prednášky</li>
+<li>Zobrazenie mojich prednášok</li>
+<li>Zrušenie mojich prednášok</li>
+<li>Zobrazenie štatistík mojich prednášok</li>
+<li>Zobrazenie stavu prednášky (potvrdené, nepotvrdené)</li>
+</ul>
+
+<h4>Užívatelia UserController.php</h4>
+<ul>
+<li>Zobrazenie profilu užívateľa</li>
+<li>Zobrazenie potvrdených nadchádzajúcich a predošlých prednášok</li>
+<li>Upráva svojho profilu</li>
+<li>Vymazanie svojho profilu</li>
+</ul>
+
+<h4>Autorizácia - AuthController.php</h4>
+<ul>
+<li>Vytvorenie účtu</li>
+<li>Prihlásenie sa do existujúceho účtu</li>
+<li>Odhlásenie sa zo systému</li>
+</ul>
+
+<h4>Administratíva - AdminController.php</h4>
+<ul>
+<li>Zobrazenie všetkých užívateľov systému</li>
+<li>Vyhľadávanie užívateľov</li>
+<li>Upravovanie a mazanie užívateľov</li>
+<li>Správa rolí (oprávnení) užívateľov</li>
+<br>
+<li>Zobrazenie všetkých konferencií z pohľadu administrátora</li>
+<li>Upráva a mazanie ľubovolných konferencií</li>
+<li>Správa prednášok u konferencií</li>
+<li>Správa miestností u konferencií</li>
+<li>Správa rezervácií u konferencií</li>
+</ul>
 
 <h3>Databáze</h3>
 
