@@ -2,6 +2,7 @@
 
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<meta name="app-base-url" content="{{ env('APP_BASE_URL') }}">
 <div class="card">
     <h1 class="lecture-title">{{$data['title']}}</h1>
     <ph>
@@ -41,7 +42,8 @@
 <script>
 
 function cancelLecture(id) {
-    const url = 'lectures/cancel';
+    const baseUrl = document.querySelector('meta[name="app-base-url"]').getAttribute('content');
+    const url = `${baseUrl}/lectures/cancel`;
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     fetch(url, {
