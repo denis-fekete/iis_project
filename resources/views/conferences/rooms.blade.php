@@ -28,7 +28,7 @@
                 @foreach ($rooms as $room)
                     <tr>
                         <td>
-                            <form method="POST" action="{{url('conferences/conference/updateRoom')}}>
+                            <form method="POST" action="{{url('conferences/conference/updateRoom')}}">
                                 @csrf
                                 <input type="hidden" name="conference_id" value="{{ $id }}" />
                                 <input type="hidden" name="room_id" value={{ $room['id'] }} />
@@ -38,7 +38,7 @@
                         </td>
                         <td>
                             @if ($room['canBeDeleted'])
-                                <form method="POST" action="{{url('conferences/conference/deleteRoom')}}>
+                                <form method="POST" action="{{url('conferences/conference/deleteRoom')}}">
                                     @csrf
                                     <input type="hidden" name="conference_id" value="{{ $id }}" />
                                     <input type="hidden" name="room_id" value={{ $room['id'] }} />
