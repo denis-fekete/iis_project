@@ -32,7 +32,7 @@ Route::get('/home', function () {
 Route::prefix('conferences')->group(function () {
     Route::get('/search', [ConferenceController::class, 'search']);
     Route::get('/dashboard', [ConferenceController::class, 'dashboard'])
-        ->middleware('auth'); // protect website => user must be logged in
+        ->middleware('auth');
     Route::get('/create', [ConferenceController::class, 'creationForm'])
         ->middleware('auth');
     Route::get('/edit/{id}', [ConferenceController::class, 'editForm'])
