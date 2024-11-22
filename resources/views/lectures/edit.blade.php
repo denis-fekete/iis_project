@@ -6,7 +6,7 @@
         @csrf
         <input type="hidden" name="id" value="{{ $info['id'] }}">
         <label class="form_label" for="title">Tiltle:</label>
-        <input class="form_input" type="text" name="title" id="title" value="{{$info["title"]}}" required>
+        <input class="form_input" type="text" name="title" id="title" value="{{$info["title"]}}">
         <br>
         <label class="form_label" for="poster">Poster URL:</label>
         <input class="form_input" type="url" name="poster" id="poster" value="{{$info["poster"]}}">
