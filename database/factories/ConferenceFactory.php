@@ -26,17 +26,17 @@ class ConferenceFactory extends Factory
         $end_time = fake()->dateTimeBetween($start_time, (clone $start_time)->modify('+2 days'));
 
         return [
-            'title' => fake()->words(5, true),
-            'description' => fake()->words(300, true),
-            'theme' => $theme,
+            'title' => fake()->sentence(),
+            'description' => fake()->paragraphs(3, true),
+            'theme' => $theme->value,
             'start_time' => $start_time,
             'end_time' => $end_time,
             'place_address' => fake()->address(),
             'price' => fake()->randomFloat(2, 0, 10000),
             'capacity' => fake()->numberBetween(1, 10000),
             'owner_id' => User::all()->random()->id,
-            'poster' => 'https://i.ibb.co/dfXSZTr/ca8dbc8b-4616-43af-b058-8b3ca681bd6a.webp',
-            'bank_account' => 'CZ1111000000111111111111',
+            'poster' => 'https://picsum.photos/seed/' . $theme->value . '/1200/400',
+            'bank_account' => 'CZ' . ((string)fake()->numberBetween(100000000000000000000, 999999999999999999999)),
         ];
     }
 }

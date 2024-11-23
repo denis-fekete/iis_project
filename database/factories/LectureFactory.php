@@ -21,19 +21,19 @@ class LectureFactory extends Factory
     {
         $conference = Conference::all()->random();
         $start_time = fake()->dateTimeBetween($conference->start_time, $conference->end_time);
-        $end_time = fake()->dateTimeBetween($start_time, (clone $start_time)->modify('+2 days'));
+        $end_time = fake()->dateTimeBetween($start_time, (clone $start_time)->modify('+6 hours'));
+        $title = fake()->sentence();
 
         return [
-            'title' => fake()->words(4, true),
-            'poster' => fake()->words(10, true),
-            'description' => fake()->words(59, true),
+            'title' => $title,
+            'description' => fake()->paragraphs(3, true),
             'is_confirmed' => fake()->boolean(),
             'start_time' => $start_time,
             'end_time' => $end_time,
             'speaker_id' => User::all()->random()->id,
             'conference_id' => $conference->id,
             'room_id' => Room::all()->random()->id,
-            'poster' => 'https://i.ibb.co/fQwgJqW/fb3acb40-b79c-44ee-a6ef-7573ad349d36.webp',
+            'poster' => 'https://picsum.photos/seed/' . $title . '/1200/400',
         ];
     }
 }

@@ -207,7 +207,9 @@ class ConferenceService
      * @return void Array of conferences
      */
     public static function getMy($id) {
-        return Conference::where('owner_id', $id)->get();
+        return Conference::where('owner_id', $id)
+            ->orderBy('start_time', 'desc')
+            ->get();
     }
 
     /**
