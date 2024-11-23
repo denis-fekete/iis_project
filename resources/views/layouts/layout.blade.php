@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IIS Project</title>
 </head>
 <body>
     @include('layouts.common_styles')
@@ -27,7 +28,7 @@
             <div class="page_footer" id="page_footer">
                 <div class="div_center">
                     <div class="grid_horizontal">
-                        <a class="text_link" href="{{ config('app.url') }}/doc.html" >Documentation</a>
+                        <a class="text_link" href="https://www.stud.fit.vutbr.cz/~xfeket01/IIS/doc.html" >Documentation</a>
                     </div>
                 </div>
             </div>
