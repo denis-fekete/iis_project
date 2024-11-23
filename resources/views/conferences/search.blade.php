@@ -73,7 +73,7 @@
 @foreach ($conferences as $item)
     @if(isset($info['role']) && $info['role'] == 'admin')
         <div class="card">
-            <p class="card_title">{{$item->title}}</p>
+            <p class="title">{{$item->title}}</p>
             @if ($item->poster)
                 <img class="card_image" src="{{$item->poster}}" alt="Placeholder image">
             @endif
@@ -110,7 +110,7 @@
         const direction = document.getElementById('direction_selector').value;
         const search = document.getElementById('searchString').value;
 
-        navigateTo("/conferences/search?" +
+        navigateTo("/search?" +
             "themes=" + theme + "&" +
             "order=" + order + "&" +
             "directions=" + direction + "&" +

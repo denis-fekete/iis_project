@@ -29,9 +29,9 @@ class AdminController extends Controller
     public function conferencesSearch() {
         if(AdminService::amIAdmin()) {
             $themes = request()->input('themes', null);
-            $orderBy = request()->input('orderBy', 'Name');
-            $orderDir = request()->input('orderDir', 'asc');
-            $searchString = request()->input('searchFor', null);
+            $orderBy = request()->input('order', 'Name');
+            $orderDir = request()->input('directions', 'asc');
+            $searchString = request()->input('search', null);
 
             $conferences = ConferenceService::getAllShortDescription($themes, $orderBy, $orderDir, $searchString);
 
@@ -42,7 +42,7 @@ class AdminController extends Controller
                     'directions' => OrderDirection::cases(),
                     'orders' => OrderBy::cases(),
                     'default_theme' => $themes,
-                    'default_orders' => $orderBy,
+                    'default_order' => $orderBy,
                     'default_directions' => $orderDir,
                     'default_search' => $searchString,
                     'role' => auth()->user()->role,
