@@ -25,7 +25,11 @@
 
         <footer>
             <div class="page_footer" id="page_footer">
-                <p>License</p>
+                <div class="div_center">
+                    <div class="grid_horizontal">
+                        <a class="text_link" href="{{ config('app.url') }}/doc.html" >Documentation</a>
+                    </div>
+                </div>
             </div>
         </footer>
     </div>  {{-- body_container --}}
