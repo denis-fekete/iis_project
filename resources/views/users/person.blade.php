@@ -1,6 +1,18 @@
 @extends('layouts.layout')
 
 @section('content')
+<script>
+    function showConfirm(id) {
+        document.getElementById('form' + id).style.display = "flex";
+        document.getElementById('warn' + id).style.display = "none";
+    }
+
+    function hideConfirm(id) {
+        document.getElementById('form' + id).style.display = "none";
+        document.getElementById('warn' + id).style.display = "block";
+    }
+</script>
+
 <div class="title_block">
     <p class="title">Profile</p>
 </div>
@@ -49,11 +61,22 @@
         </form>
         <button onclick="exitEdit()">Exit editing</button>
 
-        <form action="{{ url('/users/delete') }}" method="post">
-            @csrf
-            <input type="text" name="user_id" value="{{$person->id}}" hidden>
-            <input type="submit" class="delete_btn" value="Delete account">
-        </form>
+
+        <div class="grid_horizontal">
+            <div class="grid_horizontal" id="warn{{ $user->id }}">
+                <button class="delete_btn" onclick="showConfirm('{{ $user->id }}')" id="warn{{ $user->id }}">Delete</button>
+            </div>
+
+            <div class="grid_horizontal" id="form{{ $user->id }}" style="display: none">
+                <button onclick="hideConfirm('{{ $user->id }}')">Cancel</button>
+
+                <form action="{{ url('/users/delete?force=false') }}" method="post" >
+                    @csrf
+                    <input type="text" name="user_id" value="{{$user->id}}" hidden>
+                    <input type="submit" class="delete_btn" value="Delete account">
+                </form>
+            </div>
+        </div>
     </div>
 @endif
 

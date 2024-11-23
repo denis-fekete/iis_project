@@ -9,7 +9,9 @@ pack:
 		app/Services/* \
 		database/migrations/* \
 		routes/web.php \
-		docs/doc.html
+		docs/doc.html \
+		docs/DB_Scheme.png \
+		docs/use_case_diagram.svg
 
 clean:
 	rm -f ./*.zip

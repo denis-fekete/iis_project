@@ -6,54 +6,67 @@
     <p class="title">Search</h1>
 </div>
 
-<div class="card">
-    <fieldset class="radio_box">
-        <input type="radio" name="themes" value=""
-                @if ($info['default_theme'] == "")
-                    checked
-                @endif
-        >
-        <label>All</label>
-        @foreach ($info['themes'] as $item)
-            <input type="radio" name="themes" value="{{$item->value}}"
-                @if ($item->value == $info['default_theme'])
-                    checked
-                @endif
-            >
-            <label>{{$item->value}}</label>
-        @endforeach
-    </fieldset>
-    <fieldset class="radio_box">
-        @foreach ($info['orders'] as $item)
-            <input type="radio" name="orders" value="{{$item->value}}"
-                @if ($item->value == $info['default_orders'])
-                    checked
-                @endif
-            >
-            <label>{{$item->value}}</label>
-        @endforeach
-    </fieldset>
-    <fieldset class="radio_box">
-        <input type="radio" name="directions" value="asc"
-            @if ("asc" == $info['default_directions'])
-                checked
-            @endif
-            >
-        <label>Ascending</label>
-        <input type="radio" name="directions" value="desc"
-            @if ("desc" == $info['default_directions'])
-                checked
-            @endif
-            >
-        <label>Descending</label>
-    </fieldset>
-    <input type="text" name="search" id="searchString"
+<div class="div_center">
+<div class="filter">
+    <label for="search">Search for title:</label>
+    <input class="search" style="width: 100%;" type="text" name="search" id="searchString"
         @isset($info['default_search'])
             value="{{$info['default_search']}}"
         @endisset
         >
-    <br>
-    <input type="submit" onclick="applyFilters()" value="Apply">
+    <br><br>
+
+    <label for="theme">Theme:</label>
+    <select type="text" name="themes" id="theme_selector">
+        <option value=""
+            @if ($info["default_theme"] == "")
+                selected
+            @endif
+            >All
+        </option>
+        @foreach ($info['themes'] as $theme)
+            <option value="{{$theme->value}}"
+                @if ($theme->value == old('themes', $info["default_theme"]))
+                    selected
+                @endif
+                >{{$theme->value}}
+            </option>
+        @endforeach
+    </select>
+
+    <label for="orders">Order by:</label>
+    <select type="text" name="orders" id="order_selector">
+        @foreach ($info['orders'] as $order)
+            <option value="{{$order->value}}"
+                @if ($order->value == old('order', $info["default_order"]))
+                    selected
+                @endif
+                >{{$order->value}}
+            </option>
+        @endforeach
+    </select>
+
+    <label for="directions">Direction:</label>
+    <select type="text" name="directions" id="direction_selector">
+        @foreach ($info['directions'] as $order)
+            <option value="{{$order->value}}"
+                @if ($order->value == old('directions', $info["default_directions"]))
+                    selected
+                @endif
+                >
+                @if($order->value == "asc")
+                    Ascending
+                @else
+                    Descending
+                @endif
+            </option>
+        @endforeach
+    </select>
+    <br><br>
+    <div class="div_center">
+        <input type="submit" style="width: 20%;" onclick="applyFilters()" value="Apply">
+    </div>
+</div>
 </div>
 
 <div class="grid_vertical_2_collumns">
@@ -92,16 +105,16 @@
 
 <script>
     function applyFilters() {
-        const theme = document.querySelector('input[name="themes"]:checked')?.value;
-        const order = document.querySelector('input[name="orders"]:checked')?.value;
-        const direction = document.querySelector('input[name="directions"]:checked')?.value;
-        let search = document.getElementById('searchString').value;
+        const theme = document.getElementById('theme_selector').value;
+        const order = document.getElementById('order_selector').value;
+        const direction = document.getElementById('direction_selector').value;
+        const search = document.getElementById('searchString').value;
 
         navigateTo("/conferences/search?" +
             "themes=" + theme + "&" +
-            "orderBy=" + order + "&" +
-            "orderDir=" + direction + "&" +
-            "searchFor=" + search
+            "order=" + order + "&" +
+            "directions=" + direction + "&" +
+            "search=" + search
             );
     }
 </script>

@@ -202,26 +202,31 @@ class UserService
         return ''; // everything was alright, return no error message
     }
 
-    public static function delete($id) {
+    public static function delete($id, $force) {
         $user = User::find($id);
 
-        $conferences = Conference::where('owner_id', $id)
-            ->where('end_time', '>', Carbon::now())
-            ->get();
+        if($force == 'false' ) {
+            $conferences = Conference::where('owner_id', $id)
+                ->where('end_time', '>', Carbon::now())
+                ->get();
 
-        if($conferences->count() !== 0) {
-            return "User account cannot be deleted: User has planned conferences for the future";
+            if($conferences->count() !== 0) {
+                return "User account cannot be deleted: User has planned conferences for the future";
+            }
+
+            $lectures = Lecture::where('speaker_id', $id)
+                ->where('is_confirmed', true)
+                ->where('end_time', '>', Carbon::now())
+                ->get();
+
+            if($lectures->count() !== 0) {
+                return "User account cannot be deleted: User has planned lectures for the future";
+            }
+        } else {
+            if(AdminService::amIAdmin() === false) {
+                return "You do not have a permissions to force delete user";
+            }
         }
-
-        $lectures = Lecture::where('speaker_id', $id)
-            ->where('is_confirmed', true)
-            ->where('end_time', '>', Carbon::now())
-            ->get();
-
-        if($lectures->count() !== 0) {
-            return "User account cannot be deleted: User has planned lectures for the future";
-        }
-
 
         if($user !== null) {
             $user->delete();

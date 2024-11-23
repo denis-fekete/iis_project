@@ -82,6 +82,24 @@
         box-shadow: 2px 2px 5px #3E3C3E;
     }
 
+    .div_center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+    }
+
+    .filter {
+        background-color: #E1DDA8;
+        margin-inline: 2%;
+        padding: 1em;
+        padding-bottom: 1em;
+        border-radius: 20px;
+        box-shadow: 2px 2px 5px #3E3C3E;
+        width: 40%;
+        display: block;
+    }
+
     /* --------------------------------------------------------------------- */
     /* Inputs */
     /* --------------------------------------------------------------------- */
@@ -117,7 +135,7 @@
     }
 
     select {
-        background-color: transparent;
+        background-color: #EEEBCC;
         padding: 0.2em;
     }
 

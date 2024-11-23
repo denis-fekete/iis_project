@@ -37,7 +37,6 @@ Legend:
     - ✅ see details                        
         - ✅ edit details
         - ✅ add new presentation (plain text)
-    - ❌ see statistics (number of user that are planning to attend lecture)
     - ✅ see state (accepted/pending)
     - ✅ cancel lecture
 - ✅ list my conferences
@@ -76,8 +75,8 @@ Legend:
 - search or filter conferences
 - see details about conference
 - list lectures of conference
-- ❌ see details about lecturer (list of lectures, own bio, etc...)
-- ❌ start reservation process without signing in or registering
+- see details about lecturer (list of lectures, own bio, etc...)
+- start reservation process without signing in or registering
 - list my conferences
 - create conference
 - enter conference edit mode

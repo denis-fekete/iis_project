@@ -18,11 +18,11 @@ class ConferenceController extends Controller
      *
      * @return void search view with all conferences
      */
-    public function search() {
-        $themes = request()->input('themes', null);
-        $orderBy = request()->input('orderBy', 'Name');
-        $orderDir = request()->input('orderDir', 'asc');
-        $searchString = request()->input('searchFor', null);
+    public function search(Request $request) {
+        $themes = $request->input('themes', null);
+        $orderBy = $request->input('order', 'Name');
+        $orderDir = $request->input('directions', 'asc');
+        $searchString = $request->input('search', null);
 
         $conferences = ConferenceService::getAllShortDescription($themes, $orderBy, $orderDir, $searchString);
 
@@ -33,7 +33,7 @@ class ConferenceController extends Controller
                 'directions' => OrderDirection::cases(),
                 'orders' => OrderBy::cases(),
                 'default_theme' => $themes,
-                'default_orders' => $orderBy,
+                'default_order' => $orderBy,
                 'default_directions' => $orderDir,
                 'default_search' => $searchString,
                 ]);

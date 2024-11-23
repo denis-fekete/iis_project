@@ -98,10 +98,11 @@ class UserController extends Controller
      */
     public function delete(Request $request) {
         $userToDelete = $request->input('user_id');
+        $force = $request->input('force');
         $user = auth()->user();
 
         if($user !== null && ($user->id == $userToDelete || AdminService::amIAdmin())) {
-            $res = UserService::delete($userToDelete);
+            $res = UserService::delete($userToDelete, $force);
             return redirect()->back()
                 ->with('notification', [$res]);
         } else {

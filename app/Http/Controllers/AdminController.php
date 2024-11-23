@@ -61,13 +61,14 @@ class AdminController extends Controller
      */
     public function usersSearch() {
         if(AdminService::amIAdmin()) {
-            $orderDir = request()->input('orderDir', 'asc');
-            $searchString = request()->input('searchFor', null);
+            $orderDir = request()->input('order', 'asc');
+            $searchString = request()->input('search', null);
 
             $users = UserService::search($orderDir, $searchString);
             return view('admin.users.search')
                 ->with('users', $users)
                 ->with('info', [
+                    'directions' => OrderDirection::cases(),
                     'default_directions' => $orderDir,
                     'default_search' => $searchString,
                     'roles' => RoleType::cases(),
