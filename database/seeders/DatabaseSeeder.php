@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
         Room::factory(10)->create();
 
         $this->setupUser(
-            'pepa@pepa.com',
+            'pepa@pepa.cz',
             'pepa',
             'Pepa',
             'Pepik',
@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
         );
 
         $this->setupUser(
-            'franta@franta.com',
+            'franta@franta.cz',
             'franta',
             'Franta',
             'František',
