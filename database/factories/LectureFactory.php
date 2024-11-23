@@ -22,14 +22,12 @@ class LectureFactory extends Factory
         $conference = Conference::all()->random();
         $rooms = $conference->rooms;
         $roomId = $rooms->isNotEmpty() ? $rooms->random()->id : null;
-        if($roomId = null) {
-            Room::create([
-                'name' => fake()->words(1, true),
+
+        if($roomId == null) {
+            Room::factory(1)->create([
                 'conference_id' => $conference->id,
             ]);
-
-            $rooms = $conference->rooms;
-            $roomId = $rooms->random()->id;
+            $roomId = $rooms->isNotEmpty() ? $rooms->random()->id : null;
         }
 
         $start_time = fake()->dateTimeBetween($conference->start_time, $conference->end_time);

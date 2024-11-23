@@ -25,8 +25,22 @@ class DatabaseSeeder extends Seeder
     {
         User::factory(5)->create();
 
-        Conference::factory(5)->create();
-        Room::factory(10)->create();
+        Conference::factory(20)
+            ->create()
+            ->each(function ($conference) {
+                $roomsCnt = fake()->numberBetween(1, 5);
+                Room::factory($roomsCnt)->create([
+                    'conference_id' => $conference->id,
+                ]);
+
+                $lecturesCnt = fake()->numberBetween(1, 5);
+                Lecture::factory($lecturesCnt)->create([
+                    'conference_id' => $conference->id,
+                    'room_id' => $conference->rooms->random()->id,
+                ]);
+            });
+
+        Reservation::factory(50)->create();
 
         $this->setupUser(
             'pepa@pepa.cz',
@@ -50,14 +64,6 @@ class DatabaseSeeder extends Seeder
             30
         );
 
-        User::factory(40)->create();
-
-        Conference::factory(10)->create();
-        Lecture::factory(10)->create();
-        Reservation::factory(20)->create();
-
-        Room::factory(200)->create();
-        LectureSchedule::factory(30)->create();
 
         $realWorldSeedsUser = $this->setupUser(
             'admin@admin.com',
@@ -69,7 +75,6 @@ class DatabaseSeeder extends Seeder
             0,
             10
         );
-
 
         self::realWorldSeeds($realWorldSeedsUser->id);
     }
@@ -85,114 +90,61 @@ class DatabaseSeeder extends Seeder
 
         $allThemes = Themes::cases();
         $count = count(Themes::cases());
-        $bankAccount = 'CZ' . ((string)fake()->numberBetween(100000000000000000000, 999999999999999999999));
 
         if($conferences > 0) {
             // create atleast one past conference
             $theme = $allThemes[fake()->numberBetween(0, $count - 1)];
             $start_time = fake()->dateTimeBetween('-6 months', '-1 months');
             $end_time = fake()->dateTimeBetween($start_time, (clone $start_time)->modify('+2 days'));
-            $conference = Conference::create([
-                'title' => fake()->sentence(),
-                'description' => fake()->paragraphs(3, true),
-                'theme' => $theme->value,
+
+            $conference = Conference::factory()->create([
                 'start_time' => $start_time,
                 'end_time' => $end_time,
-                'place_address' => fake()->address(),
-                'price' => fake()->randomFloat(2, 10, 1000),
-                'capacity' => fake()->numberBetween(20, 500),
                 'owner_id' => $user->id,
-                'poster' => 'https://picsum.photos/seed/' . $theme->value . '/1200/400',
-                'bank_account' => $bankAccount,
             ]);
 
             $start_time = fake()->dateTimeBetween($conference->start_time, $conference->end_time);
             $end_time = fake()->dateTimeBetween($start_time, (clone $start_time)->modify('+6 hours'));
             $title = fake()->sentence();
 
-            Lecture::create([
-                'title' => $title,
-                'description' => fake()->paragraphs(3, true),
+            Room::factory(1)->create([
+                'conference_id' => $conference->id,
+            ]);
+
+            Lecture::factory()->create([
                 'is_confirmed' => true,
                 'start_time' => $start_time,
                 'end_time' => $end_time,
                 'speaker_id' => $user->id,
                 'conference_id' => $conference->id,
                 'room_id' => Room::all()->random()->id,
-                'poster' => 'https://picsum.photos/seed/' . $title . '/1200/400',
             ]);
         }
 
-        for($i = 0; $i < $conferences - 1; $i++) {
-            $theme = $allThemes[fake()->numberBetween(0, $count - 1)];
-            $start_time = fake()->dateTimeBetween('-4 months', '+12 months');
-            $end_time = fake()->dateTimeBetween($start_time, (clone $start_time)->modify('+2 days'));
-            $adminConference = Conference::create([
-                'title' => fake()->sentence(),
-                'description' => fake()->paragraphs(3, true),
-                'theme' => $theme->value,
-                'start_time' => $start_time,
-                'end_time' => $end_time,
-                'place_address' => fake()->address(),
-                'price' => fake()->randomFloat(2, 10, 1000),
-                'capacity' => fake()->numberBetween(20, 500),
+        Conference::factory($conferences)
+            ->create([
                 'owner_id' => $user->id,
-                'poster' => 'https://picsum.photos/seed/' . $theme->value . '/1200/400',
-                'bank_account' => $bankAccount,
-            ]);
+            ])
+            ->each(function ($conference) {
+                $roomsCnt = fake()->numberBetween(1, 5);
+                Room::factory($roomsCnt)->create([
+                    'conference_id' => $conference->id,
+                ]);
 
+                $lecturesCnt = fake()->numberBetween(0, 5);
+                Lecture::factory($lecturesCnt)->create([
+                    'conference_id' => $conference->id,
+                    'room_id' => $conference->rooms->random()->id,
+                ]);
+            });
 
-            $start_time = fake()->dateTimeBetween($adminConference->start_time, $adminConference->end_time);
-            $end_time = fake()->dateTimeBetween($start_time, (clone $start_time)->modify('+6 hours'));
-            $title = fake()->sentence();
+        Lecture::factory($lectures)->create([
+            'speaker_id' => $user->id,
+        ]);
 
-            Lecture::create([
-                'title' => $title,
-                'description' => fake()->paragraphs(3, true),
-                'is_confirmed' => fake()->boolean(),
-                'start_time' => $start_time,
-                'end_time' => $end_time,
-                'speaker_id' => User::all()->random()->id,
-                'conference_id' => $adminConference->id,
-                'room_id' => Room::all()->random()->id,
-                'poster' => 'https://picsum.photos/seed/' . $title . '/1200/400',
-            ]);
-        }
-
-        for($i = 0; $i < $lectures; $i++) {
-            $conference = Conference::all()->random();
-            $start_time = fake()->dateTimeBetween($conference->start_time, $conference->end_time);
-            $end_time = fake()->dateTimeBetween($start_time, (clone $start_time)->modify('+6 hours'));
-            $title = fake()->sentence();
-
-            Lecture::create([
-                'title' => $title,
-                'description' => fake()->paragraphs(3, true),
-                'is_confirmed' => fake()->boolean(),
-                'start_time' => $start_time,
-                'end_time' => $end_time,
-                'speaker_id' => $user->id,
-                'conference_id' => $conference->id,
-                'room_id' => Room::all()->random()->id,
-                'poster' => 'https://picsum.photos/seed/' . $title . '/1200/400',
-            ]);
-        }
-
-        for($i = 0; $i < $reservations; $i++) {
-            $conference = Conference::all()->random();
-            $capacity_left = ConferenceService ::capacityLeft($conference->id);
-            if($capacity_left <= 1) {
-                $conference->capacity += 10;
-                $conference->save();
-                $capacity_left = ConferenceService ::capacityLeft($conference->id);
-            }
-            Reservation::create([
-                'is_confirmed' => fake()->boolean(),
-                'user_id' => $user->id,
-                'conference_id' => $conference->id,
-                'number_of_people' => fake()->numberBetween(1, $capacity_left / 5),
-            ]);
-        }
+        Reservation::factory($reservations)->create([
+            'user_id' => $user->id,
+        ]);
 
         return $user;
     }

@@ -18,19 +18,15 @@ use App\Services\RoomService;
 // --------------------------------------------------------
 
 Route::get('/', function () {
-    return redirect('home');
+    return redirect('search');
 });
-
-Route::get('/home', function () {
-    return view('home', ['user' => auth()->user()]);
-});
+Route::get('/search', [ConferenceController::class, 'search']);
 
 // --------------------------------------------------------
 //
 // --------------------------------------------------------
 
 Route::prefix('conferences')->group(function () {
-    Route::get('/search', [ConferenceController::class, 'search']);
     Route::get('/dashboard', [ConferenceController::class, 'dashboard'])
         ->middleware('auth');
     Route::get('/create', [ConferenceController::class, 'creationForm'])

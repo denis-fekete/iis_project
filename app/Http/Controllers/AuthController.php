@@ -32,7 +32,7 @@ class AuthController extends Controller
                 if($returnUrl !== null) {
                     return redirect($returnUrl);
                 } else {
-                    return redirect('/home');
+                    return redirect('/');
                 }
             }
         } else {

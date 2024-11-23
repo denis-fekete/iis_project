@@ -1,9 +1,5 @@
 <div class="navigation">
-    <button class="navigation_button" onclick="navigateTo('/home')" >
-        Home
-    </button>
-
-    <button class="navigation_button" onclick="navigateTo('/conferences/search')">
+    <button class="navigation_button" onclick="navigateTo('/search')">
         Search
     </button>
 
@@ -19,13 +15,13 @@
             Reservations
         </button>
         <button class="navigation_button" onclick="navigateTo('/lectures/dashboard')">
-            My Lectures
+            Lectures
         </button>
         <button class="navigation_button" onclick="navigateTo('/conferences/dashboard')">
-            My Conferences
+            Conferences
         </button>
         <button class="navigation_button" onclick="navigateTo('/users/profile')">
-            My profile
+            Profile
         </button>
         <button class="navigation_button" onclick="navigateTo('/auth/logout')">
             Logout
