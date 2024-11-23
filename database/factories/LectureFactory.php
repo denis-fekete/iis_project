@@ -20,6 +20,18 @@ class LectureFactory extends Factory
     public function definition(): array
     {
         $conference = Conference::all()->random();
+        $rooms = $conference->rooms;
+        $roomId = $rooms->isNotEmpty() ? $rooms->random()->id : null;
+        if($roomId = null) {
+            Room::create([
+                'name' => fake()->words(1, true),
+                'conference_id' => $conference->id,
+            ]);
+
+            $rooms = $conference->rooms;
+            $roomId = $rooms->random()->id;
+        }
+
         $start_time = fake()->dateTimeBetween($conference->start_time, $conference->end_time);
         $end_time = fake()->dateTimeBetween($start_time, (clone $start_time)->modify('+6 hours'));
         $title = fake()->sentence();
@@ -32,7 +44,7 @@ class LectureFactory extends Factory
             'end_time' => $end_time,
             'speaker_id' => User::all()->random()->id,
             'conference_id' => $conference->id,
-            'room_id' => Room::all()->random()->id,
+            'room_id' => $roomId,
             'poster' => 'https://picsum.photos/seed/' . $title . '/1200/400',
         ];
     }

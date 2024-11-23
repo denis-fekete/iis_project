@@ -56,7 +56,7 @@ class DatabaseSeeder extends Seeder
         Lecture::factory(10)->create();
         Reservation::factory(20)->create();
 
-        Room::factory(10)->create();
+        Room::factory(200)->create();
         LectureSchedule::factory(30)->create();
 
         $realWorldSeedsUser = $this->setupUser(
@@ -218,6 +218,11 @@ class DatabaseSeeder extends Seeder
             ]);
 
             foreach($item['lectures'] as $lecture) {
+                $room = Room::create([
+                    'name' => fake()->words(1, true),
+                    'conference_id' => $conference->id,
+                ]);
+
                 $start_time = fake()->dateTimeBetween($conference->start_time, $conference->end_time);
                 $end_time = fake()->dateTimeBetween($start_time, (clone $start_time)->modify('+6 hours'));
                 Lecture::create([
@@ -228,7 +233,7 @@ class DatabaseSeeder extends Seeder
                     'end_time' => $end_time,
                     'speaker_id' => $userId,
                     'conference_id' => $conference->id,
-                    'room_id' => Room::all()->random()->id,
+                    'room_id' => $room->id,
                     'poster' => $lecture['poster'],
                 ]);
             }
