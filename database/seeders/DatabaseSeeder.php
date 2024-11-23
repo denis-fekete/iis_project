@@ -13,6 +13,7 @@ use App\Models\Reservation;
 use App\Models\Room;
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use App\Services\ConferenceService;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -98,8 +99,8 @@ class DatabaseSeeder extends Seeder
                 'start_time' => $start_time,
                 'end_time' => $end_time,
                 'place_address' => fake()->address(),
-                'price' => fake()->randomFloat(2, 0, 10000),
-                'capacity' => fake()->numberBetween(1, 10000),
+                'price' => fake()->randomFloat(2, 10, 1000),
+                'capacity' => fake()->numberBetween(20, 500),
                 'owner_id' => $user->id,
                 'poster' => 'https://picsum.photos/seed/' . $theme->value . '/1200/400',
                 'bank_account' => $bankAccount,
@@ -133,8 +134,8 @@ class DatabaseSeeder extends Seeder
                 'start_time' => $start_time,
                 'end_time' => $end_time,
                 'place_address' => fake()->address(),
-                'price' => fake()->randomFloat(2, 0, 10000),
-                'capacity' => fake()->numberBetween(1, 10000),
+                'price' => fake()->randomFloat(2, 10, 1000),
+                'capacity' => fake()->numberBetween(20, 500),
                 'owner_id' => $user->id,
                 'poster' => 'https://picsum.photos/seed/' . $theme->value . '/1200/400',
                 'bank_account' => $bankAccount,
@@ -179,10 +180,17 @@ class DatabaseSeeder extends Seeder
 
         for($i = 0; $i < $reservations; $i++) {
             $conference = Conference::all()->random();
+            $capacity_left = ConferenceService ::capacityLeft($conference->id);
+            if($capacity_left <= 1) {
+                $conference->capacity += 10;
+                $conference->save();
+                $capacity_left = ConferenceService ::capacityLeft($conference->id);
+            }
             Reservation::create([
                 'is_confirmed' => fake()->boolean(),
                 'user_id' => $user->id,
                 'conference_id' => $conference->id,
+                'number_of_people' => fake()->numberBetween(1, $capacity_left / 5),
             ]);
         }
 
@@ -202,8 +210,8 @@ class DatabaseSeeder extends Seeder
                 'start_time' => $start_time,
                 'end_time' => $end_time,
                 'place_address' => fake()->address(),
-                'price' => fake()->randomFloat(2, 0, 10000),
-                'capacity' => fake()->numberBetween(1, 10000),
+                'price' => $item['price'],
+                'capacity' => $item['capacity'],
                 'owner_id' => $userId,
                 'poster' => $item['poster'],
                 'bank_account' => $bankAccount,
@@ -215,7 +223,7 @@ class DatabaseSeeder extends Seeder
                 Lecture::create([
                     'title' => $lecture['title'],
                     'description' => $lecture['desc'],
-                    'is_confirmed' => fake()->boolean(),
+                    'is_confirmed' => true,
                     'start_time' => $start_time,
                     'end_time' => $end_time,
                     'speaker_id' => $userId,
@@ -227,11 +235,16 @@ class DatabaseSeeder extends Seeder
 
             for($i = 0; $i < 10; $i++) {
                 $conference = Conference::all()->random();
-                Reservation::create([
-                    'is_confirmed' => fake()->boolean(),
-                    'user_id' => User::all()->random()->id,
-                    'conference_id' => $conference->id,
-                ]);
+
+                $capacity_left =ConferenceService::capacityLeft($conference->id);
+                if($capacity_left > 1) {
+                    Reservation::create([
+                        'is_confirmed' => fake()->boolean(),
+                        'user_id' => User::all()->random()->id,
+                        'conference_id' => $conference->id,
+                        'number_of_people' => fake()->numberBetween(1, $capacity_left / 5),
+                    ]);
+                }
             }
         }
     }
@@ -242,6 +255,8 @@ class DatabaseSeeder extends Seeder
             "title" => "AI & ML Horizons: Unlocking the Future of Intelligent Systems",
             'theme' => "Artificial Intelligence and Machine Learning",
             "desc" => "Join us at the premier conference on Artificial Intelligence and Machine Learning, where innovation meets expertise. Explore groundbreaking research, transformative applications, and cutting-edge advancements in AI and ML technologies. This event brings together visionaries, researchers, and practitioners from around the globe to share insights, discuss trends, and inspire innovation. Whether you're a seasoned expert or an enthusiastic newcomer, immerse yourself in keynotes, interactive workshops, and engaging lectures tailored to fuel your passion for intelligent systems. Be part of the conversation shaping the future of AI and ML. Reserve your spot today!",
+            "price" => 300,
+            "capacity" => 160,
             "poster" => "https://media.geeksforgeeks.org/wp-content/uploads/20230911173805/What-is-Artiificial-Intelligence(AI).webp",
             "lectures" => [
                 [
@@ -265,6 +280,8 @@ class DatabaseSeeder extends Seeder
             "title" => "A plan to mastering productivity: Strategies for Optimal Time Management",
             "theme" => "Productivity and Time Management",
             "desc" => "In a world filled with endless notifications, emails, and multitasking demands, staying focused has become a superpower. This lecture delves into the neuroscience of attention, exploring how our brains respond to distractions and what we can do to maintain deep focus. Learn about techniques like the Pomodoro Technique, time-blocking, and digital detox strategies to reclaim your attention. Through real-world examples and hands-on exercises, participants will leave equipped with practical methods to minimize distractions and create a focus-driven work environment. Perfect for anyone looking to boost concentration and productivity in their personal or professional life.",
+            "price" => 280,
+            "capacity" => 120,
             "poster" => "https://www.utep.edu/extendeduniversity/utepconnect/blog/april-2017/time-management-header.jpg",
             "lectures" => [
                 [
@@ -288,6 +305,8 @@ class DatabaseSeeder extends Seeder
             "title" => "AI in Film: Exploring the Future of Film and Media",
             "theme" => "Film and Media",
             "desc" => "Step into the world of storytelling and innovation at the Film and Media conference. Explore the ever-evolving landscape of cinema, streaming, and digital content creation with industry leaders, visionary creators, and media experts. This conference offers a deep dive into the latest trends, technologies, and challenges shaping film and media today. Through thought-provoking lectures, panel discussions, and hands-on workshops, you’ll gain valuable insights into storytelling techniques, production strategies, and audience engagement. Whether you're a filmmaker, content creator, or media enthusiast, this event is your backstage pass to the future of entertainment. Reserve your spot now and be part of the story!",
+            "price" => 320,
+            "capacity" => 60,
             "poster" => "https://www.redsharknews.com/hubfs/ai%20film%20production.jpg",
             "lectures" => [
                 [
