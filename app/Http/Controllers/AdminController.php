@@ -24,7 +24,7 @@ class AdminController extends Controller
     /**
      * Returns all cards that are available, or based on filters
      *
-     * @return void search view with all conferences
+     * @return view search view with all conferences
      */
     public function conferencesSearch() {
         if(AdminService::amIAdmin()) {
@@ -55,9 +55,9 @@ class AdminController extends Controller
 
 
     /**
-     * Returns view with all users and allows some basic operation on them
+     * Lists all users and allows searching or ordering by name.
      *
-     * @return void
+     * @return riew Returned View shows all user and allows managing them
      */
     public function usersSearch() {
         if(AdminService::amIAdmin()) {
@@ -67,6 +67,8 @@ class AdminController extends Controller
             $users = UserService::search($orderDir, $searchString);
             return view('admin.users.search')
                 ->with('users', $users)
+                // return back default search/filter values, so that settings
+                // wont be lost on refresh
                 ->with('info', [
                     'directions' => OrderDirection::cases(),
                     'default_directions' => $orderDir,
@@ -79,18 +81,15 @@ class AdminController extends Controller
     }
 
     /**
-     * Changes user role
+     * Changes user role is current user has appropriate permissions
      *
-     * @return void
+     * @return redirect back to user dashboard
      */
     public function setRole(Request $request) {
         if(AdminService::amIAdmin()) {
             $userId = $request->input('user_id', null);
             $role = $request->input('role', null);
-            error_log($userId);
-            error_log($role);
             $res = AdminService::setRole($userId, $role);
-            error_log($res);
 
             return redirect()->back()
                 ->with('notification', [$res]);

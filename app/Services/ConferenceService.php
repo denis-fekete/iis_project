@@ -398,7 +398,7 @@ class ConferenceService
      * Returns the list of all rooms for the specified conference.
      *
      * @param  $conferenceId - id of the conference
-     * @return list ruturns list of model views of the conference with useful attributes
+     * @return list returns list of model views of the conference with useful attributes
      */
     public static function listRooms($conferenceId) {
         $conference = Conference::find($conferenceId);

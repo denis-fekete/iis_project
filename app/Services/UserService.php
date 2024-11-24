@@ -165,6 +165,12 @@ class UserService
         return ''; // everything was alright, return no error message
     }
 
+    /**
+     * Creates new user and validates data
+     *
+     * @param  Request $request input data
+     * @return string error message, if no error occurred returns ''
+     */
     public static function create(Request $request) {
         $validator =  Validator::make($request->all(), self::VALIDATOR_PARAMS_CREATE);
 
@@ -202,6 +208,14 @@ class UserService
         return ''; // everything was alright, return no error message
     }
 
+    /**
+     * Deletes user
+     *
+     * @param  string $id ID of user to be deleted
+     * @param  string $force expects 'false' or 'true', if true, deletes user account
+     * without checking if it has future conferences
+     * @return string errors message, if no error occurred returns ''
+     */
     public static function delete($id, $force) {
         $user = User::find($id);
 
@@ -222,10 +236,12 @@ class UserService
             if($lectures->count() !== 0) {
                 return "User account cannot be deleted: User has planned lectures for the future";
             }
-        } else {
+        } else if($force == 'false' ) {
             if(AdminService::amIAdmin() === false) {
                 return "You do not have a permissions to force delete user";
             }
+        } else {
+            return "Unknown force value, no changes will be made";
         }
 
         if($user !== null) {

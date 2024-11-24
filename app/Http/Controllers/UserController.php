@@ -13,7 +13,7 @@ class UserController extends Controller
      * Returns profile page of the user
      *
      * @param  string $id User id
-     * @return void View of the user page with correct data
+     * @return view View of the user page with correct data
      */
     public function getPerson($id) {
 
@@ -43,7 +43,7 @@ class UserController extends Controller
     /**
      * Redirects user to the user search for the current user
      *
-     * @return void
+     * @return redirect to searched user (current user)
      */
     public function profile() {
         $id = auth()->user()->id;
@@ -94,7 +94,7 @@ class UserController extends Controller
      * Deletes user if user has appropriate privileges
      *
      * @param  string $id Id of user to be deleted
-     * @return void
+     * @return redirect redirects user back after deletion
      */
     public function delete(Request $request) {
         $userToDelete = $request->input('user_id');

@@ -19,7 +19,7 @@ class AuthController extends Controller
      * them
      *
      * @param  Request $request Input with registration data
-     * @return void
+     * @return redirect to the url where user was before registration
      */
     public function registration(Request $request)
     {
@@ -28,6 +28,7 @@ class AuthController extends Controller
         $returnUrl = $request->input('return_to');
 
         if($res == '') {
+            // login in user after new user was created
             if(auth()->attempt(request()->only(['email', 'password']))) {
                 if($returnUrl !== null) {
                     return redirect($returnUrl);
@@ -47,7 +48,7 @@ class AuthController extends Controller
      * user will be given error messages
      *
      * @param  Request Input with login data
-     * @return void
+     * @return redirect to the url where user was before login
      */
     public function login(Request $request) {
         validator($request->all(), [
@@ -57,6 +58,7 @@ class AuthController extends Controller
 
         $returnUrl = $request->input('return_to');
 
+        // attempt to login in user
         if(auth()->attempt(request()->only(['email', 'password']))) {
             if( $returnUrl !== null) {
                 return redirect($returnUrl);
@@ -86,6 +88,9 @@ class AuthController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * @return view returns authentication view
+     */
     public function authGET() {
         return view('auth.auth');
     }

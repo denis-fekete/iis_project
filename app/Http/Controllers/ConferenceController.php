@@ -42,8 +42,8 @@ class ConferenceController extends Controller
     /**
      * Returns conference based on provided id
      *
-     * @param  mixed $id of the conference to get
-     * @return void details of the conference view
+     * @param string $id of the conference to get
+     * @return view details of the conference view
      */
     public function get($id) {
         $conference = ConferenceService::getWithLectures($id);
@@ -60,7 +60,7 @@ class ConferenceController extends Controller
     /**
      * Lists all conferences that are owned by the user
      *
-     * @return void dashboard page view
+     * @return view dashboard page view
      */
     public function dashboard() {
         $userId = auth()->user()->id;
@@ -73,7 +73,7 @@ class ConferenceController extends Controller
     /**
      * Returns view for creating new conference
      *
-     * @return void edit page view
+     * @return view edit page view
      */
     public function creationForm() {
         $conference = ConferenceService::emptyConferenceWithDate();
@@ -89,8 +89,8 @@ class ConferenceController extends Controller
     /**
      * Returns edit page filled current conference data
      *
-     * @param  mixed $id of the conference
-     * @return void edit view
+     * @param  string id of the conference
+     * @return view view for editing conferences
      */
     public function editForm($id) {
 
@@ -175,8 +175,8 @@ class ConferenceController extends Controller
     /**
      * Show lecture edit for a current conference
      *
-     * @param mixed $id Id of the conference
-     * @return void View to lectures editing or redirects user to dashboard if
+     * @param string $id Id of the conference
+     * @return view View to lectures editing or redirects user to dashboard if
      * user doesn't have permissions
      */
     public function listConferenceLectures($id) {
@@ -201,8 +201,8 @@ class ConferenceController extends Controller
     /**
      * Show reservations and allow editing for a current conference
      *
-     * @param  mixed $id Id of the conference
-     * @return void View to reservation editing or redirects user to dashboard if
+     * @param  string $id Id of the conference
+     * @return view View to reservation editing or redirects user to dashboard if
      * user doesn't have permissions
      */
     public function listConferenceReservations($id) {
@@ -220,10 +220,10 @@ class ConferenceController extends Controller
     }
 
     /**
-     * Confirmes reservations
+     * Confirms reservations
      *
      * @param  Request $request POST request containing form information
-     * @return void redirects user to reservations page with notification message
+     * @return redirect redirects user to reservations page with notification message
      */
     public function confirmReservation(Request $request) {
         $validator = Validator::make($request->all(), [
