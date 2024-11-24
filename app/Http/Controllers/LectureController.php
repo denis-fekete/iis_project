@@ -181,7 +181,7 @@ class LectureController extends Controller
     public function unconfirm(Request $request) {
         $lectureId = $request->input('id');
         $userId = auth()->user()->id;
-        
+
         $checkPolicyError = LectureService::checkSchedulePolicy($lectureId, $userId);
         if ($checkPolicyError)
             return redirect()->back()->with('error', $checkPolicyError);
